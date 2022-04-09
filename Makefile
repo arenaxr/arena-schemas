@@ -1,6 +1,9 @@
 run: venv
 	$(VENV)/python main.py
 
+update: venv
+	$(VENV)/python updateschemas.py $(src)
+
 docs: venv
 	$(VENV)/python createdoc.py
 
