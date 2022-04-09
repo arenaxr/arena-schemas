@@ -1,25 +1,57 @@
 import json
 import os
-import shutil
 import sys
 
-arena_objects_schema_path = 'schemas/input/arena-obj3d.json'
-obj_schema_path = 'schemas/input/arena-schema-files.json'
 output_folder = 'schemas/'
-input_folder = 'schemas/input/'
 
 def main():
     args = sys.argv[1:]
     print (args)
-    print (len(args))
-    print (os.path.isdir(args[0]))
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print ("Supply a valid source schemas path!")
+        print ('Supply a valid source schemas path! src=ARENA-core/build')
         return
 
-    updated_schema_path = args[0]
-    print (f'pulling from: {updated_schema_path}')
-    shutil.copytree(updated_schema_path, input_folder, dirs_exist_ok=True)
+    input_folder = args[0]
+    obj_schema_path = f'{input_folder}/schemas/arena-schema-files.json'
+
+    with open(obj_schema_path) as f:
+        obj_schemas = json.load(f)
+    for obj_schema in obj_schemas:
+        fn = obj_schemas[obj_schema]['file']
+        with open(f'{input_folder}/{fn}') as f:
+            schema = json.load(f)
+
+        # resolve all references
+        if 'allOf' in schema:
+            new_schema = schema
+            for props in schema['allOf']:
+                for key in props:
+                    if key == '$ref':
+                        ref = props[key].split('#/')
+                        with open(f'{input_folder}/{ref[0]}') as f:
+                            sub_schema = json.load(f)
+                        props = sub_schema
+                        if ref[1] not in new_schema:
+                            new_schema[ref[1]]={}
+                    new_schema[ref[1]].update(props[ref[1]])
+            del schema['allOf']
+        else:
+            new_schema = schema ## options/program
+
+        # resolve missing definitions
+
+        # write this object expanded json schema
+        new_obj_json = json.dumps(new_schema, indent=4)
+        file = open(f'{output_folder}{fn[8:]}','w')
+        file.write(new_obj_json)
+        file.close()
+
+        #break # for now
+
+    file = open(f'{output_folder}arena-schema-files.json','w')
+    file.write(json.dumps(obj_schemas, indent=4))
+    file.close()
+
 
     # with open(arena_objects_schema_path) as f:
     #     schema = json.load(f)
@@ -57,7 +89,7 @@ def main():
     #     new_obj['title'] = obj['title']
     #     new_obj['description'] = obj['description']
     #     new_obj['properties']['data'] = definitions[obj_name]
-    #     new_obj['properties']['data']['title'] = f'{obj["title"]} Data'
+    #     new_obj['properties']['data']['title'] = f"{obj['title']} Data"
     #     new_obj_json = json.dumps(new_obj, indent=4)
     #     file = open(f'{output_folder}{obj_name}.json','w')
     #     file.write(new_obj_json)
@@ -74,13 +106,13 @@ def main():
     # file.write(json.dumps(obj_schemas, indent=4))
     # file.close()
 
-"""
+'''
     for key in definitions:
             print(key, '->', definitions[key])
             break
 
-    file1 = open("myfile.txt","w")
-"""
+    file1 = open('myfile.txt','w')
+'''
 
 if __name__ == '__main__':
     main()
