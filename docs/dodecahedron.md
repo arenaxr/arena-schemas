@@ -41,7 +41,7 @@ Dodecahedron Attributes
 |scale|See: [scale.md](scale.md)|scale||No|
 |shadow|See: [shadow.md](shadow.md)|shadow||No|
 |sound|See: [sound.md](sound.md)|sound||No|
-|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with 'https://arena-cdn.conix.io/' (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||No|
+|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||No|
 |screenshareable|Whether or not a user can screenshare on an object|boolean|```True```|No|
 |video-control|See: [video-control.md](video-control.md)|video-control||No|
 |buffer|Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).|boolean|```true```|No|

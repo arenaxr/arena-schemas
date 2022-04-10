@@ -23,7 +23,7 @@ GLTF Model Attributes
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|3D object type.|string; Must be: ```gltf-model```|```gltf-model```|Yes|
-|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with 'https://arena-cdn.conix.io/' (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
+|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
 |animation|See: [animation.md](animation.md)|animation||No|
 |armarker|See: [armarker.md](armarker.md)|armarker||No|
 |click-listener|Object will listen for clicks|boolean||No|

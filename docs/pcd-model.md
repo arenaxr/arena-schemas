@@ -23,7 +23,7 @@ PCD Model Attributes
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|3D object type.|string; Must be: ```pcd-model```|```pcd-model```|Yes|
-|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with 'https://arena-cdn.conix.io/' (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
+|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
 |pointSize|Size of the points|number|```0.01```|Yes|
 |pointColor|Color of the points|string|```#7f7f7f```|No|
 |animation|See: [animation.md](animation.md)|animation||No|
