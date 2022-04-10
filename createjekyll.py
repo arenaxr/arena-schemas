@@ -12,22 +12,21 @@ def main():
     args = sys.argv[1:]
     print(args)
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print('Supply a valid destination Jekyll path! src=ARENA/content/schemas')
-        return
+        os.mkdir(args[0])
 
     output_folder = args[0]
-    sec_title = 'ATemp'
+    sec_title = 'Message Schema'
 
     # make jekyll index.md with objects list
     md_lines = []
     md_lines.append('---\n')
     md_lines.append(f'title: {sec_title}\n')
-    md_lines.append('nav_order: 0\n')
+    md_lines.append('nav_order: 9\n')
     md_lines.append('layout: default\n')
     md_lines.append('has_children: true\n')
     md_lines.append('---\n')
     md_lines.append('\n')
-    md_lines.append('# All The Objects\n')
+    md_lines.append('# ARENA Message Objects\n')
 
     with open(obj_schema_path, 'r') as json_file_all:
         files = json.load(json_file_all)
