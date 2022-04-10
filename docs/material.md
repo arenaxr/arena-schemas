@@ -3,9 +3,12 @@ Material
 ========
 
 
-The material properties of the object’s surface.
+The material properties of the object’s surface. 
+
+More properties at https://aframe.io/docs/1.3.0/components/material.html
+
 Material Attributes
--------------------
+--------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

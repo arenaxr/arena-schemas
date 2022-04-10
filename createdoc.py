@@ -101,7 +101,7 @@ def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
     if wire_obj:
         mdFile.new_paragraph('All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes');
 
-    mdFile.new_header(level=2, title=f'{md_title} Attributes', style='setext', add_table_of_contents='n')
+    mdFile.new_header(level=2, title=f'\n{md_title} Attributes', style='setext', add_table_of_contents='n')
 
     object_table(mdFile, md_title, json_obj)
 

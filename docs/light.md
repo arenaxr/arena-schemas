@@ -3,11 +3,14 @@ Light
 =====
 
 
-A light
+A light. 
+
+More properties at https://aframe.io/docs/1.3.0/components/light.html
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+
 Light Attributes
-----------------
+-----------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

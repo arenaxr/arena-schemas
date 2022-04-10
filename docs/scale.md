@@ -4,8 +4,9 @@ Scale
 
 
 3D object scale
+
 Scale Attributes
-----------------
+-----------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

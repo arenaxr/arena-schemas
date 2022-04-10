@@ -4,8 +4,9 @@ Jitsi Video
 
 
 Apply a jitsi video source to the geometry
+
 Jitsi Video Attributes
-----------------------
+-----------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

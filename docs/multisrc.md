@@ -4,8 +4,9 @@ Multi Source
 
 
 Define multiple visual sources applied to an object.
+
 Multi Source Attributes
------------------------
+------------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

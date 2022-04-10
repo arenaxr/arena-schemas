@@ -3,9 +3,12 @@ Animation
 =========
 
 
-Animate and tween values
+Animate and tween values. 
+
+More properties at https://aframe.io/docs/1.3.0/components/animation.html
+
 Animation Attributes
---------------------
+---------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

@@ -4,8 +4,9 @@ Video
 
 
 Video Control
+
 Video Attributes
-----------------
+-----------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

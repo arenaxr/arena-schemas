@@ -3,11 +3,14 @@ Text
 ====
 
 
-Display text
+Display text. 
+
+More properties at https://aframe.io/docs/1.3.0/components/text.html
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+
 Text Attributes
----------------
+----------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

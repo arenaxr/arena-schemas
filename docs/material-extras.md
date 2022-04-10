@@ -3,9 +3,12 @@ Material extras
 ===============
 
 
-Define extra material properties.
+Define extra material properties, namely texture encoding, whether to render the material's color and render order. The properties set here access directly Three.js material component. 
+
+More properties at https://threejs.org/docs/#api/en/materials/Material
+
 Material extras Attributes
---------------------------
+---------------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

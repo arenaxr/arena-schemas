@@ -4,8 +4,9 @@ ARMarker
 
 
 A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.
+
 ARMarker Attributes
--------------------
+--------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |

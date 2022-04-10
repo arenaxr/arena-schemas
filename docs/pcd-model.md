@@ -6,8 +6,9 @@ PCD Model
 Load a PCD model
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+
 PCD Model Attributes
---------------------
+---------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
