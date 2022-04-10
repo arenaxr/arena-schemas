@@ -1,8 +1,0 @@
-
-Color
-=====
-
-
-Color
-Color Attributes
-----------------

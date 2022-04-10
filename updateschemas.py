@@ -41,20 +41,28 @@ def main():
         with open(f'{input_folder}/{fn}') as f:
             schema = json.load(f)
 
-        # resolve all references
+        # resolve references
         if 'allOf' in schema:
             new_schema = parse_allof_ref(schema)
             del schema['allOf']
         else:
             new_schema = schema
-
         if 'allOf' in new_schema['properties']['data']:
-            new_schema['properties']['data'] = parse_allof_ref(new_schema['properties']['data'])
+            new_schema['properties']['data'] = parse_allof_ref(
+                new_schema['properties']['data'])
             del new_schema['properties']['data']['allOf']
-        else:
-            new_schema['properties']['data'] = new_schema['properties']['data']
 
-        # resolve missing definitions
+        # generate definitions
+        if 'definitions' not in new_schema:
+            new_schema['definitions'] = {}
+        if 'data' in new_schema['properties'] and 'properties' in new_schema['properties']['data']:
+            dprops = new_schema['properties']['data']['properties']
+            for key in dprops:
+                if 'type' in dprops[key] and dprops[key]['type'] == 'object':
+                    if key not in new_schema['definitions']:
+                        new_schema['definitions'][key] = dprops[key]
+                        new_schema['properties']['data']['properties'][key] = {
+                            '$ref': f'#/definitions/{key}'}
 
         # write this object expanded json schema
         new_obj_json = json.dumps(new_schema, indent=4)
@@ -62,7 +70,7 @@ def main():
         file.write(new_obj_json)
         file.close()
 
-        break # for now
+       # break  # for now
 
     file = open(f'{output_folder}arena-schema-files.json', 'w')
     file.write(json.dumps(obj_schemas, indent=4))

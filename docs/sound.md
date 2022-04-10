@@ -19,4 +19,4 @@ Positional Sound Attributes
 |refDistance|Reference distance for reducing volume as the audio source moves further from the listener.|number|```1```|No|
 |rolloffFactor|Describes how quickly the volume is reduced as the source moves away from the listener.|number|```1```|No|
 |src|URL path to sound file e.g. 'store/users/wiselab/sound/wave.mp3'|string||No|
-|volume|How loud to play the sound.|number|```1```|No|
+|volume|How loud to play the sound|number|```1```|No|

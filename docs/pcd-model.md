@@ -1,13 +1,13 @@
 
-GLTF Model
-==========
+PCD Model
+=========
 
 
-Load a GLTF model
+Load a PCD model
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
-GLTF Model Attributes
----------------------
+PCD Model Attributes
+--------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -15,14 +15,16 @@ GLTF Model Attributes
 |persist|Persist this object in the database (default true = persist on server)|boolean|```true```|Yes|
 |type|AFrame 3D Object|string; Must be: ```object```|```'object'```|Yes|
 |action|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|Yes|
-|data|GLTF Model Data|GLTF Model data||Yes|
+|data|PCD Model Data|PCD Model data||Yes|
 
-### GLTF Model Data Attributes
+### PCD Model Data Attributes
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|3D object type.|string; Must be: ```gltf-model```|```gltf-model```|Yes|
+|object_type|3D object type.|string; Must be: ```pcd-model```|```pcd-model```|Yes|
 |url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with 'https://arena-cdn.conix.io/' (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
+|pointSize|Size of the points|number|```0.01```|Yes|
+|pointColor|Color of the points|string|```#7f7f7f```|No|
 |animation|See: [animation.md](animation.md)|animation||No|
 |armarker|See: [armarker.md](armarker.md)|armarker||No|
 |click-listener|Object will listen for clicks|boolean||No|

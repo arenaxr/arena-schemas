@@ -9,6 +9,6 @@ Impulse Attributes
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|on|on|string||No|
 |force|force|string||No|
+|on|on|string||No|
 |position|position|string||No|

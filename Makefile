@@ -1,10 +1,13 @@
 run: venv
 	$(VENV)/python main.py
 
-update: venv
-	$(VENV)/python updateschemas.py $(src)
-
 docs: venv
+	$(VENV)/python createdoc.py
+
+update: venv
+	rm -f schemas/*.json
+	$(VENV)/python updateschemas.py $(src)
+	rm -f docs/*.md
 	$(VENV)/python createdoc.py
 
 show-req: venv
