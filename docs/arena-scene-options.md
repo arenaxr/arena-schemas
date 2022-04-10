@@ -22,6 +22,6 @@ Scene Config Attributes
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|env-presets|See: [environment-presets.md](environment-presets.md)|environment-presets||Yes|
-|renderer-settings|See: [renderer-settings.md](renderer-settings.md)|renderer-settings||No|
-|scene-options|See: [scene-options.md](scene-options.md)|scene-options||Yes|
+|env-presets|See: [environment-presets](environment-presets)|environment-presets||Yes|
+|renderer-settings|See: [renderer-settings](renderer-settings)|renderer-settings||No|
+|scene-options|See: [scene-options](scene-options)|scene-options||Yes|

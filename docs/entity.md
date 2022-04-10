@@ -24,23 +24,23 @@ Entity (generic object) Attributes
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|3D object type.|string; Must be: ```entity```|```entity```|Yes|
 |geometry|geometry|||No|
-|animation|See: [animation.md](animation.md)|animation||No|
-|armarker|See: [armarker.md](armarker.md)|armarker||No|
+|animation|See: [animation](animation)|animation||No|
+|armarker|See: [armarker](armarker)|armarker||No|
 |click-listener|Object will listen for clicks|boolean||No|
 |collision-listener|Name of the collision-listener, default can be empty string|string||No|
 |color|Color|string|```'#ffa500'```|No|
-|dynamic-body|See: [dynamic-body.md](dynamic-body.md)|dynamic-body||No|
-|goto-url|See: [goto-url.md](goto-url.md)|goto-url||No|
+|dynamic-body|See: [dynamic-body](dynamic-body)|dynamic-body||No|
+|goto-url|See: [goto-url](goto-url)|goto-url||No|
 |hide-on-enter-ar|Hide object when entering AR. Remove component to *not* hide|boolean; Must be: ```True```|```True```|No|
-|impulse|See: [impulse.md](impulse.md)|impulse||No|
-|landmark|See: [landmark.md](landmark.md)|landmark||No|
-|material-extras|See: [material-extras.md](material-extras.md)|material-extras||No|
+|impulse|See: [impulse](impulse)|impulse||No|
+|landmark|See: [landmark](landmark)|landmark||No|
+|material-extras|See: [material-extras](material-extras)|material-extras||No|
 |parent|Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|string||No|
-|position|See: [position.md](position.md)|position||No|
-|rotation|See: [rotation.md](rotation.md)|rotation||No|
-|scale|See: [scale.md](scale.md)|scale||No|
-|shadow|See: [shadow.md](shadow.md)|shadow||No|
-|sound|See: [sound.md](sound.md)|sound||No|
+|position|See: [position](position)|position||No|
+|rotation|See: [rotation](rotation)|rotation||No|
+|scale|See: [scale](scale)|scale||No|
+|shadow|See: [shadow](shadow)|shadow||No|
+|sound|See: [sound](sound)|sound||No|
 |url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||No|
 |screenshareable|Whether or not a user can screenshare on an object|boolean|```True```|No|
-|video-control|See: [video-control.md](video-control.md)|video-control||No|
+|video-control|See: [video-control](video-control)|video-control||No|

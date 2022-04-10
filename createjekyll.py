@@ -32,9 +32,9 @@ def main():
         files = json.load(json_file_all)
     for file in files:
         print(files[file])
-        fn = os.path.basename(files[file]['file'])
-        t = files[file]['title']
-        md_lines.append(f'- [{t}]({fn[:-5]})\n')
+        filename = os.path.basename(files[file]['file'])
+        title = files[file]['title']
+        md_lines.append(f'- [{title}]({filename[:-5]})\n')
 
     out = ''.join(md_lines)
     print(out)
