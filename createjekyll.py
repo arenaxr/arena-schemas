@@ -45,32 +45,34 @@ def main():
 
     out = ''.join(md_lines)
     index_path = os.path.join(output_folder, 'index.md')
-    print(f'-->{index_path}')
+    print(f'->{index_path}')
     f = open(index_path, 'w')
     f.write(out)
     f.close()
 
     # make jekyll.md for each object
-    for filename in os.listdir(input_folder):
+    idx = 0
+    for filename in sorted (os.listdir(input_folder)):
         with open(os.path.join(input_folder, filename), 'r') as f:
             text = f.read()
-            lines = text.split('\n')
-            md_lines = []
-            md_lines.append('---\n')
-            md_lines.append(f'title: {lines[0]}\n')
-            md_lines.append('nav_order: 1\n')
-            md_lines.append('layout: default\n')
-            md_lines.append(f'parent: {sec_sub_title}\n')
-            md_lines.append(f'grand_parent: {sec_title}\n')
-            md_lines.append('---\n')
-            md_lines.append('\n')
-            md_lines.append(text)
-            out = ''.join(md_lines)
-            md_path = os.path.join(output_folder,  filename)
-            print(f'-->{md_path}')
-            f = open(os.path.join(output_folder, filename), 'w')
-            f.write(out)
-            f.close()
+        lines = text.split('\n')
+        md_lines = []
+        md_lines.append('---\n')
+        md_lines.append(f'title: {lines[0]}\n')
+        md_lines.append(f'nav_order: {idx}\n')
+        md_lines.append('layout: default\n')
+        md_lines.append(f'parent: {sec_sub_title}\n')
+        md_lines.append(f'grand_parent: {sec_title}\n')
+        md_lines.append('---\n')
+        md_lines.append('\n')
+        md_lines.append(text)
+        out = ''.join(md_lines)
+        md_path = os.path.join(output_folder,  filename)
+        print(f'->{md_path}')
+        f = open(md_path, 'w')
+        f.write(out)
+        f.close()
+        idx += 1
 
 
 if __name__ == '__main__':
