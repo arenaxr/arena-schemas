@@ -1,9 +1,10 @@
-import os
 import json
+import os
+
 from mdutils.mdutils import MdUtils
 
 input_folder = 'schemas/'
-ouput_folder = 'docs/'
+output_folder = 'docs/'
 #markdown_filename =
 
 ObjTypeDesc = {
@@ -76,10 +77,10 @@ def object_table(mdFile, md_title, obj, definitions={}):
             line[Table.cols.DFT] = format_value(default, default[prop])
         if '$ref' in prop_obj:
             obj_name = prop_obj['$ref'][len('#/definitions/'):]
-            line[Table.cols.DESC] = f'See: [{obj_name}.md]({obj_name}.md)'
+            line[Table.cols.DESC] = f'See: [{obj_name}]({obj_name})'
             line[Table.cols.TYPE] = obj_name
             if obj_name in definitions:
-                write_md(definitions[obj_name], f'{ouput_folder}{obj_name}.md', overwrite=False, wire_obj=False)
+                write_md(definitions[obj_name], f'{output_folder}{obj_name}.md', overwrite=False, wire_obj=False)
         table_lines.extend(line)
 
     mdFile.new_table(columns=len(Table.heading), rows=len(table_lines)//len(Table.heading), text=table_lines, text_align='left')
@@ -101,7 +102,7 @@ def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
     if wire_obj:
         mdFile.new_paragraph('All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes');
 
-    mdFile.new_header(level=2, title=f'{md_title} Attributes', style='setext', add_table_of_contents='n')
+    mdFile.new_header(level=2, title=f'\n{md_title} Attributes', style='setext', add_table_of_contents='n')
 
     object_table(mdFile, md_title, json_obj)
 
@@ -132,7 +133,7 @@ def main():
          if filename.endswith(".json") and not filename.endswith("arena-schema-files.json"):
              json_filename = os.path.join(input_folder, filename)
              filename_noext = os.fsdecode(os.path.splitext(file)[0])
-             md_filename = os.path.join(ouput_folder, f'{filename_noext}.md')
+             md_filename = os.path.join(output_folder, f'{filename_noext}.md')
              with open(json_filename) as f:
                 json_obj = json.load(f)
              write_md(json_obj, md_filename)

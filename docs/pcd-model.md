@@ -1,14 +1,14 @@
 
-Cylinder
-========
+PCD Model
+=========
 
 
-cylinder Geometry
+Load a PCD model
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
-Cylinder Attributes
---------------------
+PCD Model Attributes
+---------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -16,20 +16,16 @@ Cylinder Attributes
 |persist|Persist this object in the database (default true = persist on server)|boolean|```true```|Yes|
 |type|AFrame 3D Object|string; Must be: ```object```|```'object'```|Yes|
 |action|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|Yes|
-|data|Cylinder Data|Cylinder data||Yes|
+|data|PCD Model Data|PCD Model data||Yes|
 
-### Cylinder Data Attributes
+### PCD Model Data Attributes
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|3D object type.|string; Must be: ```cylinder```|```cylinder```|Yes|
-|height|height|number|```2```|Yes|
-|openEnded|open ended|boolean|```False```|No|
-|radius|radius|number|```1```|Yes|
-|segmentsHeight|segments height|number|```18```|No|
-|segmentsRadial|segments radial|number|```36```|No|
-|thetaLength|theta length|number|```360```|No|
-|thetaStart|theta start|number|```0```|No|
+|object_type|3D object type.|string; Must be: ```pcd-model```|```pcd-model```|Yes|
+|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||Yes|
+|pointSize|Size of the points|number|```0.01```|Yes|
+|pointColor|Color of the points|string|```#7f7f7f```|No|
 |animation|See: [animation](animation)|animation||No|
 |armarker|See: [armarker](armarker)|armarker||No|
 |click-listener|Object will listen for clicks|boolean||No|
@@ -42,16 +38,12 @@ Cylinder Attributes
 |landmark|See: [landmark](landmark)|landmark||No|
 |material-extras|See: [material-extras](material-extras)|material-extras||No|
 |parent|Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|string||No|
-|position|See: [position](position)|position|```{'x': 0, 'y': 0, 'z': 0}```|No|
-|rotation|See: [rotation](rotation)|rotation|```{'x': 0, 'y': 0, 'z': 0}```|No|
-|scale|See: [scale](scale)|scale||No|
+|position|See: [position](position)|position|```{'x': 0, 'y': 0, 'z': 0}```|Yes|
+|rotation|See: [rotation](rotation)|rotation|```{'x': 0, 'y': 0, 'z': 0}```|Yes|
+|scale|See: [scale](scale)|scale|```{'x': 1, 'y': 1, 'z': 1}```|Yes|
 |shadow|See: [shadow](shadow)|shadow||No|
 |sound|See: [sound](sound)|sound||No|
-|url|Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|string||No|
 |screenshareable|Whether or not a user can screenshare on an object|boolean|```True```|No|
 |video-control|See: [video-control](video-control)|video-control||No|
-|buffer|Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).|boolean|```true```|No|
-|jitsi-video|See: [jitsi-video](jitsi-video)|jitsi-video||No|
-|material|See: [material](material)|material|```{'color': '#7f7f7f'}```|No|
-|multisrc|See: [multisrc](multisrc)|multisrc||No|
-|skipCache|Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).|boolean|```true```|No|
+|animation-mixer|See: [animation-mixer](animation-mixer)|animation-mixer||No|
+|gltf-model-lod|See: [gltf-model-lod](gltf-model-lod)|gltf-model-lod||No|

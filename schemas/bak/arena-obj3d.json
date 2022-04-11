@@ -340,21 +340,21 @@
                 "type":"array",
                 "description":"Comma-separated list of events to listen to trigger a restart and play. Animation will not autoplay if specified. startEvents will restart the animation, use pauseEvents to resume it. If there are other animation components on the entity animating the same property, those animations will be automatically paused to not conflict.",
                 "default":[
-                   
+
                 ]
              },
              "pauseEvents":{
                 "type":"array",
                 "description":"Comma-separated list of events to listen to trigger pause. Can be resumed with resumeEvents.",
                 "default":[
-                   
+
                 ]
              },
              "resumeEvents":{
                 "type":"array",
                 "description":"Comma-separated list of events to listen to trigger resume after pausing.",
                 "default":[
-                   
+
                 ]
              },
              "round":{
@@ -616,7 +616,7 @@
           "type":"string",
           "format":"uri",
           "title":"Url",
-          "description":"Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with 'https://arena-cdn.conix.io/' (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)"
+          "description":"Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)"
        },
        "shadow":{
           "properties":{

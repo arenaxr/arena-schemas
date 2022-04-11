@@ -3,11 +3,12 @@ Program
 =======
 
 
-ARENA Program
+Program
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+
 Program Attributes
-------------------
+-------------------
 
 |Attribute|Description|Type|Default|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -15,7 +16,7 @@ Program Attributes
 |action|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|Yes|
 |persist|Persist this object in the database|boolean|```true```|Yes|
 |type|ARENA program data|string; Must be: ```program```|```'program'```|Yes|
-|data|See: [program.md](program.md)|program||Yes|
+|data|See: [program](program)|program||Yes|
 
 ### Program Data Attributes
 
@@ -27,5 +28,5 @@ Program Attributes
 |filename|Filename of the entry binary|string||Yes|
 |filetype|Type of the program (WA=WASM or PY=Python)|string; One of: ```['WA', 'PY']```|```'['WA']'```|Yes|
 |args|Command-line arguments (passed in argv). Supports variables: ${scene}, ${mqtth}, ${cameraid}, ${username}, ${runtimeid}, ${moduleid}, ${query-string-key}|array||No|
-|env|Environment variables. Supports variables: ${scene}, ${mqtth}, ${cameraid}, ${username}, ${runtimeid}, ${moduleid}, ${query-string-key}|array|```['MID=${moduleid}', 'SCENE=${scene}', 'MQTTH=${mqtth}', 'REALM=realm']```|Yes|
+|env|Environment variables. Supports variables: ${scene}, ${namespace}, ${mqtth}, ${cameraid}, ${username}, ${runtimeid}, ${moduleid}, ${query-string-key}|array|```['MID=${moduleid}', 'SCENE=${scene}', 'NAMESPACE=${namespace}', 'MQTTH=${mqtth}', 'REALM=realm']```|Yes|
 |channels|Channels describe files representing access to IO from pubsub and client sockets (possibly more in the future; currently only supported for WASM programs).|array|```[{'path': '/ch/${scene}', 'type': 'pubsub', 'mode': 'rw', 'params': {'topic': 'realm/s/${scene}'}}]```|No|

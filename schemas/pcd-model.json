@@ -1,6 +1,6 @@
 {
-    "title": "Box",
-    "description": "Box Geometry",
+    "title": "PCD Model",
+    "description": "Load a PCD model",
     "required": [
         "object_id",
         "action",
@@ -38,16 +38,12 @@
             "type": "string"
         },
         "data": {
-            "title": "Box Data",
+            "title": "PCD Model Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "box",
-                "depth": 1,
-                "height": 1,
-                "width": 1,
-                "material": {
-                    "color": "#7f7f7f"
-                },
+                "object_type": "pcd-model",
+                "pointSize": 0.01,
+                "pointColor": "#7f7f7f",
                 "position": {
                     "x": 0,
                     "y": 0,
@@ -57,13 +53,20 @@
                     "x": 0,
                     "y": 0,
                     "z": 0
+                },
+                "scale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                 }
             },
             "required": [
                 "object_type",
-                "width",
-                "height",
-                "depth"
+                "url",
+                "pointSize",
+                "position",
+                "rotation",
+                "scale"
             ],
             "properties": {
                 "object_type": {
@@ -71,38 +74,27 @@
                     "title": "3D object type",
                     "description": "3D object type (derived from 'type' select above).",
                     "enum": [
-                        "box"
+                        "pcd-model"
                     ]
                 },
-                "depth": {
-                    "type": "number",
-                    "title": "depth",
-                    "default": 1
+                "url": {
+                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
+                    "format": "uri",
+                    "title": "Url",
+                    "type": "string"
                 },
-                "height": {
+                "pointSize": {
+                    "description": "Size of the points",
+                    "title": "Points Size",
                     "type": "number",
-                    "title": "height",
-                    "default": 1
+                    "default": 0.01
                 },
-                "segmentsDepth": {
-                    "type": "number",
-                    "title": "segments depth",
-                    "default": 1
-                },
-                "segmentsHeight": {
-                    "type": "number",
-                    "title": "segments height",
-                    "default": 1
-                },
-                "segmentsWidth": {
-                    "type": "number",
-                    "title": "segments width",
-                    "default": 1
-                },
-                "width": {
-                    "type": "number",
-                    "title": "width",
-                    "default": 1
+                "pointColor": {
+                    "description": "Color of the points",
+                    "title": "Points Color",
+                    "format": "color",
+                    "type": "string",
+                    "default": "#7f7f7f"
                 },
                 "animation": {
                     "$ref": "#/definitions/animation"
@@ -169,12 +161,6 @@
                 "sound": {
                     "$ref": "#/definitions/sound"
                 },
-                "url": {
-                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
-                    "format": "uri",
-                    "title": "Url",
-                    "type": "string"
-                },
                 "screenshareable": {
                     "default": true,
                     "description": "Whether or not a user can screenshare on an object",
@@ -184,26 +170,11 @@
                 "video-control": {
                     "$ref": "#/definitions/video-control"
                 },
-                "buffer": {
-                    "default": "true",
-                    "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
-                    "title": "Buffer",
-                    "type": "boolean"
+                "animation-mixer": {
+                    "$ref": "#/definitions/animation-mixer"
                 },
-                "jitsi-video": {
-                    "$ref": "#/definitions/jitsi-video"
-                },
-                "material": {
-                    "$ref": "#/definitions/material"
-                },
-                "multisrc": {
-                    "$ref": "#/definitions/multisrc"
-                },
-                "skipCache": {
-                    "default": "true",
-                    "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
-                    "title": "Skip Cache",
-                    "type": "boolean"
+                "gltf-model-lod": {
+                    "$ref": "#/definitions/gltf-model-lod"
                 }
             }
         }
@@ -525,11 +496,15 @@
         },
         "material-extras": {
             "default": {
-                "encoding": "sRGBEncoding",
-                "needsUpdate": false
+                "encoding": "sRGBEncoding"
             },
             "description": "Define extra material properties, namely texture encoding, whether to render the material's color and render order. The properties set here access directly Three.js material component. \n\nMore properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>https://threejs.org/docs/#api/en/materials/Material</a>",
             "properties": {
+                "overrideSrc": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Overrides the material in all meshes of an object (e.g. a basic shape or a GLTF); Use, for example, to change the texture of a GLTF."
+                },
                 "encoding": {
                     "default": "sRGBEncoding",
                     "enum": [
@@ -546,26 +521,20 @@
                     ],
                     "type": "string"
                 },
-                "needsUpdate": {
-                    "default": false,
-                    "type": "boolean"
-                },
-                "render-order": {
-                    "default": "1",
-                    "description": "This value allows the default rendering order of scene graph objects to be overridden.",
-                    "type": "number"
-                },
                 "colorWrite": {
-                    "description": "Whether to render the material\u2019s color",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to render the material's color."
+                },
+                "renderOrder": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Allows the default rendering order of scene graph objects to be overridden."
                 },
                 "transparentOccluder": {
-                    "description": "If true, will set colorWrite=false and renderOrder=0 to make the material a transparent occluder.",
-                    "type": "boolean"
-                },
-                "defaultRenderOrder": {
-                    "description": "Used as the renderOrder when transparentOccluder is reset to false.",
-                    "type": "number"
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If `true`, will set `colorWrite=false` and `renderOrder=0` to make the material a transparent occluder."
                 }
             },
             "title": "Material extras",
@@ -798,178 +767,83 @@
             "title": "Video",
             "type": "object"
         },
-        "jitsi-video": {
-            "description": "Apply a jitsi video source to the geometry",
-            "title": "Jitsi Video",
-            "type": "object",
+        "animation-mixer": {
+            "description": "A list of available animations can usually be found by inspecting the model file or its documentation. All animations will play by default. To play only a specific set of animations, use wildcards: animation-mixer='clip: run_*'. \n\nMore properties at <a href='https://github.com/n5ro/aframe-extras/tree/master/src/loaders#animation'>https://github.com/n5ro/aframe-extras/tree/master/src/loaders#animation</a>",
             "properties": {
-                "jitsiId": {
-                    "description": "JitsiId of the video source; If defined will override displayName",
+                "clampWhenFinished": {
+                    "default": false,
+                    "description": "If true, halts the animation at the last frame.",
+                    "type": "boolean"
+                },
+                "clip": {
+                    "default": "*",
+                    "description": "Name of the animation clip(s) to play. Accepts wildcards.",
                     "type": "string"
                 },
-                "displayName": {
-                    "description": "ARENA or Jitsi display name of the video source; Will be ignored if jitsiId is given. (* change requires reload* ) ",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "displayName"
-            ]
-        },
-        "material": {
-            "description": "The material properties of the object\u2019s surface. \n\nMore properties at <a href='https://aframe.io/docs/1.3.0/components/material.html'>https://aframe.io/docs/1.3.0/components/material.html</a>",
-            "properties": {
-                "alphaTest": {
+                "crossFadeDuration": {
+                    "default": "0",
+                    "description": "Duration of cross-fades between clips, in seconds.",
+                    "type": "number"
+                },
+                "duration": {
+                    "default": "0",
+                    "description": "Duration of the animation, in seconds (0 = auto).",
+                    "type": "number"
+                },
+                "repetitions": {
                     "default": 0,
-                    "description": "Alpha test threshold for transparency.",
+                    "description": "Number of times to play the clip, in addition to the first play. Repetitions are ignored for loop: once.",
+                    "enum": [
+                        "once",
+                        "repeate",
+                        "pingpong"
+                    ],
                     "type": "number"
                 },
-                "blending": {
-                    "default": "normal",
-                    "description": "The blending mode for the material\u2019s RGB and Alpha sent to the WebGLRenderer. Can be one of none, normal, additive, subtractive or multiply",
-                    "enum": [
-                        "none",
-                        "normal",
-                        "additive",
-                        "subtractive",
-                        "multiply"
-                    ],
-                    "type": "string"
-                },
-                "color": {
-                    "default": "#7f7f7f",
-                    "description": "Base diffuse color.",
-                    "format": "color",
-                    "title": "color",
-                    "type": "string"
-                },
-                "depthTest": {
-                    "default": true,
-                    "description": "Whether depth testing is enabled when rendering the material.",
-                    "type": "boolean"
-                },
-                "dithering": {
-                    "default": true,
-                    "description": "Whether material is dithered with noise. Removes banding from gradients like ones produced by lighting.",
-                    "type": "boolean"
-                },
-                "flatShading": {
-                    "default": false,
-                    "description": "Use THREE.FlatShading rather than THREE.StandardShading.",
-                    "type": "boolean"
-                },
-                "npot": {
-                    "default": false,
-                    "description": "Use settings for non-power-of-two (NPOT) texture.",
-                    "type": "boolean"
-                },
-                "offset": {
-                    "default": {
-                        "x": 1,
-                        "y": 1
-                    },
-                    "description": "Texture offset to be used.",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y"
-                    ],
-                    "type": "object"
-                },
-                "opacity": {
+                "timeScale": {
                     "default": 1,
-                    "description": "Extent of transparency. If the transparent property is not true, then the material will remain opaque and opacity will only affect color.",
+                    "description": "Scaling factor for playback speed. A value of 0 causes the animation to pause. Negative values cause the animation to play backwards.",
                     "type": "number"
-                },
-                "repeat": {
-                    "default": {
-                        "x": 1,
-                        "y": 1
-                    },
-                    "description": "Texture repeat to be used.",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y"
-                    ],
-                    "type": "object"
-                },
-                "shader": {
-                    "default": "standard",
-                    "description": "Which material to use. Defaults to the standard material. Can be set to the flat material or to a registered custom shader material.",
-                    "type": "string"
-                },
-                "side": {
-                    "default": "front",
-                    "description": "Which sides of the mesh to render. Can be one of front, back, or double.",
-                    "enum": [
-                        "front",
-                        "back",
-                        "double"
-                    ],
-                    "type": "string"
-                },
-                "src": {
-                    "description": "URI, relative or full path of an image/video file. e.g. 'store/users/wiselab/images/360falls.mp4'",
-                    "format": "uri",
-                    "type": "string"
-                },
-                "transparent": {
-                    "default": false,
-                    "description": "Whether material is transparent. Transparent entities are rendered after non-transparent entities.",
-                    "type": "boolean"
-                },
-                "vertexColors": {
-                    "default": "none",
-                    "description": "Whether to use vertex or face colors to shade the material. Can be one of none, vertex, or face.",
-                    "enum": [
-                        "none",
-                        "vertex",
-                        "face"
-                    ],
-                    "type": "string"
-                },
-                "visible": {
-                    "default": true,
-                    "description": "Whether material is visible. Raycasters will ignore invisible materials.",
-                    "type": "boolean"
                 }
             },
-            "title": "Material",
+            "title": "Animation Mixer",
             "type": "object"
         },
-        "multisrc": {
-            "description": "Define multiple visual sources applied to an object.",
+        "gltf-model-lod": {
+            "default": {
+                "detailedUrl": "",
+                "detailedDistance": 10,
+                "updateRate": 333,
+                "retainCache": false
+            },
+            "description": "Simple switch between the default gltf-model and a detailed one when a user camera is within specified distance",
             "properties": {
-                "srcs": {
-                    "description": "A comma-delimited list if URIs, e.g. \u201cside1.png, side2.png, side3.png, side4.png, side5.png, side6.png\u201d (required).",
-                    "type": "string"
+                "detailedUrl": {
+                    "type": "string",
+                    "title": "detailedUrl",
+                    "description": "Alternative 'detailed' gltf model to load by URL",
+                    "default": ""
                 },
-                "srcspath": {
-                    "description": "URI, relative or full path of a directory containing srcs, e.g. \u201cstore/users/wiselab/images/dice/\u201d (required).",
-                    "format": "uri",
-                    "type": "string"
+                "detailedDistance": {
+                    "type": "number",
+                    "title": "detailedDistance",
+                    "description": "At what distance to switch between the models",
+                    "default": 10
+                },
+                "updateRate": {
+                    "type": "number",
+                    "title": "updateRate",
+                    "description": "How often user camera is checked for LOD (default 333ms)",
+                    "default": 333
+                },
+                "retainCache": {
+                    "type": "boolean",
+                    "title": "retainCache",
+                    "description": "Whether to skip freeing the detailed model from browser cache (default false)",
+                    "default": false
                 }
             },
-            "required": [
-                "srcspath",
-                "srcs"
-            ],
-            "title": "Multi Source",
+            "title": "GLTF Model Level of Detail",
             "type": "object"
         }
     }

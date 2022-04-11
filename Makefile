@@ -1,8 +1,16 @@
 run: venv
 	$(VENV)/python main.py
 
+update: venv
+	rm -f schemas/*.json
+	$(VENV)/python updateschemas.py $(src)
+
 docs: venv
+	rm -f docs/*.md
 	$(VENV)/python createdoc.py
+
+jekyll: venv
+	$(VENV)/python createjekyll.py $(dst)
 
 show-req: venv
 		$(VENV)/pip freeze
