@@ -20,3 +20,10 @@ Step 3. This will take a destination directory where jekyll Markdown should be c
 ```bash
 make jekyll dst=~/git/ARENA/content/schemas/message
 ```
+
+## Update Repos Hat Trick
+```bash
+make update src=~/git/arena-services-docker/ARENA-core/build
+make docs
+make jekyll dst=~/git/ARENA/content/schemas/message
+```

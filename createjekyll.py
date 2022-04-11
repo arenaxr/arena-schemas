@@ -2,11 +2,13 @@ import json
 import os
 import sys
 
+from mdutils.mdutils import MdUtils
+
 input_folder = 'docs/'
 obj_schema_path = 'schemas/arena-schema-files.json'
-gp_sec_title = 'ARENA Objects'
-sec_title = 'Objects Schema'
-sec_nav_order = 8
+sec_nav_order = 1
+sec_title = 'ARENA Objects'
+sec_sub_title = 'Objects Schema'
 
 
 def main():
@@ -20,10 +22,10 @@ def main():
     # make jekyll index.md with objects list
     md_lines = []
     md_lines.append('---\n')
-    md_lines.append(f'title: {sec_title}\n')
+    md_lines.append(f'title: {sec_sub_title}\n')
     md_lines.append(f'nav_order: {sec_nav_order}\n')
     md_lines.append('layout: default\n')
-    md_lines.append(f'parent: {gp_sec_title}\n')
+    md_lines.append(f'parent: {sec_title}\n')
     md_lines.append('has_children: true\n')
     md_lines.append('has_toc: false\n')
     md_lines.append('---\n')
@@ -58,8 +60,8 @@ def main():
             md_lines.append(f'title: {lines[0]}\n')
             md_lines.append('nav_order: 1\n')
             md_lines.append('layout: default\n')
-            md_lines.append(f'parent: {sec_title}\n')
-            md_lines.append(f'grand_parent: {gp_sec_title}\n')
+            md_lines.append(f'parent: {sec_sub_title}\n')
+            md_lines.append(f'grand_parent: {sec_title}\n')
             md_lines.append('---\n')
             md_lines.append('\n')
             md_lines.append(text)

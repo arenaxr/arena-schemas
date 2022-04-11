@@ -3,7 +3,7 @@ Scene Options
 =============
 
 
-Scene Options
+ARENA Scene Options
 
 Scene Options Attributes
 -------------------------

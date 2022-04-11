@@ -3,7 +3,7 @@ Renderer Settings
 =================
 
 
-Renderer Settings
+These settings are fed into three.js WebGLRenderer properties
 
 Renderer Settings Attributes
 -----------------------------

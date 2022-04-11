@@ -3,7 +3,9 @@ Environment Presets
 ===================
 
 
-Environment Presets
+A-Frame Environment presets. 
+
+More properties at <a href='https://github.com/supermedium/aframe-environment-component'>https://github.com/supermedium/aframe-environment-component</a>
 
 Environment Presets Attributes
 -------------------------------
