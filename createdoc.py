@@ -77,8 +77,11 @@ def object_table(mdFile, md_title, obj, definitions={}):
             line[Table.cols.DFT] = format_value(default, default[prop])
         if '$ref' in prop_obj:
             obj_name = prop_obj['$ref'][len('#/definitions/'):]
-            line[Table.cols.DESC] = f'See: [{obj_name}]({obj_name})'
-            line[Table.cols.TYPE] = obj_name
+            if obj_name in definitions and 'description' in definitions[obj_name]:
+                line[Table.cols.DESC] = definitions[obj_name]['description'].split('\n')[0]
+            else:
+                line[Table.cols.DESC] = obj_name
+            line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
             if obj_name in definitions:
                 write_md(definitions[obj_name], f'{output_folder}{obj_name}.md', overwrite=False, wire_obj=False)
         table_lines.extend(line)
