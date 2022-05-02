@@ -355,21 +355,23 @@
                     "type": "string"
                 },
                 "sceneHeadModels": {
-                    "default": "",
+                    "default": [],
                     "description": "Define the default head model(s) for the scene in a list. Users may still choose from the ARENA default list of head models as well.",
-                    "minLength": 5,
                     "title": "Head Model URLs",
                     "type": "array",
                     "minItems": 1,
                     "maxItems": 10,
                     "items": {
                         "type": "object",
+                        "title": "Head Models",
                         "properties": {
                             "name": {
+                                "title": "Head Model Name",
                                 "type": "string",
                                 "description": "A head model name for the selection GUI."
                             },
                             "url": {
+                                "title": "Head Model URL",
                                 "type": "string",
                                 "description": "The head model GLTF URL. You must scale and rotate your source GLTFs appropriately."
                             }
@@ -431,10 +433,16 @@
                     "title": "Screenshare object name",
                     "type": "string"
                 },
-                "disableVideoCulling": {
-                    "default": false,
-                    "description": "If true will disable video frustum culling (video frustum culling stops video from users outside of view)",
-                    "title": "Disable Video Frustum Culling",
+                "videoFrustumCulling": {
+                    "default": true,
+                    "description": "If false, will disable video frustum culling (video frustum culling stops video from users outside of view)",
+                    "title": "Video Frustum Culling",
+                    "type": "boolean"
+                },
+                "videoDistanceConstraints": {
+                    "default": true,
+                    "description": "If false, will disable video distance constraints (video resolution decreases with distance from users in view)",
+                    "title": "Video Distance Constraints",
                     "type": "boolean"
                 },
                 "volume": {
@@ -442,13 +450,20 @@
                     "description": "Volume for users in a scene",
                     "title": "Positional Audio Volume",
                     "type": "number"
+                },
+                "physics": {
+                    "default": false,
+                    "description": "If true, will load the aframe-physics-system. Required for the following: `dynamic-body`, `impulse`, `collision-listener`.",
+                    "title": "Physics System",
+                    "type": "boolean"
                 }
             },
             "required": [
                 "clickableOnlyEvents",
                 "maxAVDist",
                 "privateScene",
-                "disableVideoCulling"
+                "videoFrustumCulling",
+                "videoDistanceConstraints"
             ],
             "title": "Scene Options",
             "type": "object",
