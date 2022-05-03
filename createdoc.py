@@ -15,12 +15,12 @@ ObjTypeDesc = {
 }
 
 class Table:
-    heading = ["Attribute", "Description", "Type", "Default", "Required"]
+    heading = ["Attribute", "Type", "Default", "Description", "Required"]
     cols = type('Columns', (object,), {
         'ATTR': 0,
-        'DESC': 1,
-        'TYPE': 2,
-        'DFT': 3,
+        'TYPE': 1,
+        'DFT': 2,
+        'DESC': 3,
         'REQ': 4
     })()
 
@@ -47,7 +47,9 @@ def object_table(mdFile, md_title, obj, definitions={}):
     table_lines = Table.heading.copy()
     for prop in prop_list:
         prop_obj = prop_list[prop]
-        line = [prop, '', '', '', 'No']
+        line = [''] * 5
+        line[Table.cols.ATTR] = prop
+        line[Table.cols.REQ] = 'No'
         if 'type' in prop_obj:
             line[Table.cols.TYPE] = prop_obj['type']
         if (prop == 'data'):
