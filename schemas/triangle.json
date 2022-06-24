@@ -183,12 +183,23 @@
                 "dynamic-body": {
                     "$ref": "#/definitions/dynamic-body"
                 },
+                "goto-landmark": {
+                    "$ref": "#/definitions/goto-landmark"
+                },
                 "goto-url": {
                     "$ref": "#/definitions/goto-url"
                 },
                 "hide-on-enter-ar": {
                     "description": "Hide object when entering AR. Remove component to *not* hide",
                     "title": "Hide in AR",
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                },
+                "hide-on-enter-vr": {
+                    "description": "Hide object when entering VR. Remove component to *not* hide",
+                    "title": "Hide in VR",
                     "type": "boolean",
                     "enum": [
                         true
@@ -456,6 +467,28 @@
                 "type"
             ],
             "title": "Physics",
+            "type": "object"
+        },
+        "goto-landmark": {
+            "description": "Teleports user to the landmark with the given name; Requires click-listener",
+            "properties": {
+                "on": {
+                    "enum": [
+                        "mousedown",
+                        "mouseup"
+                    ],
+                    "type": "string"
+                },
+                "landmark": {
+                    "default": "",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "landmark",
+                "on"
+            ],
+            "title": "Goto Landmark",
             "type": "object"
         },
         "goto-url": {
