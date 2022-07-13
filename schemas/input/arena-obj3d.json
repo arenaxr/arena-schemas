@@ -536,7 +536,7 @@
        },
        "goto-url":{
           "title":"Goto URL",
-          "description":"Goto given URL; Requires click-listner",
+          "description":"Goto given URL; Requires click-listener",
           "type":"object",
           "properties":{
              "dest":{
