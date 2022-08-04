@@ -1,6 +1,6 @@
 {
-    "title": "Cone",
-    "description": "Cone Geometry",
+    "title": "Prism",
+    "description": "Prism Geometry",
     "required": [
         "object_id",
         "action",
@@ -38,12 +38,13 @@
             "type": "string"
         },
         "data": {
-            "title": "Cone Data",
+            "title": "Prism Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "cone",
-                "height": 2,
-                "radiusBottom": 1,
+                "object_type": "prism",
+                "depth": 1,
+                "height": 1,
+                "width": 1,
                 "material": {
                     "color": "#7f7f7f"
                 },
@@ -60,8 +61,9 @@
             },
             "required": [
                 "object_type",
+                "width",
                 "height",
-                "radiusBottom"
+                "depth"
             ],
             "properties": {
                 "object_type": {
@@ -69,48 +71,23 @@
                     "title": "3D object type",
                     "description": "3D object type (derived from 'type' select above).",
                     "enum": [
-                        "cone"
+                        "prism"
                     ]
+                },
+                "depth": {
+                    "type": "number",
+                    "title": "depth",
+                    "default": 1
                 },
                 "height": {
                     "type": "number",
                     "title": "height",
-                    "default": 2
-                },
-                "openEnded": {
-                    "type": "boolean",
-                    "title": "open ended",
-                    "default": false
-                },
-                "radiusBottom": {
-                    "type": "number",
-                    "title": "radius bottom",
                     "default": 1
                 },
-                "radiusTop": {
+                "width": {
                     "type": "number",
-                    "title": "radius top",
+                    "title": "width",
                     "default": 1
-                },
-                "segmentsHeight": {
-                    "type": "number",
-                    "title": "segments height",
-                    "default": 18
-                },
-                "segmentsRadial": {
-                    "type": "number",
-                    "title": "segments radial",
-                    "default": 36
-                },
-                "thetaLength": {
-                    "type": "number",
-                    "title": "theta length",
-                    "default": 360
-                },
-                "thetaStart": {
-                    "type": "number",
-                    "title": "theta start",
-                    "default": 0
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
