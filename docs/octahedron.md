@@ -23,6 +23,7 @@ Octahedron Attributes
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|string; Must be: ```octahedron```|```octahedron```|3D object type.|Yes|
+|detail|number|```0```|detail|No|
 |radius|number|```1```|radius|Yes|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|3D object position|No|

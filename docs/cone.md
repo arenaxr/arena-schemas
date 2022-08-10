@@ -26,7 +26,7 @@ Cone Attributes
 |height|number|```2```|height|Yes|
 |openEnded|boolean|```False```|open ended|No|
 |radiusBottom|number|```1```|radius bottom|Yes|
-|radiusTop|number|```1```|radius top|No|
+|radiusTop|number|```0.01```|radius top|No|
 |segmentsHeight|number|```18```|segments height|No|
 |segmentsRadial|number|```36```|segments radial|No|
 |thetaLength|number|```360```|theta length|No|

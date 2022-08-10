@@ -1,6 +1,6 @@
 {
-    "title": "Sphere",
-    "description": "Sphere Geometry",
+    "title": "Isosahedron",
+    "description": "isosahedron Geometry",
     "required": [
         "object_id",
         "action",
@@ -38,10 +38,10 @@
             "type": "string"
         },
         "data": {
-            "title": "Sphere Data",
+            "title": "Isosahedron Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "sphere",
+                "object_type": "isosahedron",
                 "radius": 1,
                 "material": {
                     "color": "#7f7f7f"
@@ -58,7 +58,8 @@
                 }
             },
             "required": [
-                "object_type"
+                "object_type",
+                "radius"
             ],
             "properties": {
                 "object_type": {
@@ -66,43 +67,18 @@
                     "title": "3D object type",
                     "description": "3D object type (derived from 'type' select above).",
                     "enum": [
-                        "sphere"
+                        "isosahedron"
                     ]
                 },
-                "phiLength": {
+                "detail": {
                     "type": "number",
-                    "title": "phi length",
-                    "default": 360
-                },
-                "phiStart": {
-                    "type": "number",
-                    "title": "phi start",
+                    "title": "detail",
                     "default": 0
                 },
                 "radius": {
                     "type": "number",
                     "title": "radius",
                     "default": 1
-                },
-                "segmentsHeight": {
-                    "type": "number",
-                    "title": "segments height",
-                    "default": 18
-                },
-                "segmentsWidth": {
-                    "type": "number",
-                    "title": "segments width",
-                    "default": 36
-                },
-                "thetaLength": {
-                    "type": "number",
-                    "title": "theta length",
-                    "default": 180
-                },
-                "thetaStart": {
-                    "type": "number",
-                    "title": "theta start",
-                    "default": 0
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",

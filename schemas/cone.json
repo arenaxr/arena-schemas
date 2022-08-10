@@ -90,7 +90,7 @@
                 "radiusTop": {
                     "type": "number",
                     "title": "radius top",
-                    "default": 1
+                    "default": 0.01
                 },
                 "segmentsHeight": {
                     "type": "number",

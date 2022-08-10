@@ -1,14 +1,14 @@
 
-Tetrahedron
-===========
+Capsule
+=======
 
 
-Tetrahedron Geometry
+Capsule Geometry
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
-Tetrahedron Attributes
------------------------
+Capsule Attributes
+-------------------
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -16,15 +16,17 @@ Tetrahedron Attributes
 |persist|boolean|```true```|Persist this object in the database (default true = persist on server)|Yes|
 |type|string; Must be: ```object```|```'object'```|AFrame 3D Object|Yes|
 |action|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|Yes|
-|data|Tetrahedron data||Tetrahedron Data|Yes|
+|data|Capsule data||Capsule Data|Yes|
 
-### Tetrahedron Data Attributes
+### Capsule Data Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|string; Must be: ```tetrahedron```|```tetrahedron```|3D object type.|Yes|
-|detail|number|```0```|detail|No|
+|object_type|string; Must be: ```capsule```|```capsule```|3D object type.|Yes|
+|length|number|```1```|length|Yes|
 |radius|number|```1```|radius|Yes|
+|segmentsCap|number|```18```|segments capsule|No|
+|segmentsRadial|number|```36```|segments radial|No|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|3D object position|No|
 |rotation|[rotation](rotation)|```{'x': 0, 'y': 0, 'z': 0}```|3D object rotation in degrees by default; Right-handed coordinate system. Switches to quaternion representation if 'w' is given|No|

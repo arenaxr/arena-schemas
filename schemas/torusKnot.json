@@ -93,12 +93,12 @@
                 "segmentsRadial": {
                     "type": "number",
                     "title": "segments radial",
-                    "default": 36
+                    "default": 8
                 },
                 "segmentsTubular": {
                     "type": "number",
                     "title": "segments tubular",
-                    "default": 32
+                    "default": 100
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",

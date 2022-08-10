@@ -1,14 +1,14 @@
 
-Tetrahedron
-===========
+Prism
+=====
 
 
-Tetrahedron Geometry
+Prism Geometry
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
-Tetrahedron Attributes
------------------------
+Prism Attributes
+-----------------
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -16,15 +16,16 @@ Tetrahedron Attributes
 |persist|boolean|```true```|Persist this object in the database (default true = persist on server)|Yes|
 |type|string; Must be: ```object```|```'object'```|AFrame 3D Object|Yes|
 |action|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|Yes|
-|data|Tetrahedron data||Tetrahedron Data|Yes|
+|data|Prism data||Prism Data|Yes|
 
-### Tetrahedron Data Attributes
+### Prism Data Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|string; Must be: ```tetrahedron```|```tetrahedron```|3D object type.|Yes|
-|detail|number|```0```|detail|No|
-|radius|number|```1```|radius|Yes|
+|object_type|string; Must be: ```prism```|```prism```|3D object type.|Yes|
+|depth|number|```1```|depth|Yes|
+|height|number|```1```|height|Yes|
+|width|number|```1```|width|Yes|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|3D object position|No|
 |rotation|[rotation](rotation)|```{'x': 0, 'y': 0, 'z': 0}```|3D object rotation in degrees by default; Right-handed coordinate system. Switches to quaternion representation if 'w' is given|No|
