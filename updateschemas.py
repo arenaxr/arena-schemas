@@ -28,7 +28,7 @@ def main():
     args = sys.argv[1:]
     print(args)
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print('Supply a valid source schemas path! src=ARENA-core/build')
+        print('Supply a valid source schemas path! src=arena-web-core/build')
         return
 
     input_folder = args[0]

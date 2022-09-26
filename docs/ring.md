@@ -23,7 +23,7 @@ Ring Attributes
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|string; Must be: ```ring```|```ring```|3D object type.|Yes|
-|radiusInner|number|```1```|radius inner|Yes|
+|radiusInner|number|```0.5```|radius inner|Yes|
 |radiusOuter|number|```1```|radius outer|Yes|
 |segmentsPhi|number|```10```|segments phi|No|
 |segmentsTheta|number|```32```|segments theta|No|

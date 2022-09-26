@@ -4,9 +4,9 @@ Schemas for objects used in the ARENA.
 There are a handful of scripts and run commands that can update scripts and generate intermediate json schema and markdown documents:
 
 ## Generate Intermediate Schema
-Step 1. This will take a source directory, like the ARENA-core build directory and parse it's `[src]/schemas/` for  `arena-schema-files.json` to output expanded json schema in our local schema dir `./schemas/`, removing older `.json` schema files if needed.
+Step 1. This will take a source directory, like the arena-web-core build directory and parse it's `[src]/schemas/` for  `arena-schema-files.json` to output expanded json schema in our local schema dir `./schemas/`, removing older `.json` schema files if needed.
 ```bash
-make update src=~/git/arena-services-docker/ARENA-core/build
+make update src=~/git/arena-services-docker/arena-web-core/build
 ```
 
 ## Generate Linked Markdown
@@ -23,7 +23,7 @@ make jekyll dst=~/git/ARENA/content/schemas/message
 
 ## Update Repos Hat Trick
 ```bash
-make update src=~/git/arena-services-docker/ARENA-core/build
+make update src=~/git/arena-services-docker/arena-web-core/build
 make docs
-make jekyll dst=~/git/ARENA/content/schemas/message
+make jekyll dst=~/git/arena/content/schemas/message
 ```
