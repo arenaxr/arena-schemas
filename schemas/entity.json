@@ -63,20 +63,49 @@
                             "description": "The geometry primitive.",
                             "enum": [
                                 "box",
-                                "sphere",
+                                "capsule",
                                 "circle",
                                 "cone",
                                 "cylinder",
                                 "dodecahedron",
                                 "icosahedron",
-                                "tetrahedron",
                                 "octahedron",
                                 "plane",
+                                "prism",
                                 "ring",
+                                "roundedbox",
+                                "sphere",
+                                "tetrahedron",
                                 "torus",
                                 "torusKnot",
                                 "triangle"
                             ]
+                        }
+                    }
+                },
+                "panel": {
+                    "title": "UI Panel",
+                    "description": "The rounded UI panel primitive.",
+                    "default": {
+                        "depth": 0.05,
+                        "height": 1,
+                        "width": 1
+                    },
+                    "properties": {
+                        "depth": {
+                            "type": "number",
+                            "title": "depth",
+                            "default": 0.05
+                        },
+                        "height": {
+                            "type": "number",
+                            "title": "height",
+                            "default": 1
+                        },
+                        "width": {
+                            "type": "number",
+                            "title": "width",
+                            "default": 1
                         }
                     }
                 },
@@ -155,6 +184,9 @@
                 },
                 "sound": {
                     "$ref": "#/definitions/sound"
+                },
+                "textinput": {
+                    "$ref": "#/definitions/textinput"
                 },
                 "url": {
                     "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
@@ -737,6 +769,55 @@
             },
             "title": "Positional Sound",
             "type": "object"
+        },
+        "textinput": {
+            "title": "Text Input",
+            "description": "Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.",
+            "type": "object",
+            "default": {
+                "on": "mousedown",
+                "title": "Text Input",
+                "label": "Input text below (max is 140 characters)",
+                "placeholder": "Type here"
+            },
+            "properties": {
+                "on": {
+                    "default": "mousedown",
+                    "description": "A case-sensitive string representing the event type to listen for, e.g. 'mousedown', 'mouseup'. See https://developer.mozilla.org/en-US/docs/Web/Events",
+                    "enum": [
+                        "mousedown",
+                        "mouseup",
+                        "mouseenter",
+                        "mouseleave",
+                        "triggerdown",
+                        "triggerup",
+                        "gripdown",
+                        "gripup",
+                        "menudown",
+                        "menuup",
+                        "systemdown",
+                        "systemup",
+                        "trackpaddown",
+                        "trackpadup"
+                    ],
+                    "type": "string"
+                },
+                "title": {
+                    "default": "Text Input",
+                    "description": "The prompt title",
+                    "type": "string"
+                },
+                "label": {
+                    "default": "Input text below (max is 140 characters)",
+                    "description": "Text prompt label",
+                    "type": "string"
+                },
+                "placeholder": {
+                    "default": "Type here",
+                    "description": "Text input place holder",
+                    "type": "string"
+                }
+            }
         },
         "video-control": {
             "description": "Video Control",
