@@ -198,6 +198,9 @@
                 "video-control": {
                     "$ref": "#/definitions/video-control"
                 },
+                "attribution": {
+                    "$ref": "#/definitions/attribution"
+                },
                 "buffer": {
                     "default": "true",
                     "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
@@ -881,6 +884,50 @@
                 "video_path"
             ],
             "title": "Video",
+            "type": "object"
+        },
+        "attribution": {
+            "description": "Attribution Component. Saves attribution data in any entity.",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "default": "Unknown",
+                    "description": "Author name; e.g. \u201cVaptor-Studio\u201d"
+                },
+                "authorURL": {
+                    "type": "string",
+                    "description": "Author homepage/profile; e.g. https://sketchfab.com/VapTor"
+                },
+                "license": {
+                    "type": "string",
+                    "default": "Unknown",
+                    "description": "License summary/short name; e.g. \u201cCC-BY-4.0\u201d."
+                },
+                "licenseURL": {
+                    "type": "string",
+                    "description": "License URL; e.g. http://creativecommons.org/licenses/by/4.0/"
+                },
+                "source": {
+                    "type": "string",
+                    "default": "Unknown",
+                    "description": "Model source e.g. \u201cSketchfab\u201d."
+                },
+                "sourceURL": {
+                    "type": "string",
+                    "description": "Model source URL; e.g. https://sketchfab.com/models/2135501583704537907645bf723685e7"
+                },
+                "title": {
+                    "type": "string",
+                    "default": "No Title",
+                    "description": "Model title; e.g. \u201cSpinosaurus\u201d."
+                },
+                "extractAssetExtras": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Extract attribution info from asset extras; will override attribution info given (default: true)"
+                }
+            },
+            "title": "Attribution",
             "type": "object"
         },
         "jitsi-video": {
