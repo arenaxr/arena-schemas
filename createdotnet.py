@@ -1,6 +1,7 @@
 import json
 import os
-
+import string
+import num2words
 from caseconverter import pascalcase
 
 input_folder = 'schemas/'
@@ -79,6 +80,7 @@ def object_table(cs_title, obj, definitions={}):
                 type = prop_obj["enum"][0]
                 if type in ObjTypeDesc:
                     line[Table.cols.DESC] = ObjTypeDesc[type]
+                #line[Table.cols.TYPE] = f'{line[Table.cols.TYPE]}; Must be: ```{type}```'
                 line[Table.cols.TYPE] = f'{line[Table.cols.TYPE]}; Must be: ```{type}```'
                 line[Table.cols.DFT] = format_value(prop_obj, type)
             else:
@@ -109,15 +111,15 @@ def object_table(cs_title, obj, definitions={}):
             cs_lines.append('        {\n')
             for enumVal in line[Table.cols.ENUM]:
                 cs_lines.append(f'            [EnumMember(Value = "{enumVal}")]\n')
-                cs_lines.append(f'            {enumVal},\n')
+                cs_lines.append(f'            {enumcase(enumVal)},\n')
             cs_lines.append('        }\n')
-        defValue = line[Table.cols.DFT].replace("\"","")
+        defValue = str(line[Table.cols.DFT]).replace("\"","")
         if (line[Table.cols.ENUM]):
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{defValue};\n')
+            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{enumcase(defValue)};\n')
             cs_lines.append(f'        [JsonConverter(typeof(StringEnumConverter))]\n')
         else:
             if line[Table.cols.TYPE] == "string":
-                defValue = f'{"{defValue}"}'
+                defValue = f'"{defValue}"'
             cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName="{line[Table.cols.ATTR]}")]\n')
         cs_lines.append(f'        [Tooltip("{line[Table.cols.DESC]}")]\n')
@@ -132,6 +134,16 @@ def object_table(cs_title, obj, definitions={}):
         cs_lines.append('        }\n')
 
     return cs_lines
+
+
+def enumcase(word):
+    if word and word[0:1].isdigit():
+        print (word[0:1])
+        print (word[1:])
+        return pascalcase(num2words.num2words(word[0:1])+word[1:])
+    else:
+        return pascalcase(word)
+
 
 def get_cs_type(type):
     if type == "number":
@@ -171,7 +183,7 @@ namespace ArenaUnity.Schemas
     {{
         public const string componentName = "{prop}";
 
-        // {cs_class} Member-fields
+        // {prop} member-fields
 '''
 
 def cs_post(cs_class):
@@ -212,33 +224,25 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
     desc = cs_title
     if 'description' in json_obj:
         desc = json_obj['description']
-    # mdFile.new_paragraph(desc)
     desc = desc.replace('\n','')
 
     cs_lines.append(cs_pre(cs_class, obj_name, desc))
     # if wire_obj:
-    #     mdFile.new_paragraph(
-    #         'All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes')
-
-    # mdFile.new_header(
-    #     level=2, title=f'\n{cs_title} Attributes', style='setext', add_table_of_contents='n')
+    #         'All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the
     # cs_file_new_header(
     #     level=2, title=f'\n{cs_title} Attributes', style='setext', add_table_of_contents='n')
 
-    cs_lines.extend(object_table(cs_title, json_obj))
+    if not wire_obj:
+        cs_lines.extend(object_table(cs_title, json_obj))
 
     if not 'properties' in json_obj:
-        # mdFile.create_md_file()
         create_cs_file(cs_fn, cs_class, cs_lines)
         return
 
     if not 'data' in json_obj['properties']:
-        # mdFile.create_md_file()
         create_cs_file(cs_fn, cs_class, cs_lines)
         return
 
-    # mdFile.new_header(
-    #     level=3, title=f'{cs_title} Data Attributes', add_table_of_contents='n')
     # cs_file_new_header(
     #     level=3, title=f'{cs_title} Data Attributes', add_table_of_contents='n')
 
@@ -256,7 +260,6 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
 
 
 def create_cs_file(cs_fn, cs_class, cs_lines):
-    # mdFile.create_md_file()
 
     cs_lines.append(cs_post(cs_class))
 
