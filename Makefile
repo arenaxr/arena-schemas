@@ -12,6 +12,10 @@ docs: venv
 jekyll: venv
 	$(VENV)/python createjekyll.py $(dst)
 
+dotnet: venv
+	rm -f dotnet/*.cs
+	$(VENV)/python createdotnet.py $(dst)
+
 show-req: venv
 		$(VENV)/pip freeze
 

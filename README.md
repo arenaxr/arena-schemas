@@ -26,4 +26,5 @@ make jekyll dst=~/git/ARENA/content/schemas/message
 make update src=~/git/arena-services-docker/arena-web-core/build
 make docs
 make jekyll dst=~/git/arena/content/schemas/message
+make dotnet dst=~/git/arena-unity/Runtime/Schemas
 ```
