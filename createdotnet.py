@@ -1,6 +1,6 @@
 import json
 import os
-import inflection
+from caseconverter import pascalcase
 
 #from mdutils.mdutils import MdUtils
 
@@ -38,8 +38,6 @@ def format_value(obj, value):
     return f'{value}'
 
 
-
-
 # def object_table(mdFile, cs_title, obj, definitions={}):
 def object_table(cs_title, obj, definitions={}):
     cs_lines = []
@@ -59,7 +57,7 @@ def object_table(cs_title, obj, definitions={}):
         prop_obj = prop_list[prop]
         line = [''] * 6
         line[Table.cols.ATTR] = prop
-        camelAttrName = inflection.camelize(line[Table.cols.ATTR])
+        pascalAttrName = pascalcase(line[Table.cols.ATTR])
         line[Table.cols.REQ] = 'No'
         if 'type' in prop_obj:
             line[Table.cols.TYPE] = get_cs_type(prop_obj['type'])
@@ -86,7 +84,7 @@ def object_table(cs_title, obj, definitions={}):
             else:
                 #line[Table.cols.TYPE] = f'{line[Table.cols.TYPE]}; One of: ```{prop_obj["enum"]}```'
                 line[Table.cols.ENUM] = prop_obj["enum"]
-                line[Table.cols.TYPE] = f'{camelAttrName}Type'
+                line[Table.cols.TYPE] = f'{pascalAttrName}Type'
         if prop in required:
             line[Table.cols.REQ] = 'Yes'
         if prop in default:
@@ -101,7 +99,7 @@ def object_table(cs_title, obj, definitions={}):
             line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
             if obj_name in definitions:
                 write_cs(
-                    definitions[obj_name], f'{output_folder}{obj_name}.cs', overwrite=False, wire_obj=False)
+                    definitions[obj_name], obj_name, f'{output_folder}{obj_name}.cs', overwrite=False, wire_obj=False)
         table_lines.extend(line)
 
         cs_lines.append('\n')
@@ -113,19 +111,20 @@ def object_table(cs_title, obj, definitions={}):
                 cs_lines.append(f'            {enumVal},\n')
             cs_lines.append('        }\n')
         if (line[Table.cols.ENUM]):
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{camelAttrName} = {camelAttrName}Type.{line[Table.cols.DFT]};\n')
+            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{line[Table.cols.DFT]};\n')
+            cs_lines.append(f'        [JsonConverter(typeof(StringEnumConverter))]\n')
         else:
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{camelAttrName} = {line[Table.cols.DFT]};\n')
+            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {line[Table.cols.DFT]};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName="{line[Table.cols.ATTR]}")]\n')
         cs_lines.append(f'        [Tooltip("{line[Table.cols.DESC]}")]\n')
-        cs_lines.append(f'        public {line[Table.cols.TYPE]} {camelAttrName} = def{camelAttrName};\n')
-        cs_lines.append(f'        public bool ShouldSerialize{camelAttrName}()\n')
+        cs_lines.append(f'        public {line[Table.cols.TYPE]} {pascalAttrName} = def{pascalAttrName};\n')
+        cs_lines.append(f'        public bool ShouldSerialize{pascalAttrName}()\n')
         cs_lines.append('        {\n')
         if line[Table.cols.REQ] == 'Yes':
             cs_lines.append(f'            return true; // required in json schema \n')
         else:
             cs_lines.append(f'            if (_token != null && _token.SelectToken("{line[Table.cols.ATTR]}") != null) return true;\n')
-            cs_lines.append(f'            return ({camelAttrName} != def{camelAttrName});\n')
+            cs_lines.append(f'            return ({pascalAttrName} != def{pascalAttrName});\n')
         cs_lines.append('        }\n')
 
 
@@ -143,9 +142,8 @@ def get_cs_type(type):
     return type
 
 
-def cs_pre(cs_class, desc):
-    return f'''
-/**
+def cs_pre(cs_class, prop, desc):
+    return f'''/**
  * Open source software under the terms in /LICENSE
  * Copyright (c) 2021-2023, Carnegie Mellon University. All rights reserved.
  */
@@ -165,10 +163,11 @@ namespace ArenaUnity.Schemas
     /// {desc}
     /// </summary>
     [Serializable]
-    public class Arena{cs_class}Json
+    public class {cs_class}
     {{
-        // Arena{cs_class}Json Member-fields
+        public const string componentName = "{prop}";
 
+        // {cs_class} Member-fields
 '''
 
 def cs_post(cs_class):
@@ -185,17 +184,17 @@ def cs_post(cs_class):
             return Regex.Unescape(JsonConvert.SerializeObject(this));
         }}
 
-        public static Arena{cs_class}Json CreateFromJSON(string jsonString, JToken token)
+        public static {cs_class} CreateFromJSON(string jsonString, JToken token)
         {{
             _token = token; // save updated wire json
-            return JsonConvert.DeserializeObject<Arena{cs_class}Json>(Regex.Unescape(jsonString));
+            return JsonConvert.DeserializeObject<{cs_class}>(Regex.Unescape(jsonString));
         }}
     }}
 }}
 '''
 
 
-def write_cs(json_obj, cs_fn, overwrite=True, wire_obj=True):
+def write_cs(json_obj, obj_name, cs_fn, overwrite=True, wire_obj=True):
     if not overwrite:
         if os.path.isfile(cs_fn):
             return
@@ -212,9 +211,10 @@ def write_cs(json_obj, cs_fn, overwrite=True, wire_obj=True):
     # mdFile.new_paragraph(desc)
     desc = desc.replace('\n','')
 
-    cs_title = inflection.camelize(cs_title.replace(' ',''))
-    print (cs_title)
-    cs_lines.append(cs_pre(cs_title, desc))
+    print(obj_name)
+    print(cs_title)
+    cs_class = f'Arena{pascalcase(obj_name)}Json'
+    cs_lines.append(cs_pre(cs_class, obj_name, desc))
     # if wire_obj:
     #     mdFile.new_paragraph(
     #         'All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes')
@@ -228,12 +228,12 @@ def write_cs(json_obj, cs_fn, overwrite=True, wire_obj=True):
 
     if not 'properties' in json_obj:
         # mdFile.create_md_file()
-        create_cs_file(cs_fn, cs_title, cs_lines)
+        create_cs_file(cs_fn, cs_class, cs_lines)
         return
 
     if not 'data' in json_obj['properties']:
         # mdFile.create_md_file()
-        create_cs_file(cs_fn, cs_title, cs_lines)
+        create_cs_file(cs_fn, cs_class, cs_lines)
         return
 
     # mdFile.new_header(
@@ -251,7 +251,7 @@ def write_cs(json_obj, cs_fn, overwrite=True, wire_obj=True):
                                      json_obj['properties']['data'], json_obj['definitions']))
 
 
-    create_cs_file(cs_fn, cs_title, cs_lines)
+    create_cs_file(cs_fn, cs_class, cs_lines)
 
 
 def create_cs_file(cs_fn, cs_class, cs_lines):
@@ -278,7 +278,7 @@ def main():
             cs_filename = os.path.join(output_folder, f'{filename_noext}.cs')
             with open(json_filename) as f:
                 json_obj = json.load(f)
-            write_cs(json_obj, cs_filename)
+            write_cs(json_obj, filename_noext, cs_filename)
             continue
         else:
             continue
