@@ -1,8 +1,7 @@
 import json
 import os
-from caseconverter import pascalcase
 
-#from mdutils.mdutils import MdUtils
+from caseconverter import pascalcase
 
 input_folder = 'schemas/'
 output_folder = 'dotnet/'
@@ -33,12 +32,13 @@ def format_value(obj, value):
         type = obj['type']
     if type == 'string':
         return f'\"{value}\"'
-    if type == 'boolean':
+    elif type == 'boolean':
         return f'{str(value).lower()}'
+    elif type == 'array':
+        return f'{str(value).replace("[","{").replace("]","}")}'
     return f'{value}'
 
 
-# def object_table(mdFile, cs_title, obj, definitions={}):
 def object_table(cs_title, obj, definitions={}):
     cs_lines = []
     if 'properties' not in obj:
@@ -98,8 +98,9 @@ def object_table(cs_title, obj, definitions={}):
                 line[Table.cols.DESC] = obj_name
             line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
             if obj_name in definitions:
+                cs_class = f'Arena{pascalcase(obj_name)}Json'
                 write_cs(
-                    definitions[obj_name], obj_name, f'{output_folder}{obj_name}.cs', overwrite=False, wire_obj=False)
+                    definitions[obj_name], obj_name, cs_class, overwrite=False, wire_obj=False)
         table_lines.extend(line)
 
         cs_lines.append('\n')
@@ -110,11 +111,14 @@ def object_table(cs_title, obj, definitions={}):
                 cs_lines.append(f'            [EnumMember(Value = "{enumVal}")]\n')
                 cs_lines.append(f'            {enumVal},\n')
             cs_lines.append('        }\n')
+        defValue = line[Table.cols.DFT].replace("\"","")
         if (line[Table.cols.ENUM]):
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{line[Table.cols.DFT]};\n')
+            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{defValue};\n')
             cs_lines.append(f'        [JsonConverter(typeof(StringEnumConverter))]\n')
         else:
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {line[Table.cols.DFT]};\n')
+            if line[Table.cols.TYPE] == "string":
+                defValue = f'{"{defValue}"}'
+            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName="{line[Table.cols.ATTR]}")]\n')
         cs_lines.append(f'        [Tooltip("{line[Table.cols.DESC]}")]\n')
         cs_lines.append(f'        public {line[Table.cols.TYPE]} {pascalAttrName} = def{pascalAttrName};\n')
@@ -127,9 +131,6 @@ def object_table(cs_title, obj, definitions={}):
             cs_lines.append(f'            return ({pascalAttrName} != def{pascalAttrName});\n')
         cs_lines.append('        }\n')
 
-
-    # mdFile.new_table(columns=len(Table.heading), rows=len(
-    #     table_lines)//len(Table.heading), text=table_lines, text_align='left')
     return cs_lines
 
 def get_cs_type(type):
@@ -139,6 +140,9 @@ def get_cs_type(type):
         return "int"
     elif type == "boolean":
         return "bool"
+    elif type == "array":
+        return "string[]"
+
     return type
 
 
@@ -194,14 +198,14 @@ def cs_post(cs_class):
 '''
 
 
-def write_cs(json_obj, obj_name, cs_fn, overwrite=True, wire_obj=True):
+def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
+    cs_fn = f'{output_folder}{cs_class}.cs'
     if not overwrite:
         if os.path.isfile(cs_fn):
             return
     print('->', cs_fn)
 
     cs_title = json_obj['title']
-    # mdFile = MdUtils(file_name=cs_fn, title=cs_title)
 
     cs_lines = []
 
@@ -211,9 +215,6 @@ def write_cs(json_obj, obj_name, cs_fn, overwrite=True, wire_obj=True):
     # mdFile.new_paragraph(desc)
     desc = desc.replace('\n','')
 
-    print(obj_name)
-    print(cs_title)
-    cs_class = f'Arena{pascalcase(obj_name)}Json'
     cs_lines.append(cs_pre(cs_class, obj_name, desc))
     # if wire_obj:
     #     mdFile.new_paragraph(
@@ -275,10 +276,10 @@ def main():
         if filename.endswith(".json") and not filename.endswith("arena-schema-files.json"):
             json_filename = os.path.join(input_folder, filename)
             filename_noext = os.fsdecode(os.path.splitext(file)[0])
-            cs_filename = os.path.join(output_folder, f'{filename_noext}.cs')
+            cs_class = f'Arena{pascalcase(filename_noext)}Json'
             with open(json_filename) as f:
                 json_obj = json.load(f)
-            write_cs(json_obj, filename_noext, cs_filename)
+            write_cs(json_obj, filename_noext, cs_class)
             continue
         else:
             continue
