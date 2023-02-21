@@ -922,9 +922,9 @@
                     "type": "string"
                 },
                 "repetitions": {
-                    "default": 0,
-                    "description": "Number of times to play the clip, in addition to the first play. Repetitions are ignored for loop: once.",
-                    "type": "number"
+                    "default": "",
+                    "description": "Number of times to play the clip, in addition to the first play (empty string = Infinity). Repetitions are ignored for loop: once.",
+                    "type": "string"
                 },
                 "startAt": {
                     "default": 0,
