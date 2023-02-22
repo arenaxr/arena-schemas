@@ -15,7 +15,7 @@
             "type": "string"
         },
         "persist": {
-            "default": "true",
+            "default": true,
             "description": "Persist this object in the database (default true = persist on server)",
             "type": "boolean"
         },
@@ -231,12 +231,15 @@
             "description": "3D object position",
             "properties": {
                 "x": {
+                    "default": 0,
                     "type": "number"
                 },
                 "y": {
+                    "default": 0,
                     "type": "number"
                 },
                 "z": {
+                    "default": 0,
                     "type": "number"
                 }
             },

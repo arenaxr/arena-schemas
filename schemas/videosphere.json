@@ -15,7 +15,7 @@
             "type": "string"
         },
         "persist": {
-            "default": "true",
+            "default": true,
             "description": "Persist this object in the database (default true = persist on server)",
             "type": "boolean"
         },
@@ -120,7 +120,7 @@
                     "$ref": "#/definitions/scale"
                 },
                 "buffer": {
-                    "default": "true",
+                    "default": true,
                     "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
                     "title": "Buffer",
                     "type": "boolean"
@@ -131,14 +131,11 @@
                 "material": {
                     "$ref": "#/definitions/material"
                 },
-                "material-extras": {
-                    "$ref": "#/definitions/material-extras"
-                },
                 "multisrc": {
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": "true",
+                    "default": true,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"
@@ -151,12 +148,15 @@
             "description": "3D object position",
             "properties": {
                 "x": {
+                    "default": 0,
                     "type": "number"
                 },
                 "y": {
+                    "default": 0,
                     "type": "number"
                 },
                 "z": {
+                    "default": 0,
                     "type": "number"
                 }
             },
@@ -376,54 +376,6 @@
                 }
             },
             "title": "Material",
-            "type": "object"
-        },
-        "material-extras": {
-            "default": {
-                "encoding": "sRGBEncoding",
-                "needsUpdate": false
-            },
-            "description": "Define extra material properties, namely texture encoding, whether to render the material's color and render order. The properties set here access directly Three.js material component. \n\nMore properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>https://threejs.org/docs/#api/en/materials/Material</a>",
-            "properties": {
-                "encoding": {
-                    "default": "sRGBEncoding",
-                    "enum": [
-                        "LinearEncoding",
-                        "sRGBEncoding",
-                        "GammaEncoding",
-                        "RGBEEncoding",
-                        "LogLuvEncoding",
-                        "RGBM7Encoding",
-                        "RGBM16Encoding",
-                        "RGBDEncoding",
-                        "BasicDepthPacking",
-                        "RGBADepthPacking"
-                    ],
-                    "type": "string"
-                },
-                "needsUpdate": {
-                    "default": false,
-                    "type": "boolean"
-                },
-                "render-order": {
-                    "default": "1",
-                    "description": "This value allows the default rendering order of scene graph objects to be overridden.",
-                    "type": "number"
-                },
-                "colorWrite": {
-                    "description": "Whether to render the material\u2019s color",
-                    "type": "boolean"
-                },
-                "transparentOccluder": {
-                    "description": "If true, will set colorWrite=false and renderOrder=0 to make the material a transparent occluder.",
-                    "type": "boolean"
-                },
-                "defaultRenderOrder": {
-                    "description": "Used as the renderOrder when transparentOccluder is reset to false.",
-                    "type": "number"
-                }
-            },
-            "title": "Material extras",
             "type": "object"
         },
         "multisrc": {

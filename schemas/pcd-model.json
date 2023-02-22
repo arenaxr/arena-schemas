@@ -15,7 +15,7 @@
             "type": "string"
         },
         "persist": {
-            "default": "true",
+            "default": true,
             "description": "Persist this object in the database (default true = persist on server)",
             "type": "boolean"
         },
@@ -205,12 +205,15 @@
             "description": "3D object position",
             "properties": {
                 "x": {
+                    "default": 0,
                     "type": "number"
                 },
                 "y": {
+                    "default": 0,
                     "type": "number"
                 },
                 "z": {
+                    "default": 0,
                     "type": "number"
                 }
             },
@@ -307,6 +310,36 @@
                     "type": "number"
                 },
                 "easing": {
+                    "enum": [
+                        "easeInQuad",
+                        "easeInCubic",
+                        "easeInQuart",
+                        "easeInQuint",
+                        "easeInSine",
+                        "easeInExpo",
+                        "easeInCirc",
+                        "easeInBack",
+                        "easeInElastic",
+                        "easeOutQuad",
+                        "easeOutCubic",
+                        "easeOutQuart",
+                        "easeOutQuint",
+                        "easeOutSine",
+                        "easeOutExpo",
+                        "easeOutCirc",
+                        "easeOutBack",
+                        "easeOutElastic",
+                        "easeInOutQuad",
+                        "easeInOutCubic",
+                        "easeInOutQuart",
+                        "easeInOutQuint",
+                        "easeInOutSine",
+                        "easeInOutExpo",
+                        "easeInOutCirc",
+                        "easeInOutBack",
+                        "easeInOutElastic",
+                        "linear"
+                    ],
                     "default": "easeInQuad",
                     "description": "Easing function of animation. To ease in, ease out, ease in and out.",
                     "type": "string"
@@ -460,6 +493,7 @@
             "description": "Physics type attached to the object. \n\nMore properties at <a href='https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body'>https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body</a>",
             "properties": {
                 "type": {
+                    "default": "static",
                     "enum": [
                         "static",
                         "dynamic"
@@ -477,6 +511,8 @@
             "description": "Teleports user to the landmark with the given name; Requires click-listener",
             "properties": {
                 "on": {
+                    "default": "mousedown",
+                    "description": "Event to listen 'on'.",
                     "enum": [
                         "mousedown",
                         "mouseup"
@@ -485,6 +521,7 @@
                 },
                 "landmark": {
                     "default": "",
+                    "description": "Id of landmark to teleport to.",
                     "type": "string"
                 }
             },
@@ -499,6 +536,7 @@
             "description": "Goto given URL; Requires click-listener",
             "properties": {
                 "dest": {
+                    "default": "sametab",
                     "enum": [
                         "popup",
                         "newtab",
@@ -507,6 +545,7 @@
                     "type": "string"
                 },
                 "on": {
+                    "default": "mousedown",
                     "enum": [
                         "mousedown",
                         "mouseup"
@@ -514,6 +553,7 @@
                     "type": "string"
                 },
                 "url": {
+                    "default": "",
                     "format": "uri",
                     "type": "string"
                 }
@@ -558,26 +598,29 @@
                     "type": "number"
                 },
                 "offsetPosition": {
+                    "default": {
+                        "x": 0,
+                        "y": 1.6,
+                        "z": 0
+                    },
                     "description": "Use as a static teleport x,y,z offset",
                     "properties": {
                         "x": {
-                            "type": "number",
-                            "default": 0
+                            "type": "number"
                         },
                         "y": {
-                            "type": "number",
-                            "default": 1.6
+                            "type": "number"
                         },
                         "z": {
-                            "type": "number",
-                            "default": 0
+                            "type": "number"
                         }
                     },
                     "required": [
                         "x",
                         "y",
                         "z"
-                    ]
+                    ],
+                    "type": "object"
                 },
                 "constrainToNavMesh": {
                     "description": "Teleports should snap to navmesh. Valid values: 'false', 'any', 'coplanar'",

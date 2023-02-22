@@ -10,5 +10,5 @@ Goto Landmark Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|on|string; One of: ```['mousedown', 'mouseup']```||on|Yes|
-|landmark|string|```''```|landmark|Yes|
+|on|string; One of: ```['mousedown', 'mouseup']```|```'mousedown'```|Event to listen 'on'.|Yes|
+|landmark|string|```''```|Id of landmark to teleport to.|Yes|

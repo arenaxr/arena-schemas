@@ -15,7 +15,7 @@
             "type": "string"
         },
         "persist": {
-            "default": "true",
+            "default": true,
             "description": "Persist this object in the database (default true = persist on server)",
             "type": "boolean"
         },
@@ -193,7 +193,7 @@
                     "$ref": "#/definitions/attribution"
                 },
                 "buffer": {
-                    "default": "true",
+                    "default": true,
                     "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
                     "title": "Buffer",
                     "type": "boolean"
@@ -208,7 +208,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": "true",
+                    "default": true,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"
@@ -221,12 +221,15 @@
             "description": "3D object position",
             "properties": {
                 "x": {
+                    "default": 0,
                     "type": "number"
                 },
                 "y": {
+                    "default": 0,
                     "type": "number"
                 },
                 "z": {
+                    "default": 0,
                     "type": "number"
                 }
             },
@@ -323,6 +326,36 @@
                     "type": "number"
                 },
                 "easing": {
+                    "enum": [
+                        "easeInQuad",
+                        "easeInCubic",
+                        "easeInQuart",
+                        "easeInQuint",
+                        "easeInSine",
+                        "easeInExpo",
+                        "easeInCirc",
+                        "easeInBack",
+                        "easeInElastic",
+                        "easeOutQuad",
+                        "easeOutCubic",
+                        "easeOutQuart",
+                        "easeOutQuint",
+                        "easeOutSine",
+                        "easeOutExpo",
+                        "easeOutCirc",
+                        "easeOutBack",
+                        "easeOutElastic",
+                        "easeInOutQuad",
+                        "easeInOutCubic",
+                        "easeInOutQuart",
+                        "easeInOutQuint",
+                        "easeInOutSine",
+                        "easeInOutExpo",
+                        "easeInOutCirc",
+                        "easeInOutBack",
+                        "easeInOutElastic",
+                        "linear"
+                    ],
                     "default": "easeInQuad",
                     "description": "Easing function of animation. To ease in, ease out, ease in and out.",
                     "type": "string"
@@ -476,6 +509,7 @@
             "description": "Physics type attached to the object. \n\nMore properties at <a href='https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body'>https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body</a>",
             "properties": {
                 "type": {
+                    "default": "static",
                     "enum": [
                         "static",
                         "dynamic"
@@ -493,6 +527,8 @@
             "description": "Teleports user to the landmark with the given name; Requires click-listener",
             "properties": {
                 "on": {
+                    "default": "mousedown",
+                    "description": "Event to listen 'on'.",
                     "enum": [
                         "mousedown",
                         "mouseup"
@@ -501,6 +537,7 @@
                 },
                 "landmark": {
                     "default": "",
+                    "description": "Id of landmark to teleport to.",
                     "type": "string"
                 }
             },
@@ -515,6 +552,7 @@
             "description": "Goto given URL; Requires click-listener",
             "properties": {
                 "dest": {
+                    "default": "sametab",
                     "enum": [
                         "popup",
                         "newtab",
@@ -523,6 +561,7 @@
                     "type": "string"
                 },
                 "on": {
+                    "default": "mousedown",
                     "enum": [
                         "mousedown",
                         "mouseup"
@@ -530,6 +569,7 @@
                     "type": "string"
                 },
                 "url": {
+                    "default": "",
                     "format": "uri",
                     "type": "string"
                 }
@@ -574,26 +614,29 @@
                     "type": "number"
                 },
                 "offsetPosition": {
+                    "default": {
+                        "x": 0,
+                        "y": 1.6,
+                        "z": 0
+                    },
                     "description": "Use as a static teleport x,y,z offset",
                     "properties": {
                         "x": {
-                            "type": "number",
-                            "default": 0
+                            "type": "number"
                         },
                         "y": {
-                            "type": "number",
-                            "default": 1.6
+                            "type": "number"
                         },
                         "z": {
-                            "type": "number",
-                            "default": 0
+                            "type": "number"
                         }
                     },
                     "required": [
                         "x",
                         "y",
                         "z"
-                    ]
+                    ],
+                    "type": "object"
                 },
                 "constrainToNavMesh": {
                     "description": "Teleports should snap to navmesh. Valid values: 'false', 'any', 'coplanar'",
@@ -632,11 +675,15 @@
         },
         "material-extras": {
             "default": {
-                "encoding": "sRGBEncoding",
-                "needsUpdate": false
+                "encoding": "sRGBEncoding"
             },
             "description": "Define extra material properties, namely texture encoding, whether to render the material's color and render order. The properties set here access directly Three.js material component. \n\nMore properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>https://threejs.org/docs/#api/en/materials/Material</a>",
             "properties": {
+                "overrideSrc": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Overrides the material source in all meshes of an object (e.g. a basic shape or a GLTF); Use, for example, to change the texture of a GLTF."
+                },
                 "encoding": {
                     "default": "sRGBEncoding",
                     "enum": [
@@ -653,26 +700,20 @@
                     ],
                     "type": "string"
                 },
-                "needsUpdate": {
-                    "default": false,
-                    "type": "boolean"
-                },
-                "render-order": {
-                    "default": "1",
-                    "description": "This value allows the default rendering order of scene graph objects to be overridden.",
-                    "type": "number"
-                },
                 "colorWrite": {
-                    "description": "Whether to render the material\u2019s color",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to render the material's color."
+                },
+                "renderOrder": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "Allows the default rendering order of scene graph objects to be overridden."
                 },
                 "transparentOccluder": {
-                    "description": "If true, will set colorWrite=false and renderOrder=0 to make the material a transparent occluder.",
-                    "type": "boolean"
-                },
-                "defaultRenderOrder": {
-                    "description": "Used as the renderOrder when transparentOccluder is reset to false.",
-                    "type": "number"
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If `true`, will set `colorWrite=false` and `renderOrder=0` to make the material a transparent occluder."
                 }
             },
             "title": "Material extras",

@@ -12,4 +12,4 @@ Physics Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|type|string; One of: ```['static', 'dynamic']```||type|Yes|
+|type|string; One of: ```['static', 'dynamic']```|```'static'```|type|Yes|
