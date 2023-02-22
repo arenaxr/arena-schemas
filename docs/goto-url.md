@@ -10,6 +10,6 @@ Goto URL Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|dest|string; One of: ```['popup', 'newtab', 'sametab']```||dest|Yes|
-|on|string; One of: ```['mousedown', 'mouseup']```||on|Yes|
-|url|string||url|Yes|
+|dest|string; One of: ```['popup', 'newtab', 'sametab']```|```'sametab'```|dest|Yes|
+|on|string; One of: ```['mousedown', 'mouseup']```|```'mousedown'```|on|Yes|
+|url|string|```''```|url|Yes|

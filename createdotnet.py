@@ -98,7 +98,8 @@ def object_table(cs_title, obj, definitions={}):
                     0]
             else:
                 line[Table.cols.DESC] = obj_name
-            line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
+            #line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
+            line[Table.cols.TYPE] = 'object'
             if obj_name in definitions:
                 cs_class = f'Arena{pascalcase(obj_name)}Json'
                 write_cs(
@@ -115,13 +116,19 @@ def object_table(cs_title, obj, definitions={}):
             cs_lines.append('        }\n')
         defValue = str(line[Table.cols.DFT]).replace("\"","")
         if (line[Table.cols.ENUM]):
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{enumcase(defValue)};\n')
+            cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{enumcase(defValue)};\n')
             cs_lines.append(f'        [JsonConverter(typeof(StringEnumConverter))]\n')
         else:
             if line[Table.cols.TYPE] == "string":
                 defValue = f'"{defValue}"'
-            cs_lines.append(f'        private const {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
-        cs_lines.append(f'        [JsonProperty(PropertyName="{line[Table.cols.ATTR]}")]\n')
+            elif line[Table.cols.TYPE] == "float":
+                defValue = f'{defValue}f'
+            elif line[Table.cols.TYPE] == "bool":
+                defValue = f'{defValue.lower()}'
+            elif line[Table.cols.TYPE] == "object":
+                defValue = f'JsonConvert.DeserializeObject("{defValue}")'
+            cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
+        cs_lines.append(f'        [JsonProperty(PropertyName = "{line[Table.cols.ATTR]}")]\n')
         cs_lines.append(f'        [Tooltip("{line[Table.cols.DESC]}")]\n')
         cs_lines.append(f'        public {line[Table.cols.TYPE]} {pascalAttrName} = def{pascalAttrName};\n')
         cs_lines.append(f'        public bool ShouldSerialize{pascalAttrName}()\n')
@@ -138,8 +145,6 @@ def object_table(cs_title, obj, definitions={}):
 
 def enumcase(word):
     if word and word[0:1].isdigit():
-        print (word[0:1])
-        print (word[1:])
         return pascalcase(num2words.num2words(word[0:1])+word[1:])
     else:
         return pascalcase(word)
@@ -255,8 +260,8 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
         cs_lines.extend(object_table(cs_title,
                                      json_obj['properties']['data'], json_obj['definitions']))
 
-
-    create_cs_file(cs_fn, cs_class, cs_lines)
+    if not wire_obj: # TODO: for now do not write full wire objects, just the components
+        create_cs_file(cs_fn, cs_class, cs_lines)
 
 
 def create_cs_file(cs_fn, cs_class, cs_lines):
