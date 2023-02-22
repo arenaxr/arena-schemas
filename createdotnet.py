@@ -1,11 +1,12 @@
 import json
 import os
-import string
+import sys
+
 import num2words
 from caseconverter import pascalcase
 
-input_folder = 'schemas/'
-output_folder = 'dotnet/'
+input_folder = 'schemas'
+output_folder = 'dotnet'
 
 ObjTypeDesc = {
     'object': 'AFrame 3D Object',
@@ -208,7 +209,14 @@ def cs_post(cs_class):
         public static {cs_class} CreateFromJSON(string jsonString, JToken token)
         {{
             _token = token; // save updated wire json
-            return JsonConvert.DeserializeObject<{cs_class}>(Regex.Unescape(jsonString));
+            {cs_class} json = null;
+            try {{
+                json = JsonConvert.DeserializeObject<{cs_class}>(Regex.Unescape(jsonString));
+            }} catch (JsonReaderException e)
+            {{
+                Debug.LogWarning($"{{e.Message}}: {{jsonString}}");
+            }}
+            return json;
         }}
     }}
 }}
@@ -216,7 +224,7 @@ def cs_post(cs_class):
 
 
 def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
-    cs_fn = f'{output_folder}{cs_class}.cs'
+    cs_fn = os.path.join(output_folder, f'{cs_class}.cs')
     if not overwrite:
         if os.path.isfile(cs_fn):
             return
@@ -276,6 +284,13 @@ def create_cs_file(cs_fn, cs_class, cs_lines):
 
 
 def main():
+    global output_folder
+    args = sys.argv[1:]
+    print(args)
+    if (len(args) == 0 or not os.path.isdir(args[0])):
+        os.mkdir(args[0])
+
+    output_folder = args[0]
 
     dir = os.fsencode(input_folder)
 
