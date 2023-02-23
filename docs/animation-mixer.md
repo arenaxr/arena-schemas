@@ -13,7 +13,7 @@ Animation Mixer Attributes
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |clampWhenFinished|boolean|```False```|If true, halts the animation at the last frame.|No|
-|clip|string|```'*'```|Name of the animation clip(s) to play. Accepts wildcards.|No|
+|clip|string|```'*'```|Name of the animation clip(s) to play. Accepts wildcards.|Yes|
 |crossFadeDuration|number|```0```|Duration of cross-fades between clips, in seconds.|No|
 |duration|number|```0```|Duration of the animation, in seconds (0 = auto).|No|
 |loop|string; One of: ```['once', 'repeat', 'pingpong']```|```'repeat'```|once, repeat, or pingpong. In repeat and pingpong modes, the clip plays once plus the specified number of repetitions. For pingpong, every second clip plays in reverse.|No|
