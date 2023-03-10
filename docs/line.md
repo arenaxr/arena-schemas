@@ -35,7 +35,8 @@ Line Attributes
 |animation|[animation](animation)||Animate and tween values. |No|
 |armarker|[armarker](armarker)||A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.|No|
 |click-listener|boolean||Object will listen for clicks|No|
-|collision-listener|string||Name of the collision-listener, default can be empty string|No|
+|box-collision-listener|[box-collision-listener](box-collision-listener)||Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps|No|
+|collision-listener|string||Name of the collision-listener, default can be empty string. Collisions trigger click events|No|
 |color|string|```#7f7f7f```|Color|No|
 |dynamic-body|[dynamic-body](dynamic-body)||Physics type attached to the object. |No|
 |goto-landmark|[goto-landmark](goto-landmark)||Teleports user to the landmark with the given name; Requires click-listener|No|

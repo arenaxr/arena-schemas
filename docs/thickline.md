@@ -26,7 +26,7 @@ Thickline Attributes
 |object_type|string; Must be: ```thickline```|```thickline```|3D object type.|Yes|
 |color|string|```#7f7f7f```|color|No|
 |lineWidth|number|```5```|Line width|No|
-|lineWidthStyler|number|```1```|Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. The final, rendered width is scaled by lineWidth. You can use p in your function definition. It varies from 0 at the first vertex of the path to 1 at the last vertex of the path.|No|
+|lineWidthStyler|string; One of: ```['default', 'grow', 'shrink', 'center-sharp', 'center-smooth', 'sine-wave']```|```default```|Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. You may also choose one of the preset functions|No|
 |path|string|```-2 -1 0, 0 20 0, 10 -1 10```|Comma-separated list of x y z coordinates of the line vertices|Yes|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)||3D object position|No|

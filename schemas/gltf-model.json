@@ -1,6 +1,6 @@
 {
     "title": "GLTF Model",
-    "description": "Load a GLTF model. \n\nFormat: <a href='https://github.com/KhronosGroup/glTF-Tutorials/blob/master/gltfTutorial/README.md'>https://github.com/KhronosGroup/glTF-Tutorials/blob/master/gltfTutorial/README.md</a>",
+    "description": "Load a GLTF model. \n\nBesides applying standard rotation and position attributes to the center-point of the GLTF model, the individual child components can also be manually manipulated. See format details in the `modelUpdate` data attribute.",
     "required": [
         "object_id",
         "action",
@@ -52,6 +52,7 @@
                     "z": 0
                 },
                 "rotation": {
+                    "w": 1,
                     "x": 0,
                     "y": 0,
                     "z": 0
@@ -109,9 +110,12 @@
                     "title": "Click Listener",
                     "type": "boolean"
                 },
+                "box-collision-listener": {
+                    "$ref": "#/definitions/box-collision-listener"
+                },
                 "collision-listener": {
-                    "description": "Name of the collision-listener, default can be empty string",
-                    "title": "Collision Listener",
+                    "description": "Name of the collision-listener, default can be empty string. Collisions trigger click events",
+                    "title": "Collision Listener (legacy)",
                     "type": "string"
                 },
                 "color": {
@@ -180,6 +184,9 @@
                 },
                 "gltf-model-lod": {
                     "$ref": "#/definitions/gltf-model-lod"
+                },
+                "modelUpdate": {
+                    "$ref": "#/definitions/modelUpdate"
                 }
             }
         }
@@ -472,6 +479,26 @@
             ],
             "title": "ARMarker",
             "type": "object"
+        },
+        "box-collision-listener": {
+            "description": "Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps",
+            "title": "Box Collision Listener",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "default": true,
+                    "type": "boolean",
+                    "description": "Publish detections, set `false` to disable"
+                },
+                "dynamic": {
+                    "default": false,
+                    "type": "boolean",
+                    "description": "Set true for a moving object, which should have its bounding box recalculated regularly to determine proper collision"
+                }
+            },
+            "required": [
+                "dynamic"
+            ]
         },
         "dynamic-body": {
             "description": "Physics type attached to the object. \n\nMore properties at <a href='https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body'>https://github.com/n5ro/aframe-physics-system#dynamic-body-and-static-body</a>",
@@ -1022,6 +1049,95 @@
             },
             "title": "GLTF Model Level of Detail",
             "type": "object"
+        },
+        "modelUpdate": {
+            "title": "GLTF Model Update",
+            "type": "object",
+            "description": "The GLTF-specific `modelUpdate` attribute is an object with child component names as keys. The top-level keys are the names of the child components to be updated. The values of each are nested `position` and `rotation` attributes to set as new values, respectively. Either `position` or `rotation` can be omitted if unchanged.",
+            "additionalProperties": true,
+            "patternProperties": {
+                "^[A-Za-z][A-Za-z0-9_-]*$": {
+                    "type": "object",
+                    "description": "One of this model's named child components.",
+                    "properties": {
+                        "position": {
+                            "properties": {
+                                "x": {
+                                    "default": 0,
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "default": 0,
+                                    "type": "number"
+                                },
+                                "z": {
+                                    "default": 0,
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "x",
+                                "y",
+                                "z"
+                            ],
+                            "type": "object",
+                            "title": "Position"
+                        },
+                        "rotation": {
+                            "properties": {
+                                "w": {
+                                    "default": 1,
+                                    "type": "number"
+                                },
+                                "x": {
+                                    "default": 0,
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "default": 0,
+                                    "type": "number"
+                                },
+                                "z": {
+                                    "default": 0,
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "w",
+                                "x",
+                                "y",
+                                "z"
+                            ],
+                            "type": "object",
+                            "title": "Rotation"
+                        }
+                    }
+                }
+            },
+            "example": {
+                "left-elbow": {
+                    "position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "rotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "right-elbow": {
+                    "rotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "left-knee": {}
+            }
         }
     }
 }

@@ -30,12 +30,13 @@ Capsule Attributes
 |segmentsRadial|number|```36```|segments radial|No|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|3D object position|No|
-|rotation|[rotation](rotation)|```{'x': 0, 'y': 0, 'z': 0}```|3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|No|
+|rotation|[rotation](rotation)|```{'w': 1, 'x': 0, 'y': 0, 'z': 0}```|3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|No|
 |scale|[scale](scale)||3D object scale|No|
 |animation|[animation](animation)||Animate and tween values. |No|
 |armarker|[armarker](armarker)||A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.|No|
 |click-listener|boolean||Object will listen for clicks|No|
-|collision-listener|string||Name of the collision-listener, default can be empty string|No|
+|box-collision-listener|[box-collision-listener](box-collision-listener)||Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps|No|
+|collision-listener|string||Name of the collision-listener, default can be empty string. Collisions trigger click events|No|
 |color|string|```'#ffa500'```|Color|No|
 |dynamic-body|[dynamic-body](dynamic-body)||Physics type attached to the object. |No|
 |goto-landmark|[goto-landmark](goto-landmark)||Teleports user to the landmark with the given name; Requires click-listener|No|

@@ -5,7 +5,7 @@ GLTF Model
 
 Load a GLTF model. 
 
-Format: <a href='https://github.com/KhronosGroup/glTF-Tutorials/blob/master/gltfTutorial/README.md'>https://github.com/KhronosGroup/glTF-Tutorials/blob/master/gltfTutorial/README.md</a>
+Besides applying standard rotation and position attributes to the center-point of the GLTF model, the individual child components can also be manually manipulated. See format details in the `modelUpdate` data attribute.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
@@ -29,12 +29,13 @@ GLTF Model Attributes
 |url|string||Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|Yes|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|3D object position|Yes|
-|rotation|[rotation](rotation)|```{'x': 0, 'y': 0, 'z': 0}```|3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|Yes|
+|rotation|[rotation](rotation)|```{'w': 1, 'x': 0, 'y': 0, 'z': 0}```|3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|Yes|
 |scale|[scale](scale)|```{'x': 1, 'y': 1, 'z': 1}```|3D object scale|Yes|
 |animation|[animation](animation)||Animate and tween values. |No|
 |armarker|[armarker](armarker)||A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.|No|
 |click-listener|boolean||Object will listen for clicks|No|
-|collision-listener|string||Name of the collision-listener, default can be empty string|No|
+|box-collision-listener|[box-collision-listener](box-collision-listener)||Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps|No|
+|collision-listener|string||Name of the collision-listener, default can be empty string. Collisions trigger click events|No|
 |color|string|```'#ffa500'```|Color|No|
 |dynamic-body|[dynamic-body](dynamic-body)||Physics type attached to the object. |No|
 |goto-landmark|[goto-landmark](goto-landmark)||Teleports user to the landmark with the given name; Requires click-listener|No|
@@ -52,3 +53,4 @@ GLTF Model Attributes
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
 |animation-mixer|[animation-mixer](animation-mixer)||A list of available animations can usually be found by inspecting the model file or its documentation. All animations will play by default. To play only a specific set of animations, use wildcards: animation-mixer='clip: run_*'. |No|
 |gltf-model-lod|[gltf-model-lod](gltf-model-lod)||Simple switch between the default gltf-model and a detailed one when a user camera is within specified distance|No|
+|modelUpdate|[modelUpdate](modelUpdate)||The GLTF-specific `modelUpdate` attribute is an object with child component names as keys. The top-level keys are the names of the child components to be updated. The values of each are nested `position` and `rotation` attributes to set as new values, respectively. Either `position` or `rotation` can be omitted if unchanged.|No|

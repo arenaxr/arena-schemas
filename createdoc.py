@@ -33,9 +33,13 @@ def format_value(obj, value):
     return f'```{value}```'
 
 def object_table(mdFile, md_title, obj, definitions={}):
-    if 'properties' not in obj:
+    prop_list = {}
+    if 'properties' in obj:
+        prop_list.update(obj['properties'])
+    if 'patternProperties' in obj:
+        prop_list.update(obj['patternProperties'])
+    if prop_list == {}:
         return
-    prop_list=obj['properties']
     required=[]
     default=[]
     if 'definitions' in obj:
@@ -110,6 +114,10 @@ def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
     mdFile.new_header(level=2, title=f'\n{md_title} Attributes', style='setext', add_table_of_contents='n')
 
     object_table(mdFile, md_title, json_obj)
+
+    if 'example' in json_obj:
+        mdFile.new_header(level=2, title=f'\n{md_title} Example', style='setext', add_table_of_contents='n')
+        mdFile.insert_code(code=json.dumps(json_obj['example'], indent=4), language='json')
 
     if not 'properties' in json_obj:
         mdFile.create_md_file()
