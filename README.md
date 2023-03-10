@@ -6,7 +6,7 @@ There are a handful of scripts and run commands that can update scripts and gene
 ## Generate Intermediate Schema
 Step 1. This will take a source directory, like the arena-web-core build directory and parse it's `[src]/schemas/` for  `arena-schema-files.json` to output expanded json schema in our local schema dir `./schemas/`, removing older `.json` schema files if needed.
 ```bash
-make update src=~/git/arena-services-docker/arena-web-core/build
+make update src=~/git/arena-services-docker/arena-web-core/build/schemas
 ```
 
 ## Generate Linked Markdown

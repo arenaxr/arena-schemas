@@ -88,30 +88,7 @@
                     }
                 },
                 "panel": {
-                    "title": "UI Panel",
-                    "description": "The rounded UI panel primitive.",
-                    "default": {
-                        "depth": 0.05,
-                        "height": 1,
-                        "width": 1
-                    },
-                    "properties": {
-                        "depth": {
-                            "type": "number",
-                            "title": "depth",
-                            "default": 0.05
-                        },
-                        "height": {
-                            "type": "number",
-                            "title": "height",
-                            "default": 1
-                        },
-                        "width": {
-                            "type": "number",
-                            "title": "width",
-                            "default": 1
-                        }
-                    }
+                    "$ref": "#/definitions/panel"
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
@@ -217,6 +194,33 @@
         }
     },
     "definitions": {
+        "panel": {
+            "title": "UI Panel",
+            "description": "The rounded UI panel primitive.",
+            "type": "object",
+            "default": {
+                "depth": 0.05,
+                "height": 1,
+                "width": 1
+            },
+            "properties": {
+                "depth": {
+                    "type": "number",
+                    "title": "depth",
+                    "default": 0.05
+                },
+                "height": {
+                    "type": "number",
+                    "title": "height",
+                    "default": 1
+                },
+                "width": {
+                    "type": "number",
+                    "title": "width",
+                    "default": 1
+                }
+            }
+        },
         "position": {
             "description": "3D object position",
             "properties": {

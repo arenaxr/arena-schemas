@@ -20,7 +20,7 @@
         "title": "Cone"
     },
     "cube": {
-        "description": "Cube (=Box) Geometry; Supported for Legacy reasons; Please use Box in new scenes",
+        "description": "Cube (=Box) Geometry (deprecated); Supported for Legacy reasons; Please use Box in new scenes",
         "file": "schemas/cube.json",
         "title": "Cube (deprecated; don't use)"
     },
@@ -148,5 +148,10 @@
         "description": "Videosphere 360 Video",
         "file": "schemas/videosphere.json",
         "title": "Videosphere"
+    },
+    "event": {
+        "description": "Events are ephemeral messages used to send user events like mouse movements or controller actions.",
+        "file": "schemas/event.json",
+        "title": "Event"
     }
 }

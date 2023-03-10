@@ -143,7 +143,7 @@ def main():
 
     for file in os.listdir(dir):
          filename = os.fsdecode(file)
-         if filename.endswith(".json") and not filename.endswith("arena-schema-files.json"):
+         if filename.endswith(".json") and not filename.startswith("arena-schema-files"):
              json_filename = os.path.join(input_folder, filename)
              filename_noext = os.fsdecode(os.path.splitext(file)[0])
              md_filename = os.path.join(output_folder, f'{filename_noext}.md')
