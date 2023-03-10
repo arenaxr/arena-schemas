@@ -90,9 +90,11 @@
                     "default": false
                 },
                 "color": {
+                    "deprecated": true,
                     "default": "#ffa500",
                     "format": "color",
-                    "title": "Color",
+                    "description": "(deprecated) Color of the material. Please use material.color instead.",
+                    "title": "Color (legacy)",
                     "type": "string"
                 },
                 "decay": {
@@ -122,6 +124,7 @@
                 },
                 "light": {
                     "title": "light (deprecated; don't use)",
+                    "deprecated": true,
                     "description": "These attributes (light, intensity, color, ...) can be set directly on the light object (instead of this light attribute inside the light object); dont use in new light objects",
                     "properties": {
                         "type": {

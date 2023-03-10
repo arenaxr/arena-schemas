@@ -43,9 +43,13 @@ def format_value(obj, value):
 
 def object_table(cs_title, obj, definitions={}):
     cs_lines = []
-    if 'properties' not in obj:
+    prop_list = {}
+    if 'properties' in obj:
+        prop_list.update(obj['properties'])
+    if 'patternProperties' in obj:
+        prop_list.update(obj['patternProperties'])
+    if prop_list == {}:
         return
-    prop_list = obj['properties']
     required = []
     default = []
     if 'definitions' in obj:
