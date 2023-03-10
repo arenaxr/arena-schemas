@@ -58,7 +58,7 @@ def main():
         lines = text.split('\n')
         md_lines = []
         md_lines.append('---\n')
-        md_lines.append(f'title: {lines[0]}\n')
+        md_lines.append(f'title: {lines[1]}\n')
         md_lines.append(f'nav_order: {idx}\n')
         md_lines.append('layout: default\n')
         md_lines.append(f'parent: {sec_sub_title}\n')
