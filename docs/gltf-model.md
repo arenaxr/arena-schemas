@@ -51,7 +51,7 @@ GLTF Model Attributes
 |screenshareable|boolean|```True```|Whether or not a user can screenshare on an object|No|
 |video-control|[video-control](video-control)||Video Control|No|
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
-|particle-system|[particle-system](particle-system)||Particle system component for A-Frame.|No|
+|particle-system|[particle-system](particle-system)||Particle system component for A-Frame. |No|
 |spe-particles|[spe-particles](spe-particles)||GPU based particle systems in A-Frame. |No|
 |animation-mixer|[animation-mixer](animation-mixer)||A list of available animations can usually be found by inspecting the model file or its documentation. All animations will play by default. To play only a specific set of animations, use wildcards: animation-mixer='clip: run_*'. |No|
 |gltf-model-lod|[gltf-model-lod](gltf-model-lod)||Simple switch between the default gltf-model and a detailed one when a user camera is within specified distance|No|

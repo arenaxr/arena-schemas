@@ -3,7 +3,9 @@ Particle System
 ===============
 
 
-Particle system component for A-Frame.
+Particle system component for A-Frame. 
+
+More properties at <a href='https://github.com/c-frame/aframe-particle-system-component'>https://github.com/c-frame/aframe-particle-system-component</a>
 
 Particle System Attributes
 ---------------------------
