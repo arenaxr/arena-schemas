@@ -47,6 +47,7 @@
             "default": {
                 "object_type": "capsule",
                 "radius": 1,
+                "length": 1,
                 "material": {
                     "color": "#7f7f7f"
                 },
@@ -1087,6 +1088,7 @@
                         "#FF0000"
                     ],
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },
@@ -1264,6 +1266,7 @@
                     "type": "array",
                     "maxItems": 4,
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },

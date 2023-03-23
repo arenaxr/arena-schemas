@@ -1100,6 +1100,7 @@
                         "#FF0000"
                     ],
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },
@@ -1277,6 +1278,7 @@
                     "type": "array",
                     "maxItems": 4,
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },

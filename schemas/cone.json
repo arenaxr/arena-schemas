@@ -46,7 +46,7 @@
             "additionalProperties": true,
             "default": {
                 "object_type": "cone",
-                "height": 2,
+                "height": 1,
                 "radiusBottom": 1,
                 "material": {
                     "color": "#7f7f7f"
@@ -1108,6 +1108,7 @@
                         "#FF0000"
                     ],
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },
@@ -1285,6 +1286,7 @@
                     "type": "array",
                     "maxItems": 4,
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },

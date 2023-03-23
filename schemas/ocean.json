@@ -1,0 +1,221 @@
+{
+    "title": "Ocean",
+    "description": "Flat-shaded ocean primitive.",
+    "required": [
+        "object_id",
+        "action",
+        "type",
+        "data",
+        "persist"
+    ],
+    "properties": {
+        "object_id": {
+            "description": "A uuid or otherwise unique identifier for this object",
+            "minLength": 3,
+            "type": "string"
+        },
+        "persist": {
+            "default": true,
+            "description": "Persist this object in the database (default true = persist on server)",
+            "type": "boolean"
+        },
+        "type": {
+            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "enum": [
+                "object"
+            ],
+            "type": "string"
+        },
+        "action": {
+            "default": "create",
+            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "enum": [
+                "create",
+                "delete",
+                "update",
+                "clientEvent"
+            ],
+            "type": "string"
+        },
+        "ttl": {
+            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
+            "type": "integer"
+        },
+        "data": {
+            "title": "Ocean Data",
+            "additionalProperties": true,
+            "default": {
+                "object_type": "ocean",
+                "width": 10,
+                "depth": 10,
+                "color": "#7AD2F7",
+                "rotation": {
+                    "w": -0.70711,
+                    "x": 0.70711,
+                    "y": 0,
+                    "z": 0
+                }
+            },
+            "required": [
+                "object_type",
+                "width",
+                "depth",
+                "color"
+            ],
+            "properties": {
+                "object_type": {
+                    "type": "string",
+                    "title": "3D object type",
+                    "description": "3D object type (derived from 'type' select above).",
+                    "enum": [
+                        "ocean"
+                    ]
+                },
+                "width": {
+                    "description": "Width of the ocean area.",
+                    "default": 10,
+                    "minValue": 0,
+                    "type": "number"
+                },
+                "depth": {
+                    "description": "Depth of the ocean area.",
+                    "default": 10,
+                    "minValue": 0,
+                    "type": "number"
+                },
+                "density": {
+                    "description": "Density of waves.",
+                    "default": 10,
+                    "type": "number"
+                },
+                "amplitude": {
+                    "description": "Wave amplitude.",
+                    "default": 0.1,
+                    "type": "number"
+                },
+                "amplitudeVariance": {
+                    "description": "Wave amplitude variance.",
+                    "default": 0.3,
+                    "type": "number"
+                },
+                "speed": {
+                    "description": "Wave speed.",
+                    "default": 1,
+                    "type": "number"
+                },
+                "speedVariance": {
+                    "description": "Wave speed variance.",
+                    "default": 2,
+                    "type": "number"
+                },
+                "color": {
+                    "description": "Wave color.",
+                    "default": "#7AD2F7",
+                    "format": "color",
+                    "type": "string"
+                },
+                "opacity": {
+                    "description": "Wave opacity.",
+                    "default": 0.8,
+                    "type": "number"
+                },
+                "parent": {
+                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
+                    "title": "Parent",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/position"
+                },
+                "rotation": {
+                    "$ref": "#/definitions/rotation"
+                },
+                "scale": {
+                    "$ref": "#/definitions/scale"
+                }
+            }
+        }
+    },
+    "definitions": {
+        "position": {
+            "description": "3D object position",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Position"
+        },
+        "rotation": {
+            "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
+            "properties": {
+                "w": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "w",
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Rotation"
+        },
+        "scale": {
+            "default": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "description": "3D object scale",
+            "id": "scale",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "z": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Scale"
+        }
+    }
+}

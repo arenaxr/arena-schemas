@@ -47,6 +47,7 @@
             "default": {
                 "object_type": "torusKnot",
                 "radius": 1,
+                "radiusTubular": 0.4,
                 "material": {
                     "color": "#7f7f7f"
                 },
@@ -1096,6 +1097,7 @@
                         "#FF0000"
                     ],
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },
@@ -1273,6 +1275,7 @@
                     "type": "array",
                     "maxItems": 4,
                     "items": {
+                        "format": "color",
                         "type": "string"
                     }
                 },
