@@ -18,13 +18,13 @@ make docs
 ## Generate Jekyll Markdown
 Step 3. This will take a destination directory where jekyll Markdown should be created. It will use `./schemas/arena-schema-files.json` to generate an `index.md` file and copy it and all of the `.md` in `./docs` to `[dst]/`. The process will add the appropriate Jekyll preamble to the beginning of the destination `.md` files.
 ```bash
-make jekyll dst=~/git/ARENA/content/schemas/message
+make jekyll dst=~/git/arena-docs/content/schemas/message
 ```
 
 ## Update Repos Hat Trick
 ```bash
 make update src=~/git/arena-services-docker/arena-web-core/build
 make docs
-make jekyll dst=~/git/arena/content/schemas/message
+make jekyll dst=~/git/arena-docs/content/schemas/message
 make dotnet dst=~/git/arena-unity/Runtime/Schemas
 ```

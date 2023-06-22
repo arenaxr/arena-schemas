@@ -17,3 +17,4 @@ Video Attributes
 |video_loop|boolean|```True```|Video automatically loops|No|
 |autoplay|boolean|```False```|Video starts playing automatically|No|
 |volume|number|```1```|Video sound volume|No|
+|cleanup|boolean|```True```|Automatically remove HTML5 video and img assets from DOM on object removal|No|
