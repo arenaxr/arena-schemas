@@ -59,7 +59,7 @@ def object_table(cs_title, obj, definitions={}):
     if 'default' in obj:
         default = obj['default']
     table_lines = Table.heading.copy()
-    for prop in prop_list:
+    for prop, prop_obj in prop_list.items():
         prop_obj = prop_list[prop]
         line = [''] * 6
         line[Table.cols.ATTR] = prop

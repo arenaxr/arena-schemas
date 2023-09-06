@@ -42,8 +42,8 @@ def generate_intermediate_json(list_fns):
         obj_schema_path = f'{input_folder}/{list_fn}'
         with open(obj_schema_path) as f:
             obj_schemas.update(json.load(f))
-        for obj_schema in obj_schemas:
-            fn = obj_schemas[obj_schema]['file']
+        for _, obj_schema in obj_schemas.items():
+            fn = obj_schema['file']
             with open(f'{input_folder}/{fn}') as f:
                 schema = json.load(f)
 
