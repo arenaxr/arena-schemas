@@ -37,7 +37,9 @@ def format_value(obj, value):
     elif type == 'boolean':
         return f'{str(value).lower()}'
     elif type == 'array':
-        return f'{str(value).replace("[","{").replace("]","}")}'
+        format_array = str(value).replace("[","{").replace("]","}").replace("'", "\"")
+        print(format_array)
+        return f'{format_array}'
     return f'{value}'
 
 
@@ -66,7 +68,7 @@ def object_table(cs_title, obj, definitions={}):
         pascalAttrName = pascalcase(line[Table.cols.ATTR])
         line[Table.cols.REQ] = 'No'
         if 'type' in prop_obj:
-            line[Table.cols.TYPE] = get_cs_type(prop_obj['type'])
+            line[Table.cols.TYPE] = get_cs_type(prop_obj)
         if prop == 'data':
             line[Table.cols.DESC] = f'{cs_title} object data properties as defined below'
             line[Table.cols.REQ] = 'Yes'
@@ -119,19 +121,24 @@ def object_table(cs_title, obj, definitions={}):
                 cs_lines.append(f'            [EnumMember(Value = "{enumVal}")]\n')
                 cs_lines.append(f'            {enumcase(enumVal)},\n')
             cs_lines.append('        }\n')
-        defValue = str(line[Table.cols.DFT]).replace("\"","")
+        defValue = str(line[Table.cols.DFT])#.replace("\"","")
         if (line[Table.cols.ENUM]):
             cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {pascalAttrName}Type.{enumcase(defValue)};\n')
             cs_lines.append(f'        [JsonConverter(typeof(StringEnumConverter))]\n')
         else:
             if line[Table.cols.TYPE] == "string":
-                defValue = f'"{defValue}"'
+                defValue = f'"{defValue}"'.replace("\"\"", "\"")
+                if defValue == '"':
+                    defValue = f'""'
             elif line[Table.cols.TYPE] == "float":
                 defValue = f'{defValue}f'
             elif line[Table.cols.TYPE] == "bool":
                 defValue = f'{defValue.lower()}'
             elif line[Table.cols.TYPE] == "object":
                 defValue = f'JsonConvert.DeserializeObject("{defValue}")'
+            elif line[Table.cols.TYPE].endswith("[]"):
+                print(defValue)
+                defValue = f'{defValue}'
             cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName = "{line[Table.cols.ATTR]}")]\n')
         cs_lines.append(f'        [Tooltip("{line[Table.cols.DESC]}")]\n')
@@ -149,23 +156,28 @@ def object_table(cs_title, obj, definitions={}):
 
 
 def enumcase(word):
+    word = word.replace("\"", "")
     if word and word[0:1].isdigit():
         return pascalcase(num2words.num2words(word[0:1])+word[1:])
     else:
         return pascalcase(word)
 
 
-def get_cs_type(type):
-    if type == "number":
+def get_cs_type(prop_obj):
+    if prop_obj['type'] == "number":
         return "float"
-    elif type == "integer":
+    elif prop_obj['type'] == "integer":
         return "int"
-    elif type == "boolean":
+    elif prop_obj['type'] == "boolean":
         return "bool"
-    elif type == "array":
-        return "string[]"
+    elif prop_obj['type'] == "array":
+        if "items" in prop_obj and "type" in prop_obj['items']:
+            array_type = get_cs_type(prop_obj['items'])
+            return f"{array_type}[]"
+        else:
+            return "string[]"
 
-    return type
+    return prop_obj['type']
 
 
 def cs_pre(cs_class, prop, desc):
