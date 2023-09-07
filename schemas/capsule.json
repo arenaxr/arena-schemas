@@ -1142,7 +1142,7 @@
                     "enum": [
                         "x",
                         "y",
-                        "x"
+                        "z"
                     ],
                     "type": "string",
                     "default": "x"
@@ -1231,7 +1231,7 @@
                 "duration": {
                     "description": "The duration in seconds that this emitter should live for. If not specified, the emitter will emit particles indefinitely.",
                     "type": "number",
-                    "default": null
+                    "default": 0
                 },
                 "enabled": {
                     "description": "When true the emitter will emit particles, when false it will not. This value can be changed dynamically during a scene. While particles are emitting, they will disappear immediately when set to false.",
