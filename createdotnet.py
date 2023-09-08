@@ -38,7 +38,7 @@ def format_value(obj, value):
         return f'{str(value).lower()}'
     elif type == 'array':
         format_array = str(value).replace("[","{").replace("]","}").replace("'", "\"")
-        print(format_array)
+        #print(format_array)
         return f'{format_array}'
     return f'{value}'
 
@@ -63,6 +63,20 @@ def object_table(cs_title, obj, definitions={}):
     table_lines = Table.heading.copy()
     for prop, prop_obj in prop_list.items():
         prop_obj = prop_list[prop]
+        if 'deprecated' in prop_obj:
+            continue  # stop processing deprecated properties
+        if prop == 'object_type':
+            continue  # stop processing object_type, native in unity
+        if prop == 'geometry':
+            continue  # stop processing geometry, native in unity
+        if prop == 'parent':
+            continue  # stop processing geometry, native in unity
+        if prop == 'position':
+            continue  # stop processing geometry, native in unity
+        if prop == 'rotation':
+            continue  # stop processing geometry, native in unity
+        if prop == 'scale':
+            continue  # stop processing geometry, native in unity
         line = [''] * 6
         line[Table.cols.ATTR] = prop
         pascalAttrName = pascalcase(line[Table.cols.ATTR])
@@ -137,7 +151,7 @@ def object_table(cs_title, obj, definitions={}):
             elif line[Table.cols.TYPE] == "object":
                 defValue = f'JsonConvert.DeserializeObject("{defValue}")'
             elif line[Table.cols.TYPE].endswith("[]"):
-                print(defValue)
+                #print (defValue)
                 defValue = f'{defValue}'
             cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName = "{line[Table.cols.ATTR]}")]\n')
@@ -286,8 +300,9 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
         cs_lines.extend(object_table(cs_title,
                                      json_obj['properties']['data'], json_obj['definitions']))
 
-    if not wire_obj: # TODO: for now do not write full wire objects, just the components
-        create_cs_file(cs_fn, cs_class, cs_lines)
+    # if not wire_obj: # TODO: for now do not write full wire objects, just the components
+    #     create_cs_file(cs_fn, cs_class, cs_lines)
+    create_cs_file(cs_fn, cs_class, cs_lines)
 
 
 def create_cs_file(cs_fn, cs_class, cs_lines):

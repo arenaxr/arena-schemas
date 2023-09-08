@@ -184,12 +184,6 @@
                     "type": "number",
                     "default": 4
                 },
-                "text": {
-                    "type": "string",
-                    "deprecated": true,
-                    "title": "Text Value (deprecated; don't use)",
-                    "description": "(deprecated) Please use attribute 'value' in new Text objects;"
-                },
                 "transparent": {
                     "description": "Whether text is transparent.",
                     "type": "boolean",
@@ -305,21 +299,19 @@
             "title": "Rotation"
         },
         "scale": {
-            "default": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
             "description": "3D object scale",
             "id": "scale",
             "properties": {
                 "x": {
+                    "default": 1,
                     "type": "number"
                 },
                 "y": {
+                    "default": 1,
                     "type": "number"
                 },
                 "z": {
+                    "default": 1,
                     "type": "number"
                 }
             },
