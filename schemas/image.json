@@ -80,6 +80,32 @@
                         "image"
                     ]
                 },
+                "url": {
+                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
+                    "format": "uri",
+                    "title": "Url",
+                    "type": "string"
+                },
+                "height": {
+                    "type": "number",
+                    "title": "height",
+                    "default": 1
+                },
+                "segmentsHeight": {
+                    "type": "number",
+                    "title": "segments height",
+                    "default": 1
+                },
+                "segmentsWidth": {
+                    "type": "number",
+                    "title": "segments width",
+                    "default": 1
+                },
+                "width": {
+                    "type": "number",
+                    "title": "width",
+                    "default": 1
+                },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
                     "title": "Parent",
@@ -173,12 +199,6 @@
                 "textinput": {
                     "$ref": "#/definitions/textinput"
                 },
-                "url": {
-                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
-                    "format": "uri",
-                    "title": "Url",
-                    "type": "string"
-                },
                 "screenshareable": {
                     "default": true,
                     "description": "Whether or not a user can screenshare on an object",
@@ -221,32 +241,6 @@
                     "title": "Skip Cache",
                     "type": "boolean"
                 }
-            },
-            "url": {
-                "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
-                "format": "uri",
-                "title": "Url",
-                "type": "string"
-            },
-            "height": {
-                "type": "number",
-                "title": "height",
-                "default": 1
-            },
-            "segmentsHeight": {
-                "type": "number",
-                "title": "segments height",
-                "default": 1
-            },
-            "segmentsWidth": {
-                "type": "number",
-                "title": "segments width",
-                "default": 1
-            },
-            "width": {
-                "type": "number",
-                "title": "width",
-                "default": 1
             }
         }
     },

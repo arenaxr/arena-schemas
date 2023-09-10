@@ -43,7 +43,7 @@ def format_value(obj, value):
     return f'{value}'
 
 
-def object_table(cs_title, obj, definitions={}):
+def object_table(cs_title, obj, wire_obj, definitions={}):
     cs_lines = []
     prop_list = {}
     if 'properties' in obj:
@@ -65,18 +65,6 @@ def object_table(cs_title, obj, definitions={}):
         prop_obj = prop_list[prop]
         if 'deprecated' in prop_obj:
             continue  # stop processing deprecated properties
-        if prop == 'object_type':
-            continue  # stop processing object_type, native in unity
-        if prop == 'geometry':
-            continue  # stop processing geometry, native in unity
-        if prop == 'parent':
-            continue  # stop processing geometry, native in unity
-        if prop == 'position':
-            continue  # stop processing geometry, native in unity
-        if prop == 'rotation':
-            continue  # stop processing geometry, native in unity
-        if prop == 'scale':
-            continue  # stop processing geometry, native in unity
         line = [''] * 6
         line[Table.cols.ATTR] = prop
         pascalAttrName = pascalcase(line[Table.cols.ATTR])
@@ -126,6 +114,11 @@ def object_table(cs_title, obj, definitions={}):
                 write_cs(
                     definitions[obj_name], obj_name, cs_class, overwrite=False, wire_obj=False)
         table_lines.extend(line)
+
+        if prop == 'object_type':
+            continue  # stop processing object_type, remove from cs
+        if prop == 'parent':
+            break  # stop processing after parent, remove from cs
 
         cs_lines.append('\n')
         if (line[Table.cols.ENUM]):
@@ -278,7 +271,7 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
     #     level=2, title=f'\n{cs_title} Attributes', style='setext', add_table_of_contents='n')
 
     if not wire_obj:
-        cs_lines.extend(object_table(cs_title, json_obj))
+        cs_lines.extend(object_table(cs_title, json_obj, wire_obj))
 
     if not 'properties' in json_obj:
         create_cs_file(cs_fn, cs_class, cs_lines)
@@ -295,10 +288,10 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
         obj_name = json_obj['properties']['data']['$ref'][len(
             '#/definitions/'):]
         cs_lines.extend(object_table(cs_title,
-                                     json_obj['definitions'][obj_name], json_obj['definitions']))
+                                     json_obj['definitions'][obj_name], wire_obj, json_obj['definitions']))
     else:
         cs_lines.extend(object_table(cs_title,
-                                     json_obj['properties']['data'], json_obj['definitions']))
+                                     json_obj['properties']['data'], wire_obj, json_obj['definitions']))
 
     # if not wire_obj: # TODO: for now do not write full wire objects, just the components
     #     create_cs_file(cs_fn, cs_class, cs_lines)
