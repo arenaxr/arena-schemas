@@ -3,7 +3,7 @@ import os
 import sys
 
 import num2words
-from caseconverter import pascalcase
+from caseconverter import pascalcase, camelcase
 
 input_folder = 'schemas'
 output_folder = 'dotnet'
@@ -36,6 +36,10 @@ def format_value(obj, value):
         return f'\"{value}\"'
     elif type == 'boolean':
         return f'{str(value).lower()}'
+    elif type == 'number':
+        return f'{float(value)}'
+    elif type == 'integer':
+        return f'{int(value)}'
     elif type == 'array':
         format_array = str(value).replace("[","{").replace("]","}").replace("'", "\"")
         #print(format_array)
@@ -68,6 +72,7 @@ def object_table(cs_title, obj, wire_obj, definitions={}):
         line = [''] * 6
         line[Table.cols.ATTR] = prop
         pascalAttrName = pascalcase(line[Table.cols.ATTR])
+        camelAttrName = camelcase(line[Table.cols.ATTR])
         line[Table.cols.REQ] = 'No'
         if 'type' in prop_obj:
             line[Table.cols.TYPE] = get_cs_type(prop_obj)
@@ -153,9 +158,9 @@ def object_table(cs_title, obj, wire_obj, definitions={}):
         cs_lines.append(f'        public bool ShouldSerialize{pascalAttrName}()\n')
         cs_lines.append('        {\n')
         if line[Table.cols.REQ] == 'Yes':
-            cs_lines.append(f'            return true; // required in json schema \n')
+            cs_lines.append(f'            return true; // required in json schema\n')
         else:
-            cs_lines.append(f'            if (_token != null && _token.SelectToken("{line[Table.cols.ATTR]}") != null) return true;\n')
+            cs_lines.append(f'            // {prop}\n')
             cs_lines.append(f'            return ({pascalAttrName} != def{pascalAttrName});\n')
         cs_lines.append('        }\n')
 
@@ -202,6 +207,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace ArenaUnity.Schemas
@@ -212,37 +218,27 @@ namespace ArenaUnity.Schemas
     [Serializable]
     public class {cs_class}
     {{
-        public const string componentName = "{prop}";
+        public readonly string object_type = "{prop}";
 
         // {prop} member-fields
 '''
+        # public readonly string object_type = "{prop}";
+        # [JsonIgnore]
+        # public readonly string componentName = "{prop}";
+
 
 def cs_post(cs_class):
     return f'''
         // General json object management
+        [OnError]
+        internal void OnError(StreamingContext context, ErrorContext errorContext)
+        {{
+            Debug.LogWarning($"{{errorContext.Error.Message}}: {{errorContext.OriginalObject}}");
+            errorContext.Handled = true;
+        }}
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData;
-
-        private static JToken _token;
-
-        public string SaveToString()
-        {{
-            return Regex.Unescape(JsonConvert.SerializeObject(this));
-        }}
-
-        public static {cs_class} CreateFromJSON(string jsonString, JToken token)
-        {{
-            _token = token; // save updated wire json
-            {cs_class} json = null;
-            try {{
-                json = JsonConvert.DeserializeObject<{cs_class}>(Regex.Unescape(jsonString));
-            }} catch (JsonReaderException e)
-            {{
-                Debug.LogWarning($"{{e.Message}}: {{jsonString}}");
-            }}
-            return json;
-        }}
     }}
 }}
 '''

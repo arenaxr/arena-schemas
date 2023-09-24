@@ -88,12 +88,12 @@
                     "default": 1.2
                 },
                 "segmentsPhi": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments phi",
                     "default": 10
                 },
                 "segmentsTheta": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments theta",
                     "default": 32
                 },
@@ -243,7 +243,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": true,
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"

@@ -76,7 +76,7 @@
                     ]
                 },
                 "detail": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "detail",
                     "default": 0
                 },
@@ -221,7 +221,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": true,
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"

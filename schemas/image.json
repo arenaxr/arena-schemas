@@ -92,12 +92,12 @@
                     "default": 1
                 },
                 "segmentsHeight": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments height",
                     "default": 1
                 },
                 "segmentsWidth": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments width",
                     "default": 1
                 },
@@ -236,7 +236,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": true,
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"

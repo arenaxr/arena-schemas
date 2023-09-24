@@ -102,7 +102,7 @@
                     "default": 0.15
                 },
                 "radiusSegments": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments radius",
                     "default": 10
                 },
@@ -242,7 +242,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": true,
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"

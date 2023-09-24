@@ -135,6 +135,12 @@
                         "stretch"
                     ]
                 },
+                "textImageRatio": {
+                    "type": "number",
+                    "title": "Text to Image Width Ratio",
+                    "default": 0.5,
+                    "minimum": 0
+                },
                 "fontSize": {
                     "type": "number",
                     "title": "Font Size",

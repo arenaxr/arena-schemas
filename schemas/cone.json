@@ -98,12 +98,12 @@
                     "default": 0.01
                 },
                 "segmentsHeight": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments height",
                     "default": 18
                 },
                 "segmentsRadial": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments radial",
                     "default": 36
                 },
@@ -253,7 +253,7 @@
                     "$ref": "#/definitions/multisrc"
                 },
                 "skipCache": {
-                    "default": true,
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"
