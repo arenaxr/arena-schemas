@@ -7,6 +7,55 @@
         "type",
         "data"
     ],
+    "definitions": {
+        "vector3": {
+            "title": "Vector3",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object"
+        },
+        "position": {
+            "description": "The event destination position in 3D.",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Position"
+        }
+    },
     "properties": {
         "object_id": {
             "description": "A uuid or otherwise unique identifier for this object",
@@ -60,22 +109,7 @@
                 },
                 "clickPos": {
                     "description": "The event origination position in 3D.",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
+                    "$ref": "#/definitions/vector3",
                     "title": "Click Position"
                 }
             },
@@ -97,29 +131,6 @@
                 "position",
                 "source"
             ]
-        }
-    },
-    "definitions": {
-        "position": {
-            "description": "The event destination position in 3D.",
-            "properties": {
-                "x": {
-                    "type": "number"
-                },
-                "y": {
-                    "type": "number"
-                },
-                "z": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "x",
-                "y",
-                "z"
-            ],
-            "type": "object",
-            "title": "Position"
         }
     }
 }

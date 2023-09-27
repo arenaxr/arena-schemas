@@ -50,6 +50,8 @@ def object_table(mdFile, md_title, obj, definitions={}):
         default=obj['default']
     table_lines = Table.heading.copy()
     for prop, prop_obj in prop_list.items():
+        if 'deprecated' in prop_obj:
+            continue  # stop processing deprecated properties
         line = [''] * 5
         line[Table.cols.ATTR] = prop
         line[Table.cols.REQ] = 'No'

@@ -8,314 +8,30 @@
         "data",
         "persist"
     ],
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object",
-            "minLength": 3,
-            "type": "string"
-        },
-        "persist": {
-            "default": true,
-            "description": "Persist this object in the database (default true = persist on server)",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
-            "enum": [
-                "object"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "create",
-            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
-            "enum": [
-                "create",
-                "delete",
-                "update",
-                "clientEvent"
-            ],
-            "type": "string"
-        },
-        "ttl": {
-            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
-            "type": "integer"
-        },
-        "data": {
-            "title": "Triangle Data",
-            "additionalProperties": true,
-            "default": {
-                "object_type": "triangle",
-                "material": {
-                    "color": "#7f7f7f"
+    "definitions": {
+        "vector3": {
+            "title": "Vector3",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
                 },
-                "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
+                "y": {
+                    "default": 0,
+                    "type": "number"
                 },
-                "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "vertexA": {
-                    "x": 0,
-                    "y": 0.5,
-                    "z": 0
-                },
-                "vertexB": {
-                    "x": -0.5,
-                    "y": -0.5,
-                    "z": 0
-                },
-                "vertexC": {
-                    "x": 0.5,
-                    "y": -0.5,
-                    "z": 0
+                "z": {
+                    "default": 0,
+                    "type": "number"
                 }
             },
             "required": [
-                "object_type",
-                "vertexA",
-                "vertexB",
-                "vertexC"
+                "x",
+                "y",
+                "z"
             ],
-            "properties": {
-                "object_type": {
-                    "type": "string",
-                    "title": "3D object type",
-                    "description": "3D object type (derived from 'type' select above).",
-                    "enum": [
-                        "triangle"
-                    ]
-                },
-                "vertexA": {
-                    "title": "vertex A",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "default": {
-                        "x": -0.5,
-                        "y": -0.5,
-                        "z": 0
-                    }
-                },
-                "vertexB": {
-                    "title": "vertex B",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "default": {
-                        "x": -0.5,
-                        "y": -0.5,
-                        "z": 0
-                    }
-                },
-                "vertexC": {
-                    "title": "vertex C",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "default": {
-                        "x": -0.5,
-                        "y": -0.5,
-                        "z": 0
-                    }
-                },
-                "parent": {
-                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
-                    "title": "Parent",
-                    "type": "string"
-                },
-                "position": {
-                    "$ref": "#/definitions/position"
-                },
-                "rotation": {
-                    "$ref": "#/definitions/rotation"
-                },
-                "scale": {
-                    "$ref": "#/definitions/scale"
-                },
-                "animation": {
-                    "$ref": "#/definitions/animation"
-                },
-                "armarker": {
-                    "$ref": "#/definitions/armarker"
-                },
-                "click-listener": {
-                    "$ref": "#/definitions/click-listener"
-                },
-                "box-collision-listener": {
-                    "$ref": "#/definitions/box-collision-listener"
-                },
-                "collision-listener": {
-                    "description": "Name of the collision-listener, default can be empty string. Collisions trigger click events",
-                    "title": "Collision Listener (legacy)",
-                    "type": "string"
-                },
-                "blip": {
-                    "$ref": "#/definitions/blip"
-                },
-                "color": {
-                    "deprecated": true,
-                    "default": "#ffa500",
-                    "format": "color",
-                    "description": "(deprecated) Color of the material. Please use material.color instead.",
-                    "title": "Color (legacy)",
-                    "type": "string"
-                },
-                "dynamic-body": {
-                    "$ref": "#/definitions/dynamic-body"
-                },
-                "goto-landmark": {
-                    "$ref": "#/definitions/goto-landmark"
-                },
-                "goto-url": {
-                    "$ref": "#/definitions/goto-url"
-                },
-                "hide-on-enter-ar": {
-                    "description": "Hide object when entering AR. Remove component to *not* hide",
-                    "title": "Hide in AR",
-                    "type": "boolean",
-                    "enum": [
-                        true
-                    ]
-                },
-                "hide-on-enter-vr": {
-                    "description": "Hide object when entering VR. Remove component to *not* hide",
-                    "title": "Hide in VR",
-                    "type": "boolean",
-                    "enum": [
-                        true
-                    ]
-                },
-                "show-on-enter-ar": {
-                    "description": "Show object when entering AR. Hidden otherwise",
-                    "title": "Show in AR",
-                    "type": "boolean",
-                    "enum": [
-                        true
-                    ]
-                },
-                "show-on-enter-vr": {
-                    "description": "Show object when entering VR. Hidden otherwise",
-                    "title": "Show in VR",
-                    "type": "boolean",
-                    "enum": [
-                        true
-                    ]
-                },
-                "impulse": {
-                    "$ref": "#/definitions/impulse"
-                },
-                "landmark": {
-                    "$ref": "#/definitions/landmark"
-                },
-                "material-extras": {
-                    "$ref": "#/definitions/material-extras"
-                },
-                "shadow": {
-                    "$ref": "#/definitions/shadow"
-                },
-                "sound": {
-                    "$ref": "#/definitions/sound"
-                },
-                "textinput": {
-                    "$ref": "#/definitions/textinput"
-                },
-                "url": {
-                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
-                    "format": "uri",
-                    "title": "Url",
-                    "type": "string"
-                },
-                "screenshareable": {
-                    "default": true,
-                    "description": "Whether or not a user can screenshare on an object",
-                    "title": "Screenshare-able",
-                    "type": "boolean"
-                },
-                "remote-render": {
-                    "$ref": "#/definitions/remote-render"
-                },
-                "video-control": {
-                    "$ref": "#/definitions/video-control"
-                },
-                "attribution": {
-                    "$ref": "#/definitions/attribution"
-                },
-                "particle-system": {
-                    "$ref": "#/definitions/particle-system"
-                },
-                "spe-particles": {
-                    "$ref": "#/definitions/spe-particles"
-                },
-                "buffer": {
-                    "default": true,
-                    "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
-                    "title": "Buffer",
-                    "type": "boolean"
-                },
-                "jitsi-video": {
-                    "$ref": "#/definitions/jitsi-video"
-                },
-                "material": {
-                    "$ref": "#/definitions/material"
-                },
-                "multisrc": {
-                    "$ref": "#/definitions/multisrc"
-                },
-                "skipCache": {
-                    "default": true,
-                    "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
-                    "title": "Skip Cache",
-                    "type": "boolean"
-                }
-            }
-        }
-    },
-    "definitions": {
+            "type": "object"
+        },
         "position": {
             "description": "3D object position",
             "properties": {
@@ -370,21 +86,19 @@
             "title": "Rotation"
         },
         "scale": {
-            "default": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
             "description": "3D object scale",
             "id": "scale",
             "properties": {
                 "x": {
+                    "default": 1,
                     "type": "number"
                 },
                 "y": {
+                    "default": 1,
                     "type": "number"
                 },
                 "z": {
+                    "default": 1,
                     "type": "number"
                 }
             },
@@ -814,23 +528,7 @@
                         "z": 0
                     },
                     "description": "Use as a static teleport x,y,z offset",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/vector3"
                 },
                 "constrainToNavMesh": {
                     "description": "Teleports should snap to navmesh. Valid values: 'false', 'any', 'coplanar'",
@@ -1196,7 +894,7 @@
                 "positionSpread": {
                     "description": "Describes this emitter's position variance on a per-particle basis.",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "type": {
                     "description": "The default distribution this emitter should use to control its particle's spawn position and force behaviour. Possible values are 1 (box), 2 (sphere), 3 (disc)",
@@ -1226,22 +924,22 @@
                 "accelerationValue": {
                     "description": "Describes this emitter's base acceleration.",
                     "default": "{x: 0, y: -10, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "accelerationSpread": {
                     "description": "Describes this emitter's acceleration variance on a per-particle basis.",
                     "default": "{x: 10, y: 0, z: 10}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocityValue": {
                     "description": "Describes this emitter's base velocity.",
                     "default": "{x: 0, y: 25, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocitySpread": {
                     "description": "Describes this emitter's acceleration variance on a per-particle basis.",
                     "default": "{x: 10, y: 7.5, z: 10}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "dragValue": {
                     "description": "Number between 0 and 1 describing drag applied to all particles.",
@@ -1368,7 +1066,7 @@
                 "acceleration": {
                     "description": "for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "accelerationDistribution": {
                     "description": "distribution of particle acceleration, for disc and sphere, only the x component will be used. if set to NONE use the 'distribution' attribute for accelerationDistribution",
@@ -1384,7 +1082,7 @@
                 "accelerationSpread": {
                     "description": "spread of the particle's acceleration. for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "activeMultiplier": {
                     "description": "multiply the rate of particles emission, if larger than 1 then the particles will be emitted in bursts. note, very large numbers will emit all particles at once",
@@ -1453,7 +1151,7 @@
                     "default": [],
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Vector3"
+                        "$ref": "#/definitions/vector3"
                     }
                 },
                 "depthTest": {
@@ -1576,12 +1274,12 @@
                 "positionOffset": {
                     "description": "fixed offset to the apply to the emitter relative to its parent entity",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "positionSpread": {
                     "description": "particles are positioned within +- of these local bounds. for sphere and disc distributions only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "radius": {
                     "description": "radius of the disc or sphere emitter (ignored for box). note radius of 0 will prevent velocity and acceleration if they use a sphere or disc distribution",
@@ -1591,7 +1289,7 @@
                 "radiusScale": {
                     "description": "scales the emitter for sphere and disc shapes to form oblongs and ellipses",
                     "default": "{x: 1, y: 1, z: 1}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "randomizeAcceleration": {
                     "description": "if true, re-randomize acceleration when re-spawning a particle, can incur a performance hit",
@@ -1655,12 +1353,12 @@
                 "rotationAxis": {
                     "description": "local axis when using rotation",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "rotationAxisSpread": {
                     "description": "variance in the axis of rotation",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "rotationSpread": {
                     "description": "rotation variance in degrees",
@@ -1712,7 +1410,7 @@
                 "textureFrames": {
                     "description": "x and y frames for a spritesheet. each particle will transition through every frame of the spritesheet over its lifetime (see textureFramesLoop)",
                     "default": "{x: 1, y: 1}",
-                    "$ref": "#/definitions/Vector2"
+                    "$ref": "#/definitions/vector2"
                 },
                 "useTransparency": {
                     "description": "should the particles be rendered with transparency?",
@@ -1722,7 +1420,7 @@
                 "velocity": {
                     "description": "for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocityDistribution": {
                     "description": "distribution of particle velocities, for disc and sphere, only the x component will be used. if set to NONE use the 'distribution' attribute for velocityDistribution",
@@ -1738,7 +1436,7 @@
                 "velocitySpread": {
                     "description": "variance for the velocity",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "wiggle": {
                     "description": "extra distance the particle moves over its lifetime",
@@ -1928,6 +1626,271 @@
             ],
             "title": "Multi Source",
             "type": "object"
+        }
+    },
+    "properties": {
+        "object_id": {
+            "description": "A uuid or otherwise unique identifier for this object",
+            "minLength": 3,
+            "type": "string"
+        },
+        "persist": {
+            "default": true,
+            "description": "Persist this object in the database (default true = persist on server)",
+            "type": "boolean"
+        },
+        "type": {
+            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "enum": [
+                "object"
+            ],
+            "type": "string"
+        },
+        "action": {
+            "default": "create",
+            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "enum": [
+                "create",
+                "delete",
+                "update",
+                "clientEvent"
+            ],
+            "type": "string"
+        },
+        "ttl": {
+            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
+            "type": "integer"
+        },
+        "data": {
+            "title": "Triangle Data",
+            "additionalProperties": true,
+            "default": {
+                "object_type": "triangle",
+                "material": {
+                    "color": "#7f7f7f"
+                },
+                "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "rotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "vertexA": {
+                    "x": 0,
+                    "y": 0.5,
+                    "z": 0
+                },
+                "vertexB": {
+                    "x": -0.5,
+                    "y": -0.5,
+                    "z": 0
+                },
+                "vertexC": {
+                    "x": 0.5,
+                    "y": -0.5,
+                    "z": 0
+                }
+            },
+            "required": [
+                "object_type",
+                "vertexA",
+                "vertexB",
+                "vertexC"
+            ],
+            "properties": {
+                "object_type": {
+                    "type": "string",
+                    "title": "3D object type",
+                    "description": "3D object type (derived from 'type' select above).",
+                    "enum": [
+                        "triangle"
+                    ]
+                },
+                "vertexA": {
+                    "title": "vertex A",
+                    "$ref": "#/definitions/vector3",
+                    "default": {
+                        "x": -0.5,
+                        "y": -0.5,
+                        "z": 0
+                    }
+                },
+                "vertexB": {
+                    "title": "vertex B",
+                    "$ref": "#/definitions/vector3",
+                    "default": {
+                        "x": -0.5,
+                        "y": -0.5,
+                        "z": 0
+                    }
+                },
+                "vertexC": {
+                    "title": "vertex C",
+                    "$ref": "#/definitions/vector3",
+                    "default": {
+                        "x": -0.5,
+                        "y": -0.5,
+                        "z": 0
+                    }
+                },
+                "parent": {
+                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
+                    "title": "Parent",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/position"
+                },
+                "rotation": {
+                    "$ref": "#/definitions/rotation"
+                },
+                "scale": {
+                    "$ref": "#/definitions/scale"
+                },
+                "animation": {
+                    "$ref": "#/definitions/animation"
+                },
+                "armarker": {
+                    "$ref": "#/definitions/armarker"
+                },
+                "click-listener": {
+                    "$ref": "#/definitions/click-listener"
+                },
+                "box-collision-listener": {
+                    "$ref": "#/definitions/box-collision-listener"
+                },
+                "collision-listener": {
+                    "description": "Name of the collision-listener, default can be empty string. Collisions trigger click events",
+                    "title": "Collision Listener (legacy)",
+                    "type": "string"
+                },
+                "blip": {
+                    "$ref": "#/definitions/blip"
+                },
+                "dynamic-body": {
+                    "$ref": "#/definitions/dynamic-body"
+                },
+                "goto-landmark": {
+                    "$ref": "#/definitions/goto-landmark"
+                },
+                "goto-url": {
+                    "$ref": "#/definitions/goto-url"
+                },
+                "hide-on-enter-ar": {
+                    "description": "Hide object when entering AR. Remove component to *not* hide",
+                    "title": "Hide in AR",
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                },
+                "hide-on-enter-vr": {
+                    "description": "Hide object when entering VR. Remove component to *not* hide",
+                    "title": "Hide in VR",
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                },
+                "show-on-enter-ar": {
+                    "description": "Show object when entering AR. Hidden otherwise",
+                    "title": "Show in AR",
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                },
+                "show-on-enter-vr": {
+                    "description": "Show object when entering VR. Hidden otherwise",
+                    "title": "Show in VR",
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                },
+                "impulse": {
+                    "$ref": "#/definitions/impulse"
+                },
+                "landmark": {
+                    "$ref": "#/definitions/landmark"
+                },
+                "material-extras": {
+                    "$ref": "#/definitions/material-extras"
+                },
+                "shadow": {
+                    "$ref": "#/definitions/shadow"
+                },
+                "sound": {
+                    "$ref": "#/definitions/sound"
+                },
+                "textinput": {
+                    "$ref": "#/definitions/textinput"
+                },
+                "url": {
+                    "description": "Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)",
+                    "format": "uri",
+                    "title": "Url",
+                    "type": "string"
+                },
+                "remote-render": {
+                    "$ref": "#/definitions/remote-render"
+                },
+                "video-control": {
+                    "$ref": "#/definitions/video-control"
+                },
+                "attribution": {
+                    "$ref": "#/definitions/attribution"
+                },
+                "particle-system": {
+                    "$ref": "#/definitions/particle-system"
+                },
+                "spe-particles": {
+                    "$ref": "#/definitions/spe-particles"
+                },
+                "look-at": {
+                    "description": "The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.",
+                    "title": "Look At",
+                    "type": "string"
+                },
+                "buffer": {
+                    "default": true,
+                    "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
+                    "title": "Buffer",
+                    "type": "boolean"
+                },
+                "color": {
+                    "title": "DEPRECATED (color)",
+                    "type": "string",
+                    "description": "DEPRECATED: data.color is deprecated for primitive geometry, use data.material.color instead.",
+                    "deprecated": true
+                },
+                "jitsi-video": {
+                    "$ref": "#/definitions/jitsi-video"
+                },
+                "material": {
+                    "$ref": "#/definitions/material"
+                },
+                "multisrc": {
+                    "$ref": "#/definitions/multisrc"
+                },
+                "screenshareable": {
+                    "default": true,
+                    "description": "Whether or not a user can screenshare on an object",
+                    "title": "Screenshare-able",
+                    "type": "boolean"
+                },
+                "skipCache": {
+                    "default": false,
+                    "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
+                    "title": "Skip Cache",
+                    "type": "boolean"
+                }
+            }
         }
     }
 }

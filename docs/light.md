@@ -28,12 +28,12 @@ Light Attributes
 |object_type|string; Must be: ```light```|```light```|3D object type.|Yes|
 |angle|number|```60```|Maximum extent of spot light from its direction (in degrees). NOTE: Spot light type only.|No|
 |castShadow|boolean|```False```|castShadow (point, spot, directional)|No|
-|color|string|```#ffffff```|(deprecated) Color of the material. Please use material.color instead.|No|
+|color|string|```#ffffff```|Light color.|No|
 |decay|number|```1.0```|Amount the light dims along the distance of the light. NOTE: Point and Spot light type only.|No|
 |distance|number|```0.0```|Distance where intensity becomes 0. If distance is 0, then the point light does not decay with distance. NOTE: Point and Spot light type only.|No|
 |groundColor|string|```'#ffffff'```|Light color from below. NOTE: Hemisphere light type only|No|
 |intensity|number|```1```|Light strength.|No|
-|light|||These attributes (light, intensity, color, ...) can be set directly on the light object (instead of this light attribute inside the light object); dont use in new light objects|No|
+|light|[light](light)||DEPRECATED: data.light.[property] is deprecated, use object_type: light and data.[property] instead.|No|
 |penumbra|number|```0.0```|Percent of the spotlight cone that is attenuated due to penumbra. NOTE: Spot light type only.|No|
 |shadowBias|number|```0```|shadowBias (castShadow=true)|No|
 |shadowCameraBottom|number|```-5```|shadowCameraBottom (castShadow=true)|No|
@@ -73,9 +73,9 @@ Light Attributes
 |sound|[sound](sound)||The sound component defines the entity as a source of sound or audio. The sound component is positional and is thus affected by the component's position. |No|
 |textinput|[textinput](textinput)||Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.|No|
 |url|string||Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|No|
-|screenshareable|boolean|```True```|Whether or not a user can screenshare on an object|No|
 |remote-render|[remote-render](remote-render)||Whether or not an object should be remote rendered [Experimental]|No|
 |video-control|[video-control](video-control)||Video Control|No|
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
 |particle-system|[particle-system](particle-system)||Particle system component for A-Frame. |No|
 |spe-particles|[spe-particles](spe-particles)||GPU based particle systems in A-Frame. |No|
+|look-at|string||The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.|No|

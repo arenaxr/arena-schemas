@@ -119,14 +119,6 @@
                 "blip": {
                     "$ref": "#/definitions/blip"
                 },
-                "color": {
-                    "deprecated": true,
-                    "default": "#ffa500",
-                    "format": "color",
-                    "description": "(deprecated) Color of the material. Please use material.color instead.",
-                    "title": "Color (legacy)",
-                    "type": "string"
-                },
                 "dynamic-body": {
                     "$ref": "#/definitions/dynamic-body"
                 },
@@ -186,12 +178,6 @@
                 "textinput": {
                     "$ref": "#/definitions/textinput"
                 },
-                "screenshareable": {
-                    "default": true,
-                    "description": "Whether or not a user can screenshare on an object",
-                    "title": "Screenshare-able",
-                    "type": "boolean"
-                },
                 "remote-render": {
                     "$ref": "#/definitions/remote-render"
                 },
@@ -206,6 +192,11 @@
                 },
                 "spe-particles": {
                     "$ref": "#/definitions/spe-particles"
+                },
+                "look-at": {
+                    "description": "The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.",
+                    "title": "Look At",
+                    "type": "string"
                 }
             }
         }
@@ -265,21 +256,19 @@
             "title": "Rotation"
         },
         "scale": {
-            "default": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
             "description": "3D object scale",
             "id": "scale",
             "properties": {
                 "x": {
+                    "default": 1,
                     "type": "number"
                 },
                 "y": {
+                    "default": 1,
                     "type": "number"
                 },
                 "z": {
+                    "default": 1,
                     "type": "number"
                 }
             },
@@ -709,23 +698,7 @@
                         "z": 0
                     },
                     "description": "Use as a static teleport x,y,z offset",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        },
-                        "z": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "type": "object"
+                    "$ref": "#/definitions/vector3"
                 },
                 "constrainToNavMesh": {
                     "description": "Teleports should snap to navmesh. Valid values: 'false', 'any', 'coplanar'",
@@ -1091,7 +1064,7 @@
                 "positionSpread": {
                     "description": "Describes this emitter's position variance on a per-particle basis.",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "type": {
                     "description": "The default distribution this emitter should use to control its particle's spawn position and force behaviour. Possible values are 1 (box), 2 (sphere), 3 (disc)",
@@ -1121,22 +1094,22 @@
                 "accelerationValue": {
                     "description": "Describes this emitter's base acceleration.",
                     "default": "{x: 0, y: -10, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "accelerationSpread": {
                     "description": "Describes this emitter's acceleration variance on a per-particle basis.",
                     "default": "{x: 10, y: 0, z: 10}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocityValue": {
                     "description": "Describes this emitter's base velocity.",
                     "default": "{x: 0, y: 25, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocitySpread": {
                     "description": "Describes this emitter's acceleration variance on a per-particle basis.",
                     "default": "{x: 10, y: 7.5, z: 10}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "dragValue": {
                     "description": "Number between 0 and 1 describing drag applied to all particles.",
@@ -1263,7 +1236,7 @@
                 "acceleration": {
                     "description": "for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "accelerationDistribution": {
                     "description": "distribution of particle acceleration, for disc and sphere, only the x component will be used. if set to NONE use the 'distribution' attribute for accelerationDistribution",
@@ -1279,7 +1252,7 @@
                 "accelerationSpread": {
                     "description": "spread of the particle's acceleration. for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "activeMultiplier": {
                     "description": "multiply the rate of particles emission, if larger than 1 then the particles will be emitted in bursts. note, very large numbers will emit all particles at once",
@@ -1348,7 +1321,7 @@
                     "default": [],
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Vector3"
+                        "$ref": "#/definitions/vector3"
                     }
                 },
                 "depthTest": {
@@ -1471,12 +1444,12 @@
                 "positionOffset": {
                     "description": "fixed offset to the apply to the emitter relative to its parent entity",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "positionSpread": {
                     "description": "particles are positioned within +- of these local bounds. for sphere and disc distributions only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "radius": {
                     "description": "radius of the disc or sphere emitter (ignored for box). note radius of 0 will prevent velocity and acceleration if they use a sphere or disc distribution",
@@ -1486,7 +1459,7 @@
                 "radiusScale": {
                     "description": "scales the emitter for sphere and disc shapes to form oblongs and ellipses",
                     "default": "{x: 1, y: 1, z: 1}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "randomizeAcceleration": {
                     "description": "if true, re-randomize acceleration when re-spawning a particle, can incur a performance hit",
@@ -1550,12 +1523,12 @@
                 "rotationAxis": {
                     "description": "local axis when using rotation",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "rotationAxisSpread": {
                     "description": "variance in the axis of rotation",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "rotationSpread": {
                     "description": "rotation variance in degrees",
@@ -1607,7 +1580,7 @@
                 "textureFrames": {
                     "description": "x and y frames for a spritesheet. each particle will transition through every frame of the spritesheet over its lifetime (see textureFramesLoop)",
                     "default": "{x: 1, y: 1}",
-                    "$ref": "#/definitions/Vector2"
+                    "$ref": "#/definitions/vector2"
                 },
                 "useTransparency": {
                     "description": "should the particles be rendered with transparency?",
@@ -1617,7 +1590,7 @@
                 "velocity": {
                     "description": "for sphere and disc distributions, only the x axis is used",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "velocityDistribution": {
                     "description": "distribution of particle velocities, for disc and sphere, only the x component will be used. if set to NONE use the 'distribution' attribute for velocityDistribution",
@@ -1633,7 +1606,7 @@
                 "velocitySpread": {
                     "description": "variance for the velocity",
                     "default": "{x: 0, y: 0, z: 0}",
-                    "$ref": "#/definitions/Vector3"
+                    "$ref": "#/definitions/vector3"
                 },
                 "wiggle": {
                     "description": "extra distance the particle moves over its lifetime",

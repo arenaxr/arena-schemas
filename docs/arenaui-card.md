@@ -31,6 +31,7 @@ ARENAUI Card Panel Attributes
 |imgCaption|string|``````|This will caption the image|No|
 |imgDirection|string; One of: ```['left', 'right']```|```'right'```|Image Direction|No|
 |imgSize|string; One of: ```['cover', 'contain', 'stretch']```|```cover```|Image sizing|No|
+|textImageRatio|number|```0.5```|Text to Image Width Ratio|No|
 |fontSize|number|```0.035```|Font Size|No|
 |widthScale|number|```1```|Width scale multiplier|No|
 |closeButton|boolean|```True```|Show close button|No|
@@ -45,7 +46,6 @@ ARENAUI Card Panel Attributes
 |box-collision-listener|[box-collision-listener](box-collision-listener)||Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps|No|
 |collision-listener|string||Name of the collision-listener, default can be empty string. Collisions trigger click events|No|
 |blip|[blip](blip)||When the object is created or deleted, it will animate in/out of the scene instead of appearing/disappearing instantly. Must have a geometric mesh.|No|
-|color|string|```'#ffa500'```|(deprecated) Color of the material. Please use material.color instead.|No|
 |dynamic-body|[dynamic-body](dynamic-body)||Physics type attached to the object. |No|
 |goto-landmark|[goto-landmark](goto-landmark)||Teleports user to the landmark with the given name; Requires click-listener|No|
 |goto-url|[goto-url](goto-url)||Goto given URL; Requires click-listener|No|
@@ -60,9 +60,9 @@ ARENAUI Card Panel Attributes
 |sound|[sound](sound)||The sound component defines the entity as a source of sound or audio. The sound component is positional and is thus affected by the component's position. |No|
 |textinput|[textinput](textinput)||Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.|No|
 |url|string||Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|No|
-|screenshareable|boolean|```True```|Whether or not a user can screenshare on an object|No|
 |remote-render|[remote-render](remote-render)||Whether or not an object should be remote rendered [Experimental]|No|
 |video-control|[video-control](video-control)||Video Control|No|
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
 |particle-system|[particle-system](particle-system)||Particle system component for A-Frame. |No|
 |spe-particles|[spe-particles](spe-particles)||GPU based particle systems in A-Frame. |No|
+|look-at|string||The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.|No|

@@ -92,12 +92,12 @@
                     "default": 5000
                 },
                 "segmentsHeight": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments height",
                     "default": 64
                 },
                 "segmentsWidth": {
-                    "type": "number",
+                    "type": "integer",
                     "title": "segments width",
                     "default": 64
                 },
@@ -126,6 +126,12 @@
                     "title": "Buffer",
                     "type": "boolean"
                 },
+                "color": {
+                    "title": "DEPRECATED (color)",
+                    "type": "string",
+                    "description": "DEPRECATED: data.color is deprecated for primitive geometry, use data.material.color instead.",
+                    "deprecated": true
+                },
                 "jitsi-video": {
                     "$ref": "#/definitions/jitsi-video"
                 },
@@ -135,8 +141,14 @@
                 "multisrc": {
                     "$ref": "#/definitions/multisrc"
                 },
-                "skipCache": {
+                "screenshareable": {
                     "default": true,
+                    "description": "Whether or not a user can screenshare on an object",
+                    "title": "Screenshare-able",
+                    "type": "boolean"
+                },
+                "skipCache": {
+                    "default": false,
                     "description": "Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).",
                     "title": "Skip Cache",
                     "type": "boolean"
@@ -199,21 +211,19 @@
             "title": "Rotation"
         },
         "scale": {
-            "default": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
             "description": "3D object scale",
             "id": "scale",
             "properties": {
                 "x": {
+                    "default": 1,
                     "type": "number"
                 },
                 "y": {
+                    "default": 1,
                     "type": "number"
                 },
                 "z": {
+                    "default": 1,
                     "type": "number"
                 }
             },
