@@ -116,6 +116,15 @@
                         "Roboto-Mono"
                     ]
                 },
+                "theme": {
+                    "type": "string",
+                    "title": "Color Theme",
+                    "default": "light",
+                    "enum": [
+                        "light",
+                        "dark"
+                    ]
+                },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
                     "title": "Parent",
@@ -215,12 +224,6 @@
                     "title": "Url",
                     "type": "string"
                 },
-                "screenshareable": {
-                    "default": true,
-                    "description": "Whether or not a user can screenshare on an object",
-                    "title": "Screenshare-able",
-                    "type": "boolean"
-                },
                 "remote-render": {
                     "$ref": "#/definitions/remote-render"
                 },
@@ -235,6 +238,11 @@
                 },
                 "spe-particles": {
                     "$ref": "#/definitions/spe-particles"
+                },
+                "look-at": {
+                    "description": "The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.",
+                    "title": "Look At",
+                    "type": "string"
                 }
             }
         }

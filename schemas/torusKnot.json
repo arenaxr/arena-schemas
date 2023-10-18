@@ -47,7 +47,7 @@
             "default": {
                 "object_type": "torusKnot",
                 "radius": 1,
-                "radiusTubular": 0.4,
+                "radiusTubular": 0.2,
                 "material": {
                     "color": "#7f7f7f"
                 },
@@ -94,7 +94,7 @@
                 "radiusTubular": {
                     "type": "number",
                     "title": "radius tubular",
-                    "default": 0.4
+                    "default": 0.2
                 },
                 "segmentsRadial": {
                     "type": "integer",
@@ -205,12 +205,6 @@
                     "title": "Url",
                     "type": "string"
                 },
-                "screenshareable": {
-                    "default": true,
-                    "description": "Whether or not a user can screenshare on an object",
-                    "title": "Screenshare-able",
-                    "type": "boolean"
-                },
                 "remote-render": {
                     "$ref": "#/definitions/remote-render"
                 },
@@ -226,11 +220,22 @@
                 "spe-particles": {
                     "$ref": "#/definitions/spe-particles"
                 },
+                "look-at": {
+                    "description": "The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.",
+                    "title": "Look At",
+                    "type": "string"
+                },
                 "buffer": {
                     "default": true,
                     "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
                     "title": "Buffer",
                     "type": "boolean"
+                },
+                "color": {
+                    "title": "DEPRECATED (color)",
+                    "type": "string",
+                    "description": "DEPRECATED: data.color is deprecated for primitive geometry, use data.material.color instead.",
+                    "deprecated": true
                 },
                 "jitsi-video": {
                     "$ref": "#/definitions/jitsi-video"
@@ -240,6 +245,12 @@
                 },
                 "multisrc": {
                     "$ref": "#/definitions/multisrc"
+                },
+                "screenshareable": {
+                    "default": true,
+                    "description": "Whether or not a user can screenshare on an object",
+                    "title": "Screenshare-able",
+                    "type": "boolean"
                 },
                 "skipCache": {
                     "default": false,
