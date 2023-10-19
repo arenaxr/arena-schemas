@@ -45,29 +45,12 @@
             "title": "PCD Model Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "pcd-model",
-                "pointSize": 0.01,
-                "pointColor": "#7f7f7f",
-                "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "scale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                }
+                "object_type": "pcd-model"
             },
             "required": [
                 "object_type",
                 "url",
+                "pointColor",
                 "pointSize",
                 "position",
                 "rotation",
@@ -432,19 +415,18 @@
             "type": "object"
         },
         "armarker": {
-            "default": {
-                "buildable": false,
-                "dynamic": false,
-                "markerid": "0",
-                "markertype": "apriltag_36h11",
-                "size": 150
-            },
             "description": "A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.",
             "properties": {
                 "publish": {
                     "type": "boolean",
                     "title": "publish",
                     "description": "Publish detections. Send detections to external agents (e.g. external builder script that places new markers in the scene). If dynamic=true and publish=true, object position is not updated (left up to external agent).",
+                    "default": false
+                },
+                "buildable": {
+                    "type": "boolean",
+                    "title": "buildable",
+                    "description": "Whether tag has 'dynamic' toggled on click. Used to position a tag, then lock into position.",
                     "default": false
                 },
                 "dynamic": {
@@ -476,7 +458,7 @@
                     "type": "number"
                 },
                 "markerid": {
-                    "default": 0,
+                    "default": "0",
                     "title": "markerid",
                     "description": "The marker id (e.g. for AprilTag 36h11 family, an integer in the range [0, 586])",
                     "type": "string"
@@ -508,7 +490,9 @@
             "required": [
                 "markertype",
                 "markerid",
-                "size"
+                "size",
+                "buildable",
+                "dynamic"
             ],
             "title": "ARMarker",
             "type": "object"
@@ -751,19 +735,14 @@
                     "type": "string"
                 }
             },
-            "default": {
-                "randomRadiusMin": 0,
-                "randomRadiusMax": 0,
-                "lookAtLandmark": true
-            },
             "required": [
-                "label"
+                "label",
+                "randomRadiusMin",
+                "randomRadiusMax",
+                "lookAtLandmark"
             ]
         },
         "material-extras": {
-            "default": {
-                "encoding": "sRGBEncoding"
-            },
             "description": "Define extra material properties, namely texture encoding, whether to render the material's color and render order. The properties set here access directly Three.js material component. \n\nMore properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>https://threejs.org/docs/#api/en/materials/Material</a>",
             "properties": {
                 "overrideSrc": {
@@ -804,15 +783,14 @@
                 }
             },
             "title": "Material extras",
-            "type": "object"
+            "type": "object",
+            "required": [
+                "encoding"
+            ]
         },
         "shadow": {
             "title": "Shadow",
             "type": "object",
-            "default": {
-                "cast": false,
-                "receive": false
-            },
             "properties": {
                 "cast": {
                     "default": false,
@@ -826,7 +804,11 @@
                     "title": "receive shadow",
                     "type": "boolean"
                 }
-            }
+            },
+            "required": [
+                "cast",
+                "receive"
+            ]
         },
         "sound": {
             "description": "The sound component defines the entity as a source of sound or audio. The sound component is positional and is thus affected by the component's position. \n\nMore properties at <a href='https://aframe.io/docs/1.4.0/components/sound.html'>https://aframe.io/docs/1.4.0/components/sound.html</a>",
@@ -915,12 +897,6 @@
             "title": "Text Input",
             "description": "Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.",
             "type": "object",
-            "default": {
-                "on": "mousedown",
-                "title": "Text Input",
-                "label": "Input text below (max is 140 characters)",
-                "placeholder": "Type here"
-            },
             "properties": {
                 "on": {
                     "default": "mousedown",
@@ -958,7 +934,13 @@
                     "description": "Text input place holder",
                     "type": "string"
                 }
-            }
+            },
+            "required": [
+                "on",
+                "title",
+                "label",
+                "placeholder"
+            ]
         },
         "remote-render": {
             "description": "Whether or not an object should be remote rendered [Experimental]",
@@ -1704,12 +1686,6 @@
             "type": "object"
         },
         "gltf-model-lod": {
-            "default": {
-                "detailedUrl": "",
-                "detailedDistance": 10,
-                "updateRate": 333,
-                "retainCache": false
-            },
             "description": "Simple switch between the default gltf-model and a detailed one when a user camera is within specified distance",
             "properties": {
                 "detailedUrl": {
@@ -1738,7 +1714,13 @@
                 }
             },
             "title": "GLTF Model Level of Detail",
-            "type": "object"
+            "type": "object",
+            "required": [
+                "detailedUrl",
+                "detailedDistance",
+                "updateRate",
+                "retainCache"
+            ]
         },
         "modelUpdate": {
             "title": "GLTF Model Update",

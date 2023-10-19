@@ -45,15 +45,14 @@
             "title": "Thickline Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "thickline",
-                "lineWidth": 5,
-                "lineWidthStyler": "default",
-                "path": "-2 -1 0, 0 20 0, 10 -1 10",
-                "color": "#7f7f7f"
+                "object_type": "thickline"
             },
             "required": [
                 "object_type",
-                "path"
+                "path",
+                "lineWidth",
+                "lineWidthStyler",
+                "color"
             ],
             "properties": {
                 "object_type": {

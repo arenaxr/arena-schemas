@@ -37,7 +37,7 @@ def format_value(obj, value):
     elif type == 'boolean':
         return f'{str(value).lower()}'
     elif type == 'number':
-        return f'{float(value)}'
+        return f'{"{0:g}".format(float(value))}'
     elif type == 'integer':
         return f'{int(value)}'
     elif type == 'array':
