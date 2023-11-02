@@ -1,6 +1,6 @@
 {
-    "title": "Camera",
-    "description": "Camera is the pose and arena-user component data representing a user avatar.",
+    "title": "Hand",
+    "description": "Hand is the (left or right) hand metadata pose and controller type of the user avatar.",
     "required": [
         "object_id",
         "action",
@@ -42,16 +42,17 @@
             "type": "integer"
         },
         "data": {
-            "title": "Camera Data",
+            "title": "Hand Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "camera"
+                "object_type": "handLeft"
             },
             "required": [
                 "object_type",
                 "position",
                 "rotation",
-                "arena-user"
+                "url",
+                "dep"
             ],
             "properties": {
                 "object_type": {
@@ -59,11 +60,21 @@
                     "title": "3D object type",
                     "description": "3D object type (derived from 'type' select above).",
                     "enum": [
-                        "camera"
+                        "handLeft",
+                        "handRight"
                     ]
                 },
-                "arena-user": {
-                    "$ref": "#/definitions/arena-user"
+                "url": {
+                    "type": "string",
+                    "title": "Hand Model Url",
+                    "description": "Path to user avatar hand model",
+                    "default": "static/models/hands/valve_index_left.gltf"
+                },
+                "dep": {
+                    "type": "string",
+                    "title": "Dependant Object Id",
+                    "description": "Camera object_id this hand belongs to.",
+                    "default": ""
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
@@ -83,71 +94,6 @@
         }
     },
     "definitions": {
-        "arena-user": {
-            "description": "Another user's camera in the ARENA. Handles Jitsi and display name updates.",
-            "title": "User Avatar",
-            "type": "object",
-            "properties": {
-                "displayName": {
-                    "type": "string",
-                    "title": "displayName",
-                    "description": "User display name.",
-                    "default": ""
-                },
-                "color": {
-                    "format": "color",
-                    "title": "color",
-                    "type": "string",
-                    "description": "The color for the user's name text.",
-                    "default": "white"
-                },
-                "headModelPath": {
-                    "type": "string",
-                    "title": "headModelPath",
-                    "description": "Path to user avatar head model",
-                    "default": "/static/models/avatars/robobit.glb"
-                },
-                "presence": {
-                    "type": "string",
-                    "title": "presence",
-                    "description": "Type of presence for user",
-                    "default": "Standard",
-                    "enum": [
-                        "Standard",
-                        "Portal"
-                    ]
-                },
-                "jitsiId": {
-                    "type": "string",
-                    "title": "depth",
-                    "description": "User Jitsi ID.",
-                    "default": ""
-                },
-                "hasAudio": {
-                    "type": "bool",
-                    "title": "hasAudio",
-                    "description": "Whether the user has audio on.",
-                    "default": false
-                },
-                "hasVideo": {
-                    "type": "bool",
-                    "title": "hasVideo",
-                    "description": "Whether the user has video on.",
-                    "default": false
-                },
-                "hasAvatar": {
-                    "type": "bool",
-                    "title": "hasAvatar",
-                    "description": "Whether the user has facial feature capture on.",
-                    "default": false
-                }
-            },
-            "required": [
-                "displayName",
-                "color",
-                "headModelPath"
-            ]
-        },
         "position": {
             "description": "3D object position",
             "properties": {
