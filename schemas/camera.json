@@ -1,0 +1,225 @@
+{
+    "title": "User Camera",
+    "description": "User Camera is the pose and arena-user component data representing a user avatar.",
+    "required": [
+        "object_id",
+        "action",
+        "type",
+        "data",
+        "persist"
+    ],
+    "properties": {
+        "object_id": {
+            "description": "A uuid or otherwise unique identifier for this object",
+            "minLength": 3,
+            "type": "string"
+        },
+        "persist": {
+            "default": true,
+            "description": "Persist this object in the database (default true = persist on server)",
+            "type": "boolean"
+        },
+        "type": {
+            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "enum": [
+                "object"
+            ],
+            "type": "string"
+        },
+        "action": {
+            "default": "create",
+            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "enum": [
+                "create",
+                "delete",
+                "update",
+                "clientEvent"
+            ],
+            "type": "string"
+        },
+        "ttl": {
+            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
+            "type": "integer"
+        },
+        "data": {
+            "title": "User Camera Data",
+            "additionalProperties": true,
+            "default": {
+                "object_type": "camera"
+            },
+            "required": [
+                "object_type",
+                "position",
+                "rotation",
+                "arena-user"
+            ],
+            "properties": {
+                "object_type": {
+                    "type": "string",
+                    "title": "3D object type",
+                    "description": "3D object type (derived from 'type' select above).",
+                    "enum": [
+                        "camera"
+                    ]
+                },
+                "arena-user": {
+                    "$ref": "#/definitions/arena-user"
+                },
+                "parent": {
+                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
+                    "title": "Parent",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/position"
+                },
+                "rotation": {
+                    "$ref": "#/definitions/rotation"
+                },
+                "scale": {
+                    "$ref": "#/definitions/scale"
+                }
+            }
+        }
+    },
+    "definitions": {
+        "arena-user": {
+            "description": "Another user's camera in the ARENA. Handles Jitsi and display name updates.",
+            "title": "ARENA User",
+            "type": "object",
+            "properties": {
+                "displayName": {
+                    "type": "string",
+                    "title": "displayName",
+                    "description": "User display name.",
+                    "default": ""
+                },
+                "color": {
+                    "type": "color",
+                    "title": "color",
+                    "description": "The color for the user's name text.",
+                    "default": "white"
+                },
+                "headModelPath": {
+                    "type": "string",
+                    "title": "headModelPath",
+                    "description": "Path to user head model",
+                    "default": "/static/models/avatars/robobit.glb"
+                },
+                "presence": {
+                    "type": "string",
+                    "title": "presence",
+                    "description": "Type of presence for user",
+                    "default": "Standard"
+                },
+                "jitsiId": {
+                    "type": "string",
+                    "title": "depth",
+                    "description": "User Jitsi ID.",
+                    "default": ""
+                },
+                "hasAudio": {
+                    "type": "bool",
+                    "title": "hasAudio",
+                    "description": "Whether the user has audio on.",
+                    "default": false
+                },
+                "hasVideo": {
+                    "type": "bool",
+                    "title": "hasVideo",
+                    "description": "Whether the user has video on.",
+                    "default": false
+                },
+                "hasAvatar": {
+                    "type": "bool",
+                    "title": "hasAvatar",
+                    "description": "Whether the user has facial feature capture on.",
+                    "default": false
+                }
+            },
+            "required": [
+                "displayName",
+                "color",
+                "headModelPath"
+            ]
+        },
+        "position": {
+            "description": "3D object position",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Position"
+        },
+        "rotation": {
+            "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
+            "properties": {
+                "w": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "w",
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Rotation"
+        },
+        "scale": {
+            "description": "3D object scale",
+            "id": "scale",
+            "properties": {
+                "x": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 1,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 1,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object",
+            "title": "Scale"
+        }
+    }
+}
