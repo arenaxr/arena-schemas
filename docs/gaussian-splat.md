@@ -1,16 +1,14 @@
 
-PCD Model
-=========
+3D Gaussian Splat
+=================
 
 
-Load a PCD model. 
-
-Format: <a href='https://pointclouds.org/documentation/tutorials/index.html'>https://pointclouds.org/documentation/tutorials/index.html</a>
+Load a 3D Gaussian Splat for Real-Time Radiance Field Rendering
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
-PCD Model Attributes
----------------------
+3D Gaussian Splat Attributes
+-----------------------------
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -19,16 +17,17 @@ PCD Model Attributes
 |type|string; Must be: ```object```|```'object'```|AFrame 3D Object|Yes|
 |action|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|Yes|
 |ttl|integer||When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.|No|
-|data|PCD Model data||PCD Model Data|Yes|
+|data|3D Gaussian Splat data||3D Gaussian Splat|Yes|
 
-### PCD Model Data Attributes
+### 3D Gaussian Splat Data Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|string; Must be: ```pcd-model```|```pcd-model```|3D object type.|Yes|
-|url|string||Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|Yes|
-|pointSize|number|```0.01```|Size of the points|Yes|
-|pointColor|string|```'#7f7f7f'```|Color of the points|Yes|
+|object_type|string; Must be: ```gaussian_splatting```|```gaussian_splatting```|3D object type.|Yes|
+|src|string||Splat URL. Dropbox share links also accepted. Store files paths under '/store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|Yes|
+|cutoutEntity|string|```''```|Selector to a box primitive that uses scale and position to define the bounds of splat points to render|No|
+|pixelRatio|number|```1.0```|Pixel ratio for rendering. Reducing the value decreases the resolution and improves performance. If a negative value is set, the device's native value will be applied.|No|
+|xrPixelRatio|number|```0.5```| 	Same as pixelRatio. Applied to XR devices.|No|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
 |position|[position](position)||3D object position|Yes|
 |rotation|[rotation](rotation)||3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|Yes|
@@ -52,6 +51,7 @@ PCD Model Attributes
 |shadow|[shadow](shadow)||shadow|No|
 |sound|[sound](sound)||The sound component defines the entity as a source of sound or audio. The sound component is positional and is thus affected by the component's position. |No|
 |textinput|[textinput](textinput)||Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.|No|
+|url|string||Model URL. Store files paths under 'store/users/<username>' (e.g. store/users/wiselab/models/factory_robot_arm/scene.gltf); to use CDN, prefix with `https://arena-cdn.conix.io/` (e.g. https://arena-cdn.conix.io/store/users/wiselab/models/factory_robot_arm/scene.gltf)|No|
 |remote-render|[remote-render](remote-render)||Whether or not an object should be remote rendered [Experimental]|No|
 |video-control|[video-control](video-control)||Video Control|No|
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
