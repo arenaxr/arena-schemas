@@ -447,10 +447,12 @@
                     "enum": [
                         "apriltag_36h11",
                         "lightanchor",
-                        "uwb"
+                        "uwb",
+                        "vive",
+                        "optitrack"
                     ],
                     "title": "markertype",
-                    "description": "The marker type (apriltag_36h11, lightanchor, uwb)",
+                    "description": "The marker type (apriltag_36h11, lightanchor, uwb, vive, optitrack)",
                     "type": "string"
                 },
                 "size": {
