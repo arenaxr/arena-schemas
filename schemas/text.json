@@ -1,6 +1,6 @@
 {
     "title": "Text",
-    "description": "Display text. \n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>https://aframe.io/docs/1.5.0/components/text.html</a>",
+    "description": "Display text.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>A-Frame Text</a>.",
     "required": [
         "object_id",
         "action",
@@ -10,17 +10,17 @@
     ],
     "properties": {
         "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object",
+            "description": "A uuid or otherwise unique identifier for this object.",
             "minLength": 3,
             "type": "string"
         },
         "persist": {
             "default": true,
-            "description": "Persist this object in the database (default true = persist on server)",
+            "description": "Persist this object in the database.",
             "type": "boolean"
         },
         "type": {
-            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "description": "One of the message types.",
             "enum": [
                 "object"
             ],
@@ -28,7 +28,7 @@
         },
         "action": {
             "default": "create",
-            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "description": "Message action: CRUD or client event.",
             "enum": [
                 "create",
                 "delete",
@@ -60,14 +60,14 @@
                 "object_type": {
                     "type": "string",
                     "title": "3D object type",
-                    "description": "3D object type (derived from 'type' select above).",
+                    "description": "3D object type.",
                     "enum": [
                         "text"
                     ]
                 },
                 "align": {
                     "type": "string",
-                    "description": "Multi-line text alignment (left, center, right).",
+                    "description": "Multi-line text alignment.",
                     "default": "left",
                     "enum": [
                         "left",
@@ -82,7 +82,7 @@
                 },
                 "anchor": {
                     "type": "string",
-                    "description": "Horizontal positioning (left, center, right, align).",
+                    "description": "Horizontal positioning.",
                     "default": "center",
                     "enum": [
                         "left",
@@ -93,7 +93,7 @@
                 },
                 "baseline": {
                     "type": "string",
-                    "description": "Vertical positioning (top, center, bottom).",
+                    "description": "Vertical positioning.",
                     "default": "center",
                     "enum": [
                         "top",
@@ -168,7 +168,7 @@
                 },
                 "side": {
                     "type": "string",
-                    "description": "Side to render. (front, back, double)",
+                    "description": "Side to render.",
                     "default": "double",
                     "enum": [
                         "front",
@@ -199,7 +199,7 @@
                 },
                 "whiteSpace": {
                     "type": "string",
-                    "description": "How whitespace should be handled (i.e., normal, pre, nowrap).</a>",
+                    "description": "How whitespace should be handled.",
                     "default": "normal",
                     "enum": [
                         "normal",
@@ -270,6 +270,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Position"
         },
@@ -307,6 +308,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Rotation"
         },
@@ -335,6 +337,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Scale"
         }

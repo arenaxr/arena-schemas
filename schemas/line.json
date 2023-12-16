@@ -11,6 +11,7 @@
     "definitions": {
         "vector3": {
             "title": "Vector3",
+            "format": "grid",
             "properties": {
                 "x": {
                     "default": 0,
@@ -53,6 +54,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Position"
         },
@@ -90,6 +92,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Rotation"
         },
@@ -118,23 +121,24 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Scale"
         }
     },
     "properties": {
         "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object",
+            "description": "A uuid or otherwise unique identifier for this object.",
             "minLength": 3,
             "type": "string"
         },
         "persist": {
             "default": true,
-            "description": "Persist this object in the database (default true = persist on server)",
+            "description": "Persist this object in the database.",
             "type": "boolean"
         },
         "type": {
-            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "description": "One of the message types.",
             "enum": [
                 "object"
             ],
@@ -142,7 +146,7 @@
         },
         "action": {
             "default": "create",
-            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "description": "Message action: CRUD or client event.",
             "enum": [
                 "create",
                 "delete",
@@ -171,7 +175,7 @@
                 "object_type": {
                     "type": "string",
                     "title": "3D object type",
-                    "description": "3D object type (derived from 'type' select above).",
+                    "description": "3D object type.",
                     "enum": [
                         "line"
                     ]
@@ -186,6 +190,7 @@
                 "end": {
                     "title": "vertex B (end)",
                     "description": "End coordinate.",
+                    "format": "grid",
                     "$ref": "#/definitions/vector3",
                     "default": {
                         "x": -0.5,
@@ -204,6 +209,7 @@
                 "start": {
                     "title": "vertex A (start)",
                     "description": "Start point coordinate.",
+                    "format": "grid",
                     "$ref": "#/definitions/vector3",
                     "default": {
                         "x": 0,
