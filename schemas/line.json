@@ -61,18 +61,26 @@
             "properties": {
                 "w": {
                     "default": 1,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "x": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "y": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "z": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 }
             },
@@ -91,14 +99,17 @@
             "properties": {
                 "x": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 }
             },
@@ -186,6 +197,8 @@
                     "title": "Opacity",
                     "description": "Line opacity.",
                     "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
                     "default": 1
                 },
                 "start": {

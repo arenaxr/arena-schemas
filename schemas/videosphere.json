@@ -177,18 +177,26 @@
             "properties": {
                 "w": {
                     "default": 1,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "x": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "y": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "z": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 }
             },
@@ -207,14 +215,17 @@
             "properties": {
                 "x": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 }
             },
@@ -313,6 +324,8 @@
                 },
                 "opacity": {
                     "default": 1,
+                    "minimum": 0,
+                    "maximum": 1,
                     "description": "Extent of transparency. If the transparent property is not true, then the material will remain opaque and opacity will only affect color.",
                     "type": "number"
                 },

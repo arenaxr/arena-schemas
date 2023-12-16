@@ -295,18 +295,26 @@
             "properties": {
                 "w": {
                     "default": 1,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "x": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "y": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "z": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 }
             },
@@ -325,14 +333,17 @@
             "properties": {
                 "x": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 }
             },
@@ -698,7 +709,7 @@
             "properties": {
                 "mass": {
                     "default": 5,
-                    "minimum": 1e-06,
+                    "exclusiveMinimum": 0,
                     "type": "number",
                     "description": "Simulated mass of the object, > 0."
                 },
@@ -936,6 +947,8 @@
                 "gltfOpacity": {
                     "type": "number",
                     "description": "Opacity value to apply to the model. 1 is fully opaque, 0 is fully transparent.",
+                    "minimum": 0,
+                    "maximum": 1,
                     "default": 1
                 }
             },
@@ -1875,6 +1888,8 @@
                 },
                 "opacity": {
                     "default": 1,
+                    "minimum": 0,
+                    "maximum": 1,
                     "description": "Extent of transparency. If the transparent property is not true, then the material will remain opaque and opacity will only affect color.",
                     "type": "number"
                 },
