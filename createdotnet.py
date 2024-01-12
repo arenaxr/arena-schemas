@@ -3,7 +3,7 @@ import os
 import sys
 
 import num2words
-from caseconverter import pascalcase, camelcase
+from caseconverter import camelcase, pascalcase
 
 input_folder = 'schemas'
 output_folder = 'dotnet'
