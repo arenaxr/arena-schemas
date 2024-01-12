@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-output_folder = 'schemas/'
+output_folder = 'schemas'
 input_folder = ''
 
 
@@ -14,7 +14,7 @@ def parse_allof_ref(allof_schema):
             if key == '$ref':
                 ref = props[key].split('#/')
                 key = ref[1]
-                with open(f'{input_folder}/{ref[0]}') as f:
+                with open(os.path.join(input_folder, ref[0])) as f:
                     sub_schema = json.load(f)
                 props = sub_schema
             if key not in new_schema:
@@ -39,12 +39,12 @@ def generate_intermediate_json(list_fns):
     global input_folder, output_folder
     obj_schemas = {}
     for list_fn in list_fns:
-        obj_schema_path = f'{input_folder}/{list_fn}'
+        obj_schema_path = os.path.join(input_folder, list_fn)
         with open(obj_schema_path) as f:
             obj_schemas.update(json.load(f))
         for _, obj_schema in obj_schemas.items():
             fn = obj_schema['file']
-            with open(f'{input_folder}/{fn}') as f:
+            with open(os.path.join(input_folder, fn)) as f:
                 schema = json.load(f)
 
             # resolve references
@@ -72,12 +72,12 @@ def generate_intermediate_json(list_fns):
 
             # write this object expanded json schema
             new_obj_json = json.dumps(new_schema, indent=4)
-            file = open(f'{output_folder}{fn[8:]}', 'w')
+            file = open(os.path.join(output_folder, fn[8:]), 'w')
             file.write(new_obj_json)
             file.close()
 
     # write object list
-    file = open(f'{output_folder}arena-schema-files.json', 'w')
+    file = open(os.path.join(output_folder, 'arena-schema-files.json'), 'w')
     file.write(json.dumps(obj_schemas, indent=4))
     file.close()
 

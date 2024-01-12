@@ -300,7 +300,7 @@ def create_cs_file(cs_fn, cs_class, cs_lines):
 
     # cs_lines.append(text)
     out = ''.join(cs_lines)
-    #cs_path = os.path.join(output_folder,  cs_fn)
+    # cs_path = os.path.join(output_folder, cs_fn)
     f = open(cs_fn, 'w')
     f.write(out)
 

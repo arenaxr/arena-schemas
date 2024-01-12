@@ -27,5 +27,5 @@ make update src=~/git/arena-services-docker/arena-web-core/build
 make docs
 make jekyll dst=~/git/arena-docs/content/schemas/message
 make dotnet dst=~/git/arena-unity/Runtime/Schemas
-make py src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-py/docstring/
+make py src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-py/docstring
 ```

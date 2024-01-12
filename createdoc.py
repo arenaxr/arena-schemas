@@ -3,8 +3,8 @@ import os
 
 from mdutils.mdutils import MdUtils
 
-input_folder = 'schemas/'
-output_folder = 'docs/'
+input_folder = 'schemas'
+output_folder = 'docs'
 #markdown_filename =
 
 ObjTypeDesc = {
@@ -90,7 +90,7 @@ def object_table(mdFile, md_title, obj, definitions={}):
             #    line[Table.cols.DESC] = obj_name
             line[Table.cols.TYPE] = f'[{obj_name}]({obj_name})'
             if obj_name in definitions:
-                write_md(definitions[obj_name], f'{output_folder}{obj_name}.md', overwrite=False, wire_obj=False)
+                write_md(definitions[obj_name], os.path.join(output_folder, f'{obj_name}.md'), overwrite=False, wire_obj=False)
         table_lines.extend(line)
 
     mdFile.new_table(columns=len(Table.heading), rows=len(table_lines)//len(Table.heading), text=table_lines, text_align='left')

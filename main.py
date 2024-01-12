@@ -1,4 +1,5 @@
 import json
+import os
 
 arena_objects_schema_path = 'schemas/input/arena-obj3d.json'
 obj_schema_path = 'schemas/input/arena-schema-files.json'
@@ -43,7 +44,7 @@ def main():
         new_obj['properties']['data'] = definitions[obj_name]
         new_obj['properties']['data']['title'] = f'{obj["title"]} Data'
         new_obj_json = json.dumps(new_obj, indent=4)
-        file = open(f'{output_folder}{obj_name}.json','w')
+        file = open(os.path.join(output_folder, f'{obj_name}.json'),'w')
         file.write(new_obj_json)
         file.close()
 
@@ -54,7 +55,7 @@ def main():
         }
 
     obj_schemas.update(obj_schema_file)
-    file = open(f'{output_folder}arena-schema-files.json','w')
+    file = open(os.path.join(output_folder, 'arena-schema-files.json'),'w')
     file.write(json.dumps(obj_schemas, indent=4))
     file.close()
 

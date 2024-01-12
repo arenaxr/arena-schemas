@@ -17,7 +17,7 @@ def parse_allof_ref(allof_schema):
             if key == '$ref':
                 ref = props[key].split('#/')
                 key = ref[1]
-                with open(f'{input_folder}/{ref[0]}') as f:
+                with open(os.path.join(input_folder, ref[0])) as f:
                     sub_schema = json.load(f)
                 props = sub_schema
             if key not in new_schema:
@@ -50,12 +50,12 @@ def generate_intermediate_json(list_fns):
     global input_folder, output_folder
     obj_schemas = {}
     for list_fn in list_fns:
-        obj_schema_path = f'{input_folder}/{list_fn}'
+        obj_schema_path = os.path.join(input_folder, list_fn)
         with open(obj_schema_path) as tfile:
             obj_schemas.update(json.load(tfile))
         for _, obj_schema in obj_schemas.items():
             fn = obj_schema['file']
-            with open(f'{input_folder}/{fn}') as tfile:
+            with open(os.path.join(input_folder, fn)) as tfile:
                 schema = json.load(tfile)
 
             # resolve references
@@ -85,7 +85,7 @@ def generate_intermediate_json(list_fns):
             with open('templates/py_object.j2') as tfile:
                 t = Template(tfile.read())
             object_type = fn[8:-5]
-            pfile = open(f'{output_folder}{object_type}.py', 'w')
+            pfile = open(os.path.join(output_folder, f'{object_type}.py'), 'w')
             str_out = t.render(obj_schema=new_schema,
                                obj_class=pascalcase(object_type),
                                obj_type=object_type

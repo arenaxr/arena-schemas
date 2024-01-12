@@ -3,9 +3,9 @@ from .arena_object import Object
 class {{ obj_class }}(Object):
     """Class for {{ obj_class }} in the ARENA. {{ obj_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
     {% if obj_schema.properties and obj_schema.properties.data.properties -%}
-        {% for key, prop in obj_schema.properties.data.properties.items() -%}
+        {% for propname, prop in obj_schema.properties.data.properties.items() -%}
             {% if not prop.deprecated %}
-        :keyword {{ prop.type }} {{ key }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}, defaults to '{{ prop.default }}'{% endif %}
+        :param {{ prop.type }} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}, defaults to '{{ prop.default }}'{% endif %} (optional)
             {%- endif %}
         {%- endfor %}
     {%- endif %}
