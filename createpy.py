@@ -49,6 +49,7 @@ def main():
 def generate_intermediate_json(list_fns):
     global input_folder, output_folder
     obj_schemas = {}
+    obj_classes = {}
     for list_fn in list_fns:
         obj_schema_path = os.path.join(input_folder, list_fn)
         with open(obj_schema_path) as tfile:
@@ -68,6 +69,8 @@ def generate_intermediate_json(list_fns):
                 new_schema['properties']['data'] = parse_allof_ref(
                     new_schema['properties']['data'])
                 del new_schema['properties']['data']['allOf']
+            if 'deprecated' in new_schema and new_schema['deprecated']:
+                continue
 
             # generate definitions
             if 'definitions' not in new_schema:
@@ -82,17 +85,39 @@ def generate_intermediate_json(list_fns):
                                 '$ref': f'#/definitions/{key}'}
 
             # write this object expanded json schema
-            with open('templates/py_object_class.j2') as tfile:
-                t = Template(tfile.read())
+            if 'properties' not in new_schema:
+                continue
+            if 'properties' not in new_schema['properties']['data']:
+                continue
+            if 'object_type' not in new_schema['properties']['data']['properties']:
+                continue
+
             obj_type = new_schema['properties']['data']['properties']['object_type']['enum'][0]
             obj_class = pascalcase(obj_type)
-            obj_fname = f'{snakecase(obj_type)}.py'
-            pfile = open(os.path.join(output_folder, obj_fname), 'w')
-            str_out = t.render(obj_schema=new_schema,
-                               obj_class=obj_class,
-                               obj_type=obj_type)
-            pfile.write(f'{str_out}\n')
-            pfile.close()
+            obj_ns = snakecase(obj_type)
+            obj_path = os.path.join(output_folder, f'{obj_ns}.py')
+            obj_classes[obj_ns] = obj_class
+
+            # add object class if needed
+            if not os.path.isfile(obj_path):
+                with open('templates/py_object_class.j2') as tfile:
+                    t = Template(tfile.read())
+                pfile = open(obj_path, 'w')
+                str_out = t.render(obj_schema=new_schema,
+                                   obj_class=obj_class,
+                                   obj_type=obj_type)
+                pfile.write(f'{str_out}\n')
+                pfile.close()
+
+            # update the object docstring only
+
+        # export objects init file
+        with open('templates/py_object_init.j2') as tfile:
+            t = Template(tfile.read())
+        pfile = open(os.path.join(output_folder, '__init__.py'), 'w')
+        str_out = t.render(classes=obj_classes)
+        pfile.write(f'{str_out}\n')
+        pfile.close()
 
 
 if __name__ == '__main__':

@@ -1,13 +1,13 @@
 # This file is auto-generated...
 
 from .arena_object import Object
-{% for objname, obj in obj_schema.objects.items() -%}
-from .{{ obj.obj_namespace }} import {{ obj.obj_class }}
-{%- endfor %}
+{% for cname in classes -%}
+from .{{ cname }} import {{ classes[cname] }}
+{% endfor %}
 
 OBJECT_TYPE_MAP = {
-    Object.object_type:       Object,
-{% for objname, obj in obj_schema.objects.items() -%}
-    {{ obj.obj_class }}.object_type:          {{ obj.obj_class }},
+    Object.object_type: Object,
+{% for cname in classes %}
+    {{ cname }}.object_type: {{ classes[cname] }},
 {%- endfor %}
 }
