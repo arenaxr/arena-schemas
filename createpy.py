@@ -92,24 +92,25 @@ def generate_intermediate_json(list_fns):
             if 'object_type' not in new_schema['properties']['data']['properties']:
                 continue
 
-            obj_type = new_schema['properties']['data']['properties']['object_type']['enum'][0]
-            obj_class = pascalcase(obj_type)
-            obj_ns = snakecase(obj_type)
-            obj_path = os.path.join(output_folder, f'{obj_ns}.py')
-            obj_classes[obj_ns] = obj_class
+            for type in new_schema['properties']['data']['properties']['object_type']['enum']:
+                obj_type = type
+                obj_class = pascalcase(obj_type)
+                obj_ns = snakecase(obj_type)
+                obj_path = os.path.join(output_folder, f'{obj_ns}.py')
+                obj_classes[obj_ns] = obj_class
 
-            # add object class if needed
-            if not os.path.isfile(obj_path):
-                with open('templates/py_object_class.j2') as tfile:
-                    t = Template(tfile.read())
-                pfile = open(obj_path, 'w')
-                str_out = t.render(obj_schema=new_schema,
-                                   obj_class=obj_class,
-                                   obj_type=obj_type)
-                pfile.write(f'{str_out}\n')
-                pfile.close()
+                # add object class if needed
+                if not os.path.isfile(obj_path):
+                    with open('templates/py_object_class.j2') as tfile:
+                        t = Template(tfile.read())
+                    pfile = open(obj_path, 'w')
+                    str_out = t.render(obj_schema=new_schema,
+                                    obj_class=obj_class,
+                                    obj_type=obj_type)
+                    pfile.write(f'{str_out}\n')
+                    pfile.close()
 
-            # update the object docstring only
+                # update the object docstring only
 
         # export objects init file
         with open('templates/py_object_init.j2') as tfile:
