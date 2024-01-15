@@ -1,3 +1,4 @@
+import collections
 import json
 import os
 import sys
@@ -101,10 +102,10 @@ def generate_intermediate_json(list_fns):
                 if not os.path.isfile(obj_path):
                     with open('templates/py_object_class.j2') as tfile:
                         t = Template(tfile.read())
-                    str_out = t.render(obj_schema=new_schema,
-                                       obj_class=obj_class, obj_type=obj_type)
+                    class_out = t.render(obj_schema=new_schema,
+                                         obj_class=obj_class, obj_type=obj_type)
                     pfile = open(obj_path, 'w')
-                    pfile.write(f'{str_out}\n')
+                    pfile.write(f'{class_out}\n')
                     pfile.close()
 
                 # update the object docstring only
@@ -113,8 +114,8 @@ def generate_intermediate_json(list_fns):
                 pfile.close()
                 with open('templates/py_object_docstring.j2') as tfile:
                     t = Template(tfile.read())
-                str_out = t.render(obj_schema=new_schema,
-                                   obj_class=obj_class, obj_type=obj_type)
+                docstr_out = t.render(obj_schema=new_schema,
+                                      obj_class=obj_class, obj_type=obj_type)
                 class_dec = f'class {obj_class}(Object):'
                 pfile = open(obj_path, 'w')
                 c = False
@@ -126,23 +127,24 @@ def generate_intermediate_json(list_fns):
                     elif c and '"""' in line:
                         c = False
                         s = True
-                        pfile.write(str_out)
+                        pfile.write(docstr_out)
                     elif s:
                         if '"""' in line:
                             s = False
-                        else:
-                            continue
                     else:
                         pfile.write(line)
 
                 pfile.close()
 
+        # sort objects
+        obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
+
         # export objects init file
         with open('templates/py_object_init.j2') as tfile:
             t = Template(tfile.read())
         pfile = open(os.path.join(output_folder, '__init__.py'), 'w')
-        str_out = t.render(classes=obj_classes)
-        pfile.write(f'{str_out}\n')
+        init_out = t.render(classes=obj_classes)
+        pfile.write(f'{init_out}\n')
         pfile.close()
 
 
