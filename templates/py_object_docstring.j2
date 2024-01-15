@@ -1,6 +1,3 @@
-from .arena_object import Object
-
-class {{ obj_class }}(Object):
     """Class for {{ obj_class }} in the ARENA. {{ obj_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
     {% if obj_schema.properties and obj_schema.properties.data.properties -%}
         {% for propname, prop in obj_schema.properties.data.properties.items() -%}
@@ -10,7 +7,3 @@ class {{ obj_class }}(Object):
         {%- endfor %}
     {%- endif %}
     """
-    object_type = "{{ obj_type }}"
-
-    def __init__(self, **kwargs):
-        super().__init__(obj_type={{ obj_class }}.object_type, **kwargs)

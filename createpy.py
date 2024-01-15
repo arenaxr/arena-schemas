@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-from caseconverter import pascalcase
+from caseconverter import pascalcase, snakecase
 from jinja2 import Template
 
 output_folder = ''
@@ -82,14 +82,15 @@ def generate_intermediate_json(list_fns):
                                 '$ref': f'#/definitions/{key}'}
 
             # write this object expanded json schema
-            with open('templates/py_object.j2') as tfile:
+            with open('templates/py_object_class.j2') as tfile:
                 t = Template(tfile.read())
-            object_type = fn[8:-5]
-            pfile = open(os.path.join(output_folder, f'{object_type}.py'), 'w')
+            obj_type = new_schema['properties']['data']['properties']['object_type']['enum'][0]
+            obj_class = pascalcase(obj_type)
+            obj_fname = f'{snakecase(obj_type)}.py'
+            pfile = open(os.path.join(output_folder, obj_fname), 'w')
             str_out = t.render(obj_schema=new_schema,
-                               obj_class=pascalcase(object_type),
-                               obj_type=object_type
-                               )
+                               obj_class=obj_class,
+                               obj_type=obj_type)
             pfile.write(f'{str_out}\n')
             pfile.close()
 
