@@ -85,8 +85,6 @@ def generate_intermediate_json(list_fns):
                                 '$ref': f'#/definitions/{key}'}
 
             # write this object expanded json schema
-            if 'properties' not in new_schema:
-                continue
             if 'properties' not in new_schema['properties']['data']:
                 continue
             if 'object_type' not in new_schema['properties']['data']['properties']:
@@ -103,14 +101,41 @@ def generate_intermediate_json(list_fns):
                 if not os.path.isfile(obj_path):
                     with open('templates/py_object_class.j2') as tfile:
                         t = Template(tfile.read())
-                    pfile = open(obj_path, 'w')
                     str_out = t.render(obj_schema=new_schema,
-                                    obj_class=obj_class,
-                                    obj_type=obj_type)
+                                       obj_class=obj_class, obj_type=obj_type)
+                    pfile = open(obj_path, 'w')
                     pfile.write(f'{str_out}\n')
                     pfile.close()
 
                 # update the object docstring only
+                pfile = open(obj_path, 'r')
+                lines = pfile.readlines()
+                pfile.close()
+                with open('templates/py_object_docstring.j2') as tfile:
+                    t = Template(tfile.read())
+                str_out = t.render(obj_schema=new_schema,
+                                   obj_class=obj_class, obj_type=obj_type)
+                class_dec = f'class {obj_class}(Object):'
+                pfile = open(obj_path, 'w')
+                c = False
+                s = False
+                for line in lines:
+                    if class_dec in line:
+                        c = True
+                        pfile.write(line)
+                    elif c and '"""' in line:
+                        c = False
+                        s = True
+                        pfile.write(str_out)
+                    elif s:
+                        if '"""' in line:
+                            s = False
+                        else:
+                            continue
+                    else:
+                        pfile.write(line)
+
+                pfile.close()
 
         # export objects init file
         with open('templates/py_object_init.j2') as tfile:
