@@ -10,12 +10,14 @@ output_folder = ''
 input_folder = ''
 
 
-def parse_allof_ref(allof_schema):
+def parse_allof_ref(allof_schema, expand_refs=True):
     global input_folder
     new_schema = allof_schema
     for props in allof_schema['allOf']:
         for key in props:
             if key == '$ref':
+                if not expand_refs:
+                    continue
                 ref = props[key].split('#/')
                 key = ref[1]
                 with open(os.path.join(input_folder, ref[0])) as f:
@@ -68,7 +70,7 @@ def generate_intermediate_json(list_fns):
                 new_schema = schema
             if 'allOf' in new_schema['properties']['data']:
                 new_schema['properties']['data'] = parse_allof_ref(
-                    new_schema['properties']['data'])
+                    new_schema['properties']['data'], False)
                 del new_schema['properties']['data']['allOf']
             if 'deprecated' in new_schema and new_schema['deprecated']:
                 continue
