@@ -118,22 +118,21 @@ def generate_intermediate_json(list_fns):
                                       obj_class=obj_class, obj_type=obj_type)
                 class_dec = f'class {obj_class}(Object):'
                 pfile = open(obj_path, 'w')
-                c = False
-                s = False
+                found_class = False
+                found_doc = False
                 for line in lines:
                     if class_dec in line:
-                        c = True
+                        found_class = True
                         pfile.write(line)
-                    elif c and '"""' in line:
-                        c = False
-                        s = True
-                        pfile.write(docstr_out)
-                    elif s:
+                    elif found_class and '"""' in line:
+                        found_class = False
+                        found_doc = True
+                        pfile.write(f'{docstr_out}\n')
+                    elif found_doc:
                         if '"""' in line:
-                            s = False
+                            found_doc = False
                     else:
                         pfile.write(line)
-
                 pfile.close()
 
         # sort objects
