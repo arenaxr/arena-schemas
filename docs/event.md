@@ -15,7 +15,7 @@ Event Attributes
 |object_id|string||A uuid or otherwise unique identifier for this object|Yes|
 |persist|boolean|```False```|Persist this object in the database (default false = do not persist on server)|No|
 |type|string; One of: ```['mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'triggerdown', 'triggerup', 'gripdown', 'gripup', 'menudown', 'menuup', 'systemdown', 'systemup', 'trackpaddown', 'trackpadup', 'soundplay', 'soundpause', 'soundstop']```||One of the client event action types like 'mousedown'.|Yes|
-|action|string; Must be: ```clientEvent```|```'clientEvent'```|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|Yes|
+|action|string; Must be: ```clientEvent```|```'clientEvent'```|One of 3 basic Create, Update, Delete actions or a special client event action (e.g. a click)|Yes|
 |data|Event data||Event Data|Yes|
 
 ### Event Data Attributes
@@ -23,5 +23,5 @@ Event Attributes
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |source|string||The `object_id` of event origination. e.g camera or client program connection id.|Yes|
-|position|[position](position)|```{'x': 0, 'y': 0, 'z': 0}```|The event destination position in 3D.|Yes|
+|position|[position](position)||The event destination position in 3D.|Yes|
 |clickPos|[vector3](vector3)|```{'x': 0, 'y': 1.6, 'z': 0}```|The event origination position in 3D.|No|

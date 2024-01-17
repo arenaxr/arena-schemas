@@ -12,10 +12,10 @@ Line Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_id|string||A uuid or otherwise unique identifier for this object|Yes|
-|persist|boolean|```True```|Persist this object in the database (default true = persist on server)|Yes|
+|object_id|string||A uuid or otherwise unique identifier for this object.|Yes|
+|persist|boolean|```True```|Persist this object in the database.|Yes|
 |type|string; Must be: ```object```|```'object'```|AFrame 3D Object|Yes|
-|action|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)|Yes|
+|action|string; One of: ```['create', 'delete', 'update', 'clientEvent']```|```'create'```|Message action: CRUD or client event.|Yes|
 |ttl|integer||When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.|No|
 |data|Line data||Line Data|Yes|
 
@@ -24,7 +24,7 @@ Line Attributes
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
 |object_type|string; Must be: ```line```|```line```|3D object type.|Yes|
-|color|string|```#7f7f7f```|Line color.|No|
+|color|string|```'#74BEC1'```|Line color.|Yes|
 |end|[vector3](vector3)|```{'x': -0.5, 'y': -0.5, 'z': 0}```|End coordinate.|Yes|
 |opacity|number|```1```|Line opacity.|No|
 |start|[vector3](vector3)|```{'x': 0, 'y': 0.5, 'z': 0}```|Start point coordinate.|Yes|

@@ -1,6 +1,6 @@
 {
     "title": "Text",
-    "description": "Display text. \n\nMore properties at <a href='https://aframe.io/docs/1.4.0/components/text.html'>https://aframe.io/docs/1.4.0/components/text.html</a>",
+    "description": "Display text.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>A-Frame Text</a>.",
     "required": [
         "object_id",
         "action",
@@ -10,17 +10,17 @@
     ],
     "properties": {
         "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object",
+            "description": "A uuid or otherwise unique identifier for this object.",
             "minLength": 3,
             "type": "string"
         },
         "persist": {
             "default": true,
-            "description": "Persist this object in the database (default true = persist on server)",
+            "description": "Persist this object in the database.",
             "type": "boolean"
         },
         "type": {
-            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "description": "One of the message types.",
             "enum": [
                 "object"
             ],
@@ -28,7 +28,7 @@
         },
         "action": {
             "default": "create",
-            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "description": "Message action: CRUD or client event.",
             "enum": [
                 "create",
                 "delete",
@@ -45,38 +45,29 @@
             "title": "Text Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "text",
-                "font": "roboto",
-                "side": "double",
-                "value": "",
-                "width": 5,
-                "color": "white",
-                "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                }
+                "object_type": "text"
             },
             "required": [
-                "object_type"
+                "object_type",
+                "font",
+                "side",
+                "value",
+                "color",
+                "position",
+                "rotation"
             ],
             "properties": {
                 "object_type": {
                     "type": "string",
                     "title": "3D object type",
-                    "description": "3D object type (derived from 'type' select above).",
+                    "description": "3D object type.",
                     "enum": [
                         "text"
                     ]
                 },
                 "align": {
-                    "description": "Multi-line text alignment (left, center, right).",
+                    "type": "string",
+                    "description": "Multi-line text alignment.",
                     "default": "left",
                     "enum": [
                         "left",
@@ -90,7 +81,8 @@
                     "type": "number"
                 },
                 "anchor": {
-                    "description": "Horizontal positioning (left, center, right, align).",
+                    "type": "string",
+                    "description": "Horizontal positioning.",
                     "default": "center",
                     "enum": [
                         "left",
@@ -100,7 +92,8 @@
                     ]
                 },
                 "baseline": {
-                    "description": "Vertical positioning (top, center, bottom).",
+                    "type": "string",
+                    "description": "Vertical positioning.",
                     "default": "center",
                     "enum": [
                         "top",
@@ -154,9 +147,12 @@
                 "opacity": {
                     "description": "Opacity, on a scale from 0 to 1, where 0 means fully transparent and 1 means fully opaque.",
                     "type": "number",
-                    "default": 1.0
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 1
                 },
                 "shader": {
+                    "type": "string",
                     "description": "Shader used to render text.",
                     "default": "sdf",
                     "enum": [
@@ -171,7 +167,8 @@
                     ]
                 },
                 "side": {
-                    "description": "Side to render. (front, back, double)",
+                    "type": "string",
+                    "description": "Side to render.",
                     "default": "double",
                     "enum": [
                         "front",
@@ -201,7 +198,8 @@
                     "type": "string"
                 },
                 "whiteSpace": {
-                    "description": "How whitespace should be handled (i.e., normal, pre, nowrap).</a>",
+                    "type": "string",
+                    "description": "How whitespace should be handled.",
                     "default": "normal",
                     "enum": [
                         "normal",
@@ -272,6 +270,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Position"
         },
@@ -280,18 +279,26 @@
             "properties": {
                 "w": {
                     "default": 1,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "x": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "y": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "z": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 }
             },
@@ -301,6 +308,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Rotation"
         },
@@ -310,14 +318,17 @@
             "properties": {
                 "x": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 }
             },
@@ -326,6 +337,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Scale"
         }

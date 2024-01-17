@@ -3,7 +3,7 @@ import os
 import sys
 
 import num2words
-from caseconverter import pascalcase
+from caseconverter import camelcase, pascalcase
 
 input_folder = 'schemas'
 output_folder = 'dotnet'
@@ -36,14 +36,18 @@ def format_value(obj, value):
         return f'\"{value}\"'
     elif type == 'boolean':
         return f'{str(value).lower()}'
+    elif type == 'number':
+        return f'{"{0:g}".format(float(value))}'
+    elif type == 'integer':
+        return f'{int(value)}'
     elif type == 'array':
         format_array = str(value).replace("[","{").replace("]","}").replace("'", "\"")
-        print(format_array)
+        #print(format_array)
         return f'{format_array}'
     return f'{value}'
 
 
-def object_table(cs_title, obj, definitions={}):
+def object_table(cs_title, obj, wire_obj, definitions={}):
     cs_lines = []
     prop_list = {}
     if 'properties' in obj:
@@ -63,9 +67,12 @@ def object_table(cs_title, obj, definitions={}):
     table_lines = Table.heading.copy()
     for prop, prop_obj in prop_list.items():
         prop_obj = prop_list[prop]
+        if 'deprecated' in prop_obj:
+            continue  # stop processing deprecated properties
         line = [''] * 6
         line[Table.cols.ATTR] = prop
         pascalAttrName = pascalcase(line[Table.cols.ATTR])
+        camelAttrName = camelcase(line[Table.cols.ATTR])
         line[Table.cols.REQ] = 'No'
         if 'type' in prop_obj:
             line[Table.cols.TYPE] = get_cs_type(prop_obj)
@@ -113,6 +120,11 @@ def object_table(cs_title, obj, definitions={}):
                     definitions[obj_name], obj_name, cs_class, overwrite=False, wire_obj=False)
         table_lines.extend(line)
 
+        if prop == 'object_type':
+            continue  # stop processing object_type, remove from cs
+        if prop == 'parent':
+            break  # stop processing after parent, remove from cs
+
         cs_lines.append('\n')
         if (line[Table.cols.ENUM]):
             cs_lines.append(f'        public enum {line[Table.cols.TYPE]}\n')
@@ -137,7 +149,7 @@ def object_table(cs_title, obj, definitions={}):
             elif line[Table.cols.TYPE] == "object":
                 defValue = f'JsonConvert.DeserializeObject("{defValue}")'
             elif line[Table.cols.TYPE].endswith("[]"):
-                print(defValue)
+                #print (defValue)
                 defValue = f'{defValue}'
             cs_lines.append(f'        private static {line[Table.cols.TYPE]} def{pascalAttrName} = {defValue};\n')
         cs_lines.append(f'        [JsonProperty(PropertyName = "{line[Table.cols.ATTR]}")]\n')
@@ -146,9 +158,9 @@ def object_table(cs_title, obj, definitions={}):
         cs_lines.append(f'        public bool ShouldSerialize{pascalAttrName}()\n')
         cs_lines.append('        {\n')
         if line[Table.cols.REQ] == 'Yes':
-            cs_lines.append(f'            return true; // required in json schema \n')
+            cs_lines.append(f'            return true; // required in json schema\n')
         else:
-            cs_lines.append(f'            if (_token != null && _token.SelectToken("{line[Table.cols.ATTR]}") != null) return true;\n')
+            cs_lines.append(f'            // {prop}\n')
             cs_lines.append(f'            return ({pascalAttrName} != def{pascalAttrName});\n')
         cs_lines.append('        }\n')
 
@@ -195,6 +207,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace ArenaUnity.Schemas
@@ -205,37 +218,27 @@ namespace ArenaUnity.Schemas
     [Serializable]
     public class {cs_class}
     {{
-        public const string componentName = "{prop}";
+        public readonly string object_type = "{prop}";
 
         // {prop} member-fields
 '''
+        # public readonly string object_type = "{prop}";
+        # [JsonIgnore]
+        # public readonly string componentName = "{prop}";
+
 
 def cs_post(cs_class):
     return f'''
         // General json object management
+        [OnError]
+        internal void OnError(StreamingContext context, ErrorContext errorContext)
+        {{
+            Debug.LogWarning($"{{errorContext.Error.Message}}: {{errorContext.OriginalObject}}");
+            errorContext.Handled = true;
+        }}
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData;
-
-        private static JToken _token;
-
-        public string SaveToString()
-        {{
-            return Regex.Unescape(JsonConvert.SerializeObject(this));
-        }}
-
-        public static {cs_class} CreateFromJSON(string jsonString, JToken token)
-        {{
-            _token = token; // save updated wire json
-            {cs_class} json = null;
-            try {{
-                json = JsonConvert.DeserializeObject<{cs_class}>(Regex.Unescape(jsonString));
-            }} catch (JsonReaderException e)
-            {{
-                Debug.LogWarning($"{{e.Message}}: {{jsonString}}");
-            }}
-            return json;
-        }}
     }}
 }}
 '''
@@ -264,7 +267,7 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
     #     level=2, title=f'\n{cs_title} Attributes', style='setext', add_table_of_contents='n')
 
     if not wire_obj:
-        cs_lines.extend(object_table(cs_title, json_obj))
+        cs_lines.extend(object_table(cs_title, json_obj, wire_obj))
 
     if not 'properties' in json_obj:
         create_cs_file(cs_fn, cs_class, cs_lines)
@@ -281,13 +284,14 @@ def write_cs(json_obj, obj_name, cs_class, overwrite=True, wire_obj=True):
         obj_name = json_obj['properties']['data']['$ref'][len(
             '#/definitions/'):]
         cs_lines.extend(object_table(cs_title,
-                                     json_obj['definitions'][obj_name], json_obj['definitions']))
+                                     json_obj['definitions'][obj_name], wire_obj, json_obj['definitions']))
     else:
         cs_lines.extend(object_table(cs_title,
-                                     json_obj['properties']['data'], json_obj['definitions']))
+                                     json_obj['properties']['data'], wire_obj, json_obj['definitions']))
 
-    if not wire_obj: # TODO: for now do not write full wire objects, just the components
-        create_cs_file(cs_fn, cs_class, cs_lines)
+    # if not wire_obj: # TODO: for now do not write full wire objects, just the components
+    #     create_cs_file(cs_fn, cs_class, cs_lines)
+    create_cs_file(cs_fn, cs_class, cs_lines)
 
 
 def create_cs_file(cs_fn, cs_class, cs_lines):
@@ -296,7 +300,7 @@ def create_cs_file(cs_fn, cs_class, cs_lines):
 
     # cs_lines.append(text)
     out = ''.join(cs_lines)
-    #cs_path = os.path.join(output_folder,  cs_fn)
+    # cs_path = os.path.join(output_folder, cs_fn)
     f = open(cs_fn, 'w')
     f.write(out)
 

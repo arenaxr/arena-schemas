@@ -649,7 +649,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "text"
                 ]
@@ -863,7 +863,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "entity"
                 ]
@@ -961,7 +961,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "gltf-model"
                 ]
@@ -1043,7 +1043,7 @@
            "object_type":{
               "type":"string",
               "title":"3D object type",
-              "description":"3D object type (derived from 'type' select above).",
+              "description":"3D object type.",
               "enum":[
                  "threejs-scene"
               ]
@@ -1126,7 +1126,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "image"
                 ]
@@ -1226,7 +1226,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "light"
                 ]
@@ -1475,7 +1475,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "line"
                 ]
@@ -1547,7 +1547,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "thickline"
                 ]
@@ -1598,7 +1598,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "box"
                 ]
@@ -1726,7 +1726,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "cube"
                 ]
@@ -1837,7 +1837,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "circle"
                 ]
@@ -1951,7 +1951,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "cone"
                 ]
@@ -2087,7 +2087,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "cylinder"
                 ]
@@ -2218,7 +2218,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "dodecahedron"
                 ]
@@ -2317,7 +2317,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "octahedron"
                 ]
@@ -2416,7 +2416,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "plane"
                 ]
@@ -2531,7 +2531,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "ring"
                 ]
@@ -2657,7 +2657,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "sphere"
                 ]
@@ -2790,7 +2790,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "tetrahedron"
                 ]
@@ -2889,7 +2889,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "torus"
                 ]
@@ -3008,7 +3008,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "torusKnot"
                 ]
@@ -3132,7 +3132,7 @@
              "object_type":{
                 "type":"string",
                 "title":"3D object type",
-                "description":"3D object type (derived from 'type' select above).",
+                "description":"3D object type.",
                 "enum":[
                    "triangle"
                 ]
@@ -3391,7 +3391,7 @@
        },
        "action":{
           "type":"string",
-          "description":"One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+          "description":"One of 3 basic Create, Update, Delete actions or a special client event action (e.g. a click)",
           "enum":[
              "create",
              "delete",

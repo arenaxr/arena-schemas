@@ -59,6 +59,11 @@
         "file": "schemas/gltf-model.json",
         "title": "GLTF Model"
     },
+    "gaussian_splatting": {
+        "description": "Load 3D Gaussian Splat",
+        "file": "schemas/gaussian-splat.json",
+        "title": "3D Gaussian Splat"
+    },
     "image": {
         "description": "Display an image on a plane",
         "file": "schemas/image.json",
@@ -164,9 +169,24 @@
         "file": "schemas/videosphere.json",
         "title": "Videosphere"
     },
+    "camera": {
+        "description": "Camera is the pose and arena-user component data representing a user avatar.",
+        "file": "schemas/camera.json",
+        "title": "Camera"
+    },
     "event": {
         "description": "Events are ephemeral messages used to send user events like mouse movements or controller actions.",
         "file": "schemas/event.json",
         "title": "Event"
+    },
+    "handLeft": {
+        "description": "Hand Left is the left hand metadata pose and controller type of the user avatar.",
+        "file": "schemas/hand.json",
+        "title": "Hand Left"
+    },
+    "handRight": {
+        "description": "Hand Right is the right hand metadata pose and controller type of the user avatar.",
+        "file": "schemas/hand.json",
+        "title": "Hand Right"
     }
 }

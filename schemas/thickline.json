@@ -10,17 +10,17 @@
     ],
     "properties": {
         "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object",
+            "description": "A uuid or otherwise unique identifier for this object.",
             "minLength": 3,
             "type": "string"
         },
         "persist": {
             "default": true,
-            "description": "Persist this object in the database (default true = persist on server)",
+            "description": "Persist this object in the database.",
             "type": "boolean"
         },
         "type": {
-            "description": "One of the message types: object (3D A-Frame Object), scene-options, program (derived from 'type' select above)",
+            "description": "One of the message types.",
             "enum": [
                 "object"
             ],
@@ -28,7 +28,7 @@
         },
         "action": {
             "default": "create",
-            "description": "One of 3 basic Create/Update/Delete actions or a special client event action (e.g. a click)",
+            "description": "Message action: CRUD or client event.",
             "enum": [
                 "create",
                 "delete",
@@ -45,21 +45,20 @@
             "title": "Thickline Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "thickline",
-                "lineWidth": 5,
-                "lineWidthStyler": "default",
-                "path": "-2 -1 0, 0 20 0, 10 -1 10",
-                "color": "#7f7f7f"
+                "object_type": "thickline"
             },
             "required": [
                 "object_type",
-                "path"
+                "path",
+                "lineWidth",
+                "lineWidthStyler",
+                "color"
             ],
             "properties": {
                 "object_type": {
                     "type": "string",
                     "title": "3D object type",
-                    "description": "3D object type (derived from 'type' select above).",
+                    "description": "3D object type.",
                     "enum": [
                         "thickline"
                     ]
@@ -133,6 +132,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Position"
         },
@@ -141,18 +141,26 @@
             "properties": {
                 "w": {
                     "default": 1,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "x": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "y": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 },
                 "z": {
                     "default": 0,
+                    "minimum": -1,
+                    "maximum": 1,
                     "type": "number"
                 }
             },
@@ -162,6 +170,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Rotation"
         },
@@ -171,14 +180,17 @@
             "properties": {
                 "x": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
+                    "exclusiveMinimum": 0,
                     "type": "number"
                 }
             },
@@ -187,6 +199,7 @@
                 "y",
                 "z"
             ],
+            "format": "grid",
             "type": "object",
             "title": "Scale"
         }
