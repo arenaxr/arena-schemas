@@ -10,6 +10,33 @@ output_folder = ''
 input_folder = ''
 
 
+def jstype2pytype(jstype):
+    if jstype == "null":
+        return "None"
+    elif jstype == "number":
+        return "float"
+    elif jstype == "integer":
+        return "int"
+    elif jstype == "boolean":
+        return "bool"
+    elif jstype == "string":
+        return "str"
+    elif jstype == "array":
+        return "list"
+    elif jstype == "object":
+        return "dict"
+    else:
+        return "dict"
+
+
+def jsenum2str(prop):
+    if 'enum' in prop:
+        s = ', '
+        items = s.join(prop['enum'])
+        return f' [{items}]'
+    return ''
+
+
 def parse_allof_ref(allof_schema, expand_refs=True):
     global input_folder
     new_schema = allof_schema
@@ -116,6 +143,8 @@ def generate_intermediate_json(list_fns):
                 pfile.close()
                 with open('templates/py_object_docstring.j2') as tfile:
                     t = Template(tfile.read())
+                    t.globals['jstype2pytype'] = jstype2pytype
+                    t.globals['jsenum2str'] = jsenum2str
                 docstr_out = t.render(obj_schema=new_schema,
                                       obj_class=obj_class, obj_type=obj_type)
                 class_dec = f'class {obj_class}(Object):'
