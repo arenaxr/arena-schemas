@@ -38,18 +38,27 @@ def jsenum2str(prop):
 
 
 def parse_allof_ref(allof_schema, expand_refs=True):
-    global input_folder
+    global input_folder, attr_classes
     new_schema = allof_schema
     for props in allof_schema['allOf']:
         for key in props:
             if key == '$ref':
-                if not expand_refs:
-                    continue
                 ref = props[key].split('#/')
                 key = ref[1]
                 with open(os.path.join(input_folder, ref[0])) as f:
                     sub_schema = json.load(f)
-                props = sub_schema
+                if expand_refs:
+                    props = sub_schema
+                else:
+                    for prop in sub_schema['properties']:
+                        attr_class = pascalcase(prop)
+                        attr_ns = snakecase(prop)
+                        if 'properties' in sub_schema['properties'][prop]:
+                            attr_classes[attr_ns] = attr_class
+                        else:
+                            attr_classes[attr_ns] = None
+                    continue
+
             if key not in new_schema:
                 new_schema[key] = {}
             new_schema[key].update(props[key])
@@ -77,9 +86,10 @@ def main():
 
 
 def generate_intermediate_json(list_fns):
-    global input_folder, output_folder
+    global input_folder, output_folder, obj_classes, attr_classes
     obj_schemas = {}
     obj_classes = {}
+    attr_classes = {}
     for list_fn in list_fns:
         obj_schema_path = os.path.join(input_folder, list_fn)
         with open(obj_schema_path) as tfile:
@@ -124,7 +134,7 @@ def generate_intermediate_json(list_fns):
                 obj_type = type
                 obj_class = pascalcase(obj_type)
                 obj_ns = snakecase(obj_type)
-                obj_path = os.path.join(output_folder, f'{obj_ns}.py')
+                obj_path = os.path.join(output_folder, 'objects', f'{obj_ns}.py')
                 obj_classes[obj_ns] = obj_class
 
                 # add object class if needed
@@ -168,12 +178,21 @@ def generate_intermediate_json(list_fns):
 
         # sort objects
         obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
+        attr_classes = collections.OrderedDict(sorted(attr_classes.items()))
 
         # export objects init file
         with open('templates/py_object_init.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(output_folder, '__init__.py'), 'w')
+        pfile = open(os.path.join(output_folder, 'objects', '__init__.py'), 'w')
         init_out = t.render(classes=obj_classes)
+        pfile.write(f'{init_out}\n')
+        pfile.close()
+
+        # export attributes init file
+        with open('templates/py_attribute_init.j2') as tfile:
+            t = Template(tfile.read())
+        pfile = open(os.path.join(output_folder, 'attributes', '__init__.py'), 'w')
+        init_out = t.render(classes=attr_classes)
         pfile.write(f'{init_out}\n')
         pfile.close()
 

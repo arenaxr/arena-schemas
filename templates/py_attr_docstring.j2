@@ -1,7 +1,8 @@
     """
-    Class for {{ obj_class }} in the ARENA: {{ obj_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
-    {% if obj_schema.properties and obj_schema.properties.data.properties -%}
-    {% for propname, prop in obj_schema.properties.data.properties.items() -%}
+    {{ attr_class }} attribute: {{ attr_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
+    Usage: {{ attr_ns }}={{ attr_class }}(...)
+    {% if attr_schema.properties and attr_schema.properties.data.properties -%}
+    {% for propname, prop in attr_schema.properties.data.properties.items() -%}
     {% if not prop.deprecated and propname != "object_type" %}
     :param {{ jstype2pytype(prop.type) }} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
     {%- endif %}

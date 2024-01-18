@@ -1,0 +1,10 @@
+from .attribute import Attribute
+
+
+class {{ attr_class }}(Attribute):
+    """
+    """
+    name = "{{ attr_ns }}"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

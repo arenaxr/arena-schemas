@@ -1,0 +1,17 @@
+# This file is auto-generated from github.com/arenaxr/arena-schema, changes here may be overwritten.
+
+from .attribute import Attribute
+{%- for cname in classes %}
+{%- if classes[cname] %}
+from .{{ cname }} import {{ classes[cname] }}
+{%- endif %}
+{%- endfor %}
+
+ATTRIBUTE_TYPE_MAP = {
+    "attribute": Attribute,
+{%- for cname in classes %}
+{%- if classes[cname] %}
+    "{{ cname }}": {{ classes[cname] }},
+{%- endif %}
+{%- endfor %}
+}
