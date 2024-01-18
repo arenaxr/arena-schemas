@@ -1,5 +1,5 @@
     """
-    Class for {{ prop_class }} in the ARENA: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
+    {{ prop_class }} object class to manage its properties in the ARENA: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}
     {% if not prop.deprecated and propname != "object_type" %}

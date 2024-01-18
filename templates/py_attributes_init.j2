@@ -1,14 +1,18 @@
 # This file is auto-generated from github.com/arenaxr/arena-schema, changes here may be overwritten.
 
-from .attribute import Attribute
+from .attribute import *
+from .color import *
+from .data import *
 {%- for cname in classes %}
 {%- if classes[cname] %}
-from .{{ cname }} import {{ classes[cname] }}
+from .{{ cname }} import *
 {%- endif %}
 {%- endfor %}
 
 ATTRIBUTE_TYPE_MAP = {
     "attribute": Attribute,
+    "color": Color,
+    "data": Data,
 {%- for cname in classes %}
 {%- if classes[cname] %}
     "{{ cname }}": {{ classes[cname] }},

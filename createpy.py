@@ -211,3 +211,11 @@ def write_py_class(prop_schema, prop_name, tag_name):
 
 if __name__ == '__main__':
     main()
+
+
+# TODO (mwfarb): handle deprecated props
+# TODO (mwfarb): handle list types
+# TODO (mwfarb): handle lost objects description
+# TODO (mwfarb): handle some attr/obj missing description
+# TODO (mwfarb): handle props from model-update
+# TODO (mwfarb): handle data object dash convert plus list data types

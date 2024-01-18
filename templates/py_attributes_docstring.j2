@@ -1,5 +1,5 @@
     """
-    {{ prop_class }} attribute: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
+    {{ prop_class }} attribute class to manage its properties in the ARENA: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
     Usage: {{ prop_ns }}={{ prop_class }}(...)
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}

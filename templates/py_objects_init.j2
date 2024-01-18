@@ -1,8 +1,8 @@
 # This file is auto-generated from github.com/arenaxr/arena-schema, changes here may be overwritten.
 
-from .arena_object import Object
+from .arena_object import *
 {% for cname in classes -%}
-from .{{ cname }} import {{ classes[cname] }}
+from .{{ cname }} import *
 {% endfor %}
 OBJECT_TYPE_MAP = {
     Object.object_type: Object,
