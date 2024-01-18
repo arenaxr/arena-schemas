@@ -8,6 +8,7 @@ from jinja2 import Template
 
 output_folder = ''
 input_folder = ''
+attr_schema = {}
 
 
 def jstype2pytype(jstype):
@@ -38,7 +39,7 @@ def jsenum2str(prop):
 
 
 def parse_allof_ref(allof_schema, expand_refs=True):
-    global input_folder, attr_classes
+    global input_folder, attr_classes, attr_schema
     new_schema = allof_schema
     for props in allof_schema['allOf']:
         for key in props:
@@ -53,6 +54,7 @@ def parse_allof_ref(allof_schema, expand_refs=True):
                     for prop in sub_schema['properties']:
                         attr_class = pascalcase(prop)
                         attr_ns = snakecase(prop)
+                        attr_schema[prop] = sub_schema['properties'][prop]
                         if 'properties' in sub_schema['properties'][prop]:
                             attr_classes[attr_ns] = attr_class
                         else:
@@ -130,71 +132,81 @@ def generate_intermediate_json(list_fns):
             if 'object_type' not in new_schema['properties']['data']['properties']:
                 continue
 
-            for type in new_schema['properties']['data']['properties']['object_type']['enum']:
-                obj_type = type
-                obj_class = pascalcase(obj_type)
-                obj_ns = snakecase(obj_type)
-                obj_classes[obj_ns] = obj_class
-                obj_path = os.path.join(output_folder, 'objects', f'{obj_ns}.py')
+            # export object classes
+            for object_type in new_schema['properties']['data']['properties']['object_type']['enum']:
+                write_py_class(new_schema['properties']['data'], object_type, 'objects')
 
-                # add object class if needed
-                if not os.path.isfile(obj_path):
-                    with open('templates/py_object_class.j2') as tfile:
-                        t = Template(tfile.read())
-                    class_out = t.render(obj_schema=new_schema,
-                                         obj_class=obj_class, obj_type=obj_type)
-                    pfile = open(obj_path, 'w')
-                    pfile.write(f'{class_out}\n')
-                    pfile.close()
-
-                # update the object docstring only
-                pfile = open(obj_path, 'r')
-                lines = pfile.readlines()
-                pfile.close()
-                with open('templates/py_object_docstring.j2') as tfile:
-                    t = Template(tfile.read())
-                    t.globals['jstype2pytype'] = jstype2pytype
-                    t.globals['jsenum2str'] = jsenum2str
-                docstr_out = t.render(obj_schema=new_schema,
-                                      obj_class=obj_class, obj_type=obj_type)
-                class_dec = f'class {obj_class}('
-                pfile = open(obj_path, 'w')
-                found_class = False
-                found_doc = False
-                for line in lines:
-                    if line.startswith(class_dec):
-                        found_class = True
-                        pfile.write(line)
-                    elif found_class and '"""' in line:
-                        found_class = False
-                        found_doc = True
-                        pfile.write(f'{docstr_out}\n')
-                    elif found_doc:
-                        if '"""' in line:
-                            found_doc = False
-                    else:
-                        pfile.write(line)
-                pfile.close()
-
-        # sort objects
-        obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
-        attr_classes = collections.OrderedDict(sorted(attr_classes.items()))
+        # export attribute classes
+        for prop in attr_schema:
+            if attr_schema[prop]['type'] == 'object':
+                write_py_class(attr_schema[prop], prop, 'attributes')
 
         # export objects init file
-        with open('templates/py_object_init.j2') as tfile:
+        obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
+        with open('templates/py_objects_init.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(output_folder, 'objects', '__init__.py'), 'w')
+        pfile = open(os.path.join(
+            output_folder, 'objects', '__init__.py'), 'w')
         init_out = t.render(classes=obj_classes)
         pfile.write(f'{init_out}\n')
         pfile.close()
 
         # export attributes init file
-        with open('templates/py_attribute_init.j2') as tfile:
+        attr_classes = collections.OrderedDict(sorted(attr_classes.items()))
+        with open('templates/py_attributes_init.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(output_folder, 'attributes', '__init__.py'), 'w')
+        pfile = open(os.path.join(
+            output_folder, 'attributes', '__init__.py'), 'w')
         init_out = t.render(classes=attr_classes)
         pfile.write(f'{init_out}\n')
         pfile.close()
+
+
+def write_py_class(prop_schema, prop_name, tag_name):
+    prop_class = pascalcase(prop_name)
+    prop_ns = snakecase(prop_name)
+    if tag_name == 'objects':
+        obj_classes[prop_ns] = prop_class
+    py_path = os.path.join(output_folder, tag_name, f'{prop_ns}.py')
+
+    # add object class if needed
+    if not os.path.isfile(py_path):
+        with open(f'templates/py_{tag_name}_class.j2') as tfile:
+            t = Template(tfile.read())
+        class_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
+                             prop_class=prop_class, prop_name=prop_name)
+        pfile = open(py_path, 'w')
+        pfile.write(f'{class_out}\n')
+        pfile.close()
+
+        # update the object docstring only
+    pfile = open(py_path, 'r')
+    lines = pfile.readlines()
+    pfile.close()
+    with open(f'templates/py_{tag_name}_docstring.j2') as tfile:
+        t = Template(tfile.read())
+        t.globals['jstype2pytype'] = jstype2pytype
+        t.globals['jsenum2str'] = jsenum2str
+    docstr_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
+                          prop_class=prop_class, prop_name=prop_name)
+    class_dec = f'class {prop_class}('
+    pfile = open(py_path, 'w')
+    found_class = False
+    found_doc = False
+    for line in lines:
+        if line.startswith(class_dec):
+            found_class = True
+            pfile.write(line)
+        elif found_class and '"""' in line:
+            found_class = False
+            found_doc = True
+            pfile.write(f'{docstr_out}\n')
+        elif found_doc:
+            if '"""' in line:
+                found_doc = False
+        else:
+            pfile.write(line)
+    pfile.close()
 
 
 if __name__ == '__main__':

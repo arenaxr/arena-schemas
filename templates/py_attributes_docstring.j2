@@ -1,8 +1,8 @@
     """
-    {{ attr_class }} attribute: {{ attr_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
-    Usage: {{ attr_ns }}={{ attr_class }}(...)
-    {% if attr_schema.properties and attr_schema.properties.data.properties -%}
-    {% for propname, prop in attr_schema.properties.data.properties.items() -%}
+    {{ prop_class }} attribute: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
+    Usage: {{ prop_ns }}={{ prop_class }}(...)
+    {% if prop_schema.properties -%}
+    {% for propname, prop in prop_schema.properties.items() -%}
     {% if not prop.deprecated and propname != "object_type" %}
     :param {{ jstype2pytype(prop.type) }} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
     {%- endif %}
