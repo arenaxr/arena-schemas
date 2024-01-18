@@ -134,8 +134,8 @@ def generate_intermediate_json(list_fns):
                 obj_type = type
                 obj_class = pascalcase(obj_type)
                 obj_ns = snakecase(obj_type)
-                obj_path = os.path.join(output_folder, 'objects', f'{obj_ns}.py')
                 obj_classes[obj_ns] = obj_class
+                obj_path = os.path.join(output_folder, 'objects', f'{obj_ns}.py')
 
                 # add object class if needed
                 if not os.path.isfile(obj_path):
@@ -157,12 +157,12 @@ def generate_intermediate_json(list_fns):
                     t.globals['jsenum2str'] = jsenum2str
                 docstr_out = t.render(obj_schema=new_schema,
                                       obj_class=obj_class, obj_type=obj_type)
-                class_dec = f'class {obj_class}(Object):'
+                class_dec = f'class {obj_class}('
                 pfile = open(obj_path, 'w')
                 found_class = False
                 found_doc = False
                 for line in lines:
-                    if class_dec in line:
+                    if line.startswith(class_dec):
                         found_class = True
                         pfile.write(line)
                     elif found_class and '"""' in line:
