@@ -4,7 +4,7 @@
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}
     {% if not prop.deprecated and propname != "object_type" %}
-    :param {{ jstype2pytype(prop.type) }} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
+    :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
     {%- endif %}
     {%- endfor %}
     {%- endif %}

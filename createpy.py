@@ -11,7 +11,7 @@ input_folder = ''
 attr_schema = {}
 
 
-def jstype2pytype(jstype):
+def jstype2pytype(jstype, arraytype):
     if jstype == "null":
         return "None"
     elif jstype == "number":
@@ -23,7 +23,10 @@ def jstype2pytype(jstype):
     elif jstype == "string":
         return "str"
     elif jstype == "array":
-        return "list"
+        if arraytype is not None:
+            return f"list[{jstype2pytype(arraytype, None)}]"
+        else:
+            return "list"
     elif jstype == "object":
         return "dict"
     else:
@@ -134,7 +137,9 @@ def generate_intermediate_json(list_fns):
 
             # export object classes
             for object_type in new_schema['properties']['data']['properties']['object_type']['enum']:
-                write_py_class(new_schema['properties']['data'], object_type, 'objects')
+                new_schema['properties']['data']['description'] = new_schema['description']
+                write_py_class(new_schema['properties']
+                               ['data'], object_type, 'objects')
 
         # export attribute classes
         for prop in attr_schema:
@@ -179,7 +184,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
         pfile.write(f'{class_out}\n')
         pfile.close()
 
-        # update the object docstring only
+    # update the object docstring only
     pfile = open(py_path, 'r')
     lines = pfile.readlines()
     pfile.close()
@@ -214,8 +219,6 @@ if __name__ == '__main__':
 
 
 # TODO (mwfarb): handle deprecated props
-# TODO (mwfarb): handle list types
-# TODO (mwfarb): handle lost objects description
 # TODO (mwfarb): handle some attr/obj missing description
 # TODO (mwfarb): handle props from model-update
 # TODO (mwfarb): handle data object dash convert plus list data types
