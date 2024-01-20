@@ -3,8 +3,8 @@
     Usage: {{ prop_ns }}={{ prop_class }}(...)
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}
-    {% if not prop.deprecated and propname != "object_type" %}
-    :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %} {{ propname }}: {% if prop.description %}{{ prop.description }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
+    {% if 'deprecated' not in prop and propname != 'object_type' %}
+    :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %} {{ propname.replace('-', '_') }}: {% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }}; defaults to '{{ prop.default }}'{% endif %} (optional)
     {%- endif %}
     {%- endfor %}
     {%- endif %}

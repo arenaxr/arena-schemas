@@ -146,6 +146,12 @@ def generate_intermediate_json(list_fns):
             if attr_schema[prop]['type'] == 'object':
                 write_py_class(attr_schema[prop], prop, 'attributes')
 
+        # export data class
+        data_schema = {}
+        data_schema['description'] = "Data Attribute. Wraps all attributes in JSON."
+        data_schema['properties'] = attr_schema
+        write_py_class(data_schema, 'data', 'attributes')
+
         # export objects init file
         obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
         with open('templates/py_objects_init.j2') as tfile:
@@ -168,6 +174,8 @@ def generate_intermediate_json(list_fns):
 
 
 def write_py_class(prop_schema, prop_name, tag_name):
+    if 'properties' in prop_schema:
+        prop_schema['properties'] = collections.OrderedDict(sorted(prop_schema['properties'].items()))
     prop_class = pascalcase(prop_name)
     prop_ns = snakecase(prop_name)
     if tag_name == 'objects':
@@ -219,6 +227,3 @@ if __name__ == '__main__':
 
 
 # TODO (mwfarb): handle deprecated props
-# TODO (mwfarb): handle some attr/obj missing description
-# TODO (mwfarb): handle props from model-update
-# TODO (mwfarb): handle data object dash convert plus list data types
