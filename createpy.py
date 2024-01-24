@@ -224,6 +224,3 @@ def write_py_class(prop_schema, prop_name, tag_name):
 
 if __name__ == '__main__':
     main()
-
-
-# TODO (mwfarb): handle deprecated props
