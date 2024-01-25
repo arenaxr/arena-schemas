@@ -28,12 +28,11 @@
         },
         "action": {
             "default": "create",
-            "description": "Message action: CRUD or client event.",
+            "description": "Message action create, update, delete.",
             "enum": [
                 "create",
                 "delete",
-                "update",
-                "clientEvent"
+                "update"
             ],
             "type": "string"
         },
@@ -140,7 +139,7 @@
     },
     "definitions": {
         "position": {
-            "description": "3D object position",
+            "description": "3D object position.",
             "properties": {
                 "x": {
                     "default": 0,
@@ -203,7 +202,7 @@
             "title": "Rotation"
         },
         "scale": {
-            "description": "3D object scale",
+            "description": "3D object scale.",
             "id": "scale",
             "properties": {
                 "x": {

@@ -3310,7 +3310,7 @@
              },
              {
                 "title":"Box",
-                "description":"Box Geometry",
+                "description":"Box Geometry.",
                 "$ref":"#/definitions/box"
              },
              {
@@ -3320,62 +3320,62 @@
              },
              {
                 "title":"Circle",
-                "description":"Circle Geometry",
+                "description":"Circle Geometry.",
                 "$ref":"#/definitions/circle"
              },
              {
                 "title":"Cone",
-                "description":"Cone Geometry",
+                "description":"Cone Geometry.",
                 "$ref":"#/definitions/cone"
              },
              {
                 "title":"Cylinder",
-                "description":"cylinder Geometry",
+                "description":"cylinder Geometry.",
                 "$ref":"#/definitions/cylinder"
              },
              {
                 "title":"Dodecahedron",
-                "description":"dodecahedron Geometry",
+                "description":"dodecahedron Geometry.",
                 "$ref":"#/definitions/dodecahedron"
              },
              {
                 "title":"Octahedron",
-                "description":"Octahedron Geometry",
+                "description":"Octahedron Geometry.",
                 "$ref":"#/definitions/octahedron"
              },
              {
                 "title":"Plane",
-                "description":"Plane Geometry",
+                "description":"Plane Geometry.",
                 "$ref":"#/definitions/plane"
              },
              {
                 "title":"Ring",
-                "description":"Ring Geometry",
+                "description":"Ring Geometry.",
                 "$ref":"#/definitions/ring"
              },
              {
                 "title":"Sphere",
-                "description":"Sphere Geometry",
+                "description":"Sphere Geometry.",
                 "$ref":"#/definitions/sphere"
              },
              {
                 "title":"Tetrahedron",
-                "description":"Tetrahedron Geometry",
+                "description":"Tetrahedron Geometry.",
                 "$ref":"#/definitions/tetrahedron"
              },
              {
                 "title":"Torus",
-                "description":"Torus Geometry",
+                "description":"Torus Geometry.",
                 "$ref":"#/definitions/torus"
              },
              {
                 "title":"Torus Knot",
-                "description":"Torus Knot Geometry",
+                "description":"Torus Knot Geometry.",
                 "$ref":"#/definitions/torusKnot"
              },
              {
                 "title":"Triangle",
-                "description":"Triangle Geometry",
+                "description":"Triangle Geometry.",
                 "$ref":"#/definitions/triangle"
              }
           ]

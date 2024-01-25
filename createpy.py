@@ -37,7 +37,7 @@ def jsenum2str(prop):
     if 'enum' in prop:
         s = ', '
         items = s.join(prop['enum'])
-        return f' [{items}]'
+        return f' Allows [{items}]'
     return ''
 
 
@@ -148,7 +148,7 @@ def generate_intermediate_json(list_fns):
 
         # export data class
         data_schema = {}
-        data_schema['description'] = "Data Attribute. Wraps all attributes in JSON."
+        data_schema['description'] = "Wraps all attributes in JSON."
         data_schema['properties'] = attr_schema
         write_py_class(data_schema, 'data', 'attributes')
 
@@ -175,7 +175,8 @@ def generate_intermediate_json(list_fns):
 
 def write_py_class(prop_schema, prop_name, tag_name):
     if 'properties' in prop_schema:
-        prop_schema['properties'] = collections.OrderedDict(sorted(prop_schema['properties'].items()))
+        prop_schema['properties'] = collections.OrderedDict(
+            sorted(prop_schema['properties'].items()))
     prop_class = pascalcase(prop_name)
     prop_ns = snakecase(prop_name)
     if tag_name == 'objects':

@@ -51,7 +51,7 @@
         "name": "box",
         "file": "schemas/box.json",
         "title": "Box",
-        "description": "Box Geometry"
+        "description": "Box Geometry."
     },
     {
         "name": "cube",
@@ -63,72 +63,72 @@
         "name": "circle",
         "file": "schemas/circle.json",
         "title": "Circle",
-        "description": "Circle Geometry"
+        "description": "Circle Geometry."
     },
     {
         "name": "cone",
         "file": "schemas/cone.json",
         "title": "Cone",
-        "description": "Cone Geometry"
+        "description": "Cone Geometry."
     },
     {
         "name": "cylinder",
         "file": "schemas/cylinder.json",
         "title": "Cylinder",
-        "description": "cylinder Geometry"
+        "description": "cylinder Geometry."
     },
     {
         "name": "dodecahedron",
         "file": "schemas/dodecahedron.json",
         "title": "Dodecahedron",
-        "description": "dodecahedron Geometry"
+        "description": "dodecahedron Geometry."
     },
     {
         "name": "octahedron",
         "file": "schemas/octahedron.json",
         "title": "Octahedron",
-        "description": "Octahedron Geometry"
+        "description": "Octahedron Geometry."
     },
     {
         "name": "plane",
         "file": "schemas/plane.json",
         "title": "Plane",
-        "description": "Plane Geometry"
+        "description": "Plane Geometry."
     },
     {
         "name": "ring",
         "file": "schemas/ring.json",
         "title": "Ring",
-        "description": "Ring Geometry"
+        "description": "Ring Geometry."
     },
     {
         "name": "sphere",
         "file": "schemas/sphere.json",
         "title": "Sphere",
-        "description": "Sphere Geometry"
+        "description": "Sphere Geometry."
     },
     {
         "name": "tetrahedron",
         "file": "schemas/tetrahedron.json",
         "title": "Tetrahedron",
-        "description": "Tetrahedron Geometry"
+        "description": "Tetrahedron Geometry."
     },
     {
         "name": "torus",
         "file": "schemas/torus.json",
         "title": "Torus",
-        "description": "Torus Geometry"
+        "description": "Torus Geometry."
     },
     {
         "name": "torusKnot",
         "file": "schemas/torusKnot.json",
         "title": "Torus Knot",
-        "description": "Torus Knot Geometry"
+        "description": "Torus Knot Geometry."
     },
     {
         "name": "triangle",
         "file": "schemas/triangle.json",
         "title": "Triangle",
-        "description": "Triangle Geometry"
+        "description": "Triangle Geometry."
     }
 ]
