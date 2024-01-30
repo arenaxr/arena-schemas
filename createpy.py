@@ -146,11 +146,23 @@ def generate_intermediate_json(list_fns):
             if attr_schema[prop]['type'] == 'object':
                 write_py_class(attr_schema[prop], prop, 'attributes')
 
-        # export data class
         data_schema = {}
         data_schema['description'] = "Wraps all attributes in JSON."
-        data_schema['properties'] = attr_schema
+        data_schema['properties'] = collections.OrderedDict(
+            sorted(attr_schema.items()))
+
+        # export data class
         write_py_class(data_schema, 'data', 'attributes')
+
+        # export attribute translation map
+        with open('templates/py_attributes_translate.j2') as tfile:
+            t = Template(tfile.read())
+        pfile = open(os.path.join(
+            output_folder, 'attributes', 'translate.py'), 'w')
+        init_out = t.render(prop_schema=data_schema,
+                            snakecase=snakecase, pascalcase=pascalcase)
+        pfile.write(f'{init_out}\n')
+        pfile.close()
 
         # export objects init file
         obj_classes = collections.OrderedDict(sorted(obj_classes.items()))

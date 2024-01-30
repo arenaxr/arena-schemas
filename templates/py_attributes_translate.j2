@@ -1,0 +1,32 @@
+# This file is auto-generated from github.com/arenaxr/arena-schema, changes here may be overwritten.
+{% for propname, prop in prop_schema.properties.items() -%}
+{% if 'deprecated' not in prop and propname != 'object_type' and prop.type == 'object' %}
+from .{{ snakecase(propname) }} import *
+{%- endif %}
+{%- endfor %}
+
+ATTRIBUTE_KEYWORD_TRANSLATION = {
+    "physics": "dynamic-body",  # backward-compatibility
+    "clickable": "click-listener",  # backward-compatibility
+{%- for propname, prop in prop_schema.properties.items() -%}
+{% if 'deprecated' not in prop and propname != 'object_type' %}
+    "{{ propname.replace('-', '_') }}": "{{ propname }}",
+{%- endif %}
+{%- endfor %}
+}
+
+KEYWORD_ATTRIBUTE_TRANSLATION = {
+{%- for propname, prop in prop_schema.properties.items() -%}
+{% if 'deprecated' not in prop and propname != 'object_type' %}
+    "{{ propname }}": "{{ propname.replace('-', '_')  }}",
+{%- endif %}
+{%- endfor %}
+}
+
+ATTRIBUTE_CLASS_TRANSLATION = {
+{%- for propname, prop in prop_schema.properties.items() -%}
+{% if 'deprecated' not in prop and propname != 'object_type' and prop.type == 'object' %}
+    "{{ propname.replace('-', '_')  }}": {{ pascalcase(propname) }},
+{%- endif %}
+{%- endfor %}
+}
