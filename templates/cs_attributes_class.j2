@@ -23,10 +23,10 @@ namespace ArenaUnity.Schemas
     [Serializable]
     public class {{ prop_class }}
     {
-        public readonly string object_type = "cube";
+        [JsonIgnore]
+        public readonly string componentName = "{{ prop_name }}";
 
-        // cube member-fields
-
+        // {{ prop_name }} member-fields
 {% if prop_schema.properties -%}
 {% for propname, prop in prop_schema.properties.items() -%}
 {% if 'deprecated' not in prop and propname != 'object_type' %}
@@ -39,8 +39,7 @@ namespace ArenaUnity.Schemas
             // {{ propname }}
             return ({{ pascalcase(propname) }} != def{{ pascalcase(propname) }});
         }
-
-{%- endif %}
+{% endif %}
 {%- endfor %}
 {%- endif %}
         // General json object management

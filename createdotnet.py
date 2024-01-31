@@ -175,7 +175,7 @@ def write_cs_class(prop_schema, prop_name, tag_name):
     if 'properties' in prop_schema:
         prop_schema['properties'] = collections.OrderedDict(
             sorted(prop_schema['properties'].items()))
-    prop_class = pascalcase(f"Arena{prop_name}Json")
+    prop_class = f"Arena{pascalcase(prop_name)}Json"
     prop_ns = snakecase(prop_name)
     if tag_name == 'objects':
         obj_classes[prop_ns] = prop_class
@@ -184,8 +184,14 @@ def write_cs_class(prop_schema, prop_name, tag_name):
     # add object class
     with open(f'templates/cs_{tag_name}_class.j2') as tfile:
         t = Template(tfile.read())
-    class_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
-                         prop_class=prop_class, prop_name=prop_name, pascalcase=pascalcase, jstype2cstype=jstype2cstype, jsenum2str=jsenum2str, format_value=format_value)
+    class_out = t.render(prop_schema=prop_schema,
+                         prop_class=prop_class,
+                         prop_name=prop_name,
+                         pascalcase=pascalcase,
+                         jstype2cstype=jstype2cstype,
+                         jsenum2str=jsenum2str,
+                         format_value=format_value,
+                         )
     pfile = open(cs_path, 'w')
     pfile.write(f'{class_out}\n')
     pfile.close()
