@@ -157,8 +157,9 @@ def generate_intermediate_json(list_fns):
         # export attribute translation map
         with open('templates/py_attributes_translate.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(
-            output_folder, 'attributes', 'translate.py'), 'w')
+        py_path = os.path.join(output_folder, 'attributes', 'translate.py')
+        print(f'->{py_path}')
+        pfile = open(py_path, 'w')
         init_out = t.render(prop_schema=data_schema,
                             snakecase=snakecase, pascalcase=pascalcase)
         pfile.write(f'{init_out}\n')
@@ -168,8 +169,9 @@ def generate_intermediate_json(list_fns):
         obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
         with open('templates/py_objects_init.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(
-            output_folder, 'objects', '__init__.py'), 'w')
+        py_path = os.path.join(output_folder, 'objects', '__init__.py')
+        print(f'->{py_path}')
+        pfile = open(py_path, 'w')
         init_out = t.render(classes=obj_classes)
         pfile.write(f'{init_out}\n')
         pfile.close()
@@ -178,8 +180,9 @@ def generate_intermediate_json(list_fns):
         attr_classes = collections.OrderedDict(sorted(attr_classes.items()))
         with open('templates/py_attributes_init.j2') as tfile:
             t = Template(tfile.read())
-        pfile = open(os.path.join(
-            output_folder, 'attributes', '__init__.py'), 'w')
+        py_path = os.path.join(output_folder, 'attributes', '__init__.py')
+        print(f'->{py_path}')
+        pfile = open(py_path, 'w')
         init_out = t.render(classes=attr_classes)
         pfile.write(f'{init_out}\n')
         pfile.close()
@@ -201,6 +204,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
             t = Template(tfile.read())
         class_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
                              prop_class=prop_class, prop_name=prop_name)
+        print(f'->{py_path}')
         pfile = open(py_path, 'w')
         pfile.write(f'{class_out}\n')
         pfile.close()
@@ -216,6 +220,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
     docstr_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
                           prop_class=prop_class, prop_name=prop_name)
     class_dec = f'class {prop_class}('
+    print(f'->{py_path}')
     pfile = open(py_path, 'w')
     found_class = False
     found_doc = False

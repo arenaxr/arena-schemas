@@ -30,14 +30,27 @@ namespace ArenaUnity.Schemas
 {% if prop_schema.properties -%}
 {% for propname, prop in prop_schema.properties.items() -%}
 {% if 'deprecated' not in prop and propname != 'object_type' %}
+{%- if 'enum' in prop and prop.type == 'string' %}
+        public enum {{ pascalcase(propname) }}Type
+        {
+{%- for enum in prop.enum %}
+            [EnumMember(Value = "{{ enum }}")]
+            {{ pascalcase(enum) }},
+{%- endfor %}
+        }
+{%- endif %}
         private static {% if prop.items %}{{ jstype2cstype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2cstype(prop.type, None) }}{% endif %} def{{ pascalcase(propname) }} = {% if prop.default %}{{ format_value(prop.type, prop.default) }}{% else %}null{% endif %};
         [JsonProperty(PropertyName = "{{ propname }}")]
         [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
         public {% if prop.items %}{{ jstype2cstype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2cstype(prop.type, None) }}{% endif %} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
         public bool ShouldSerialize{{ pascalcase(propname) }}()
         {
+{%- if propname in prop_schema.required %}
+            return true; // required in json schema
+{%- else %}
             // {{ propname }}
             return ({{ pascalcase(propname) }} != def{{ pascalcase(propname) }});
+{%- endif %}
         }
 {% endif %}
 {%- endfor %}

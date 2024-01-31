@@ -192,6 +192,7 @@ def write_cs_class(prop_schema, prop_name, tag_name):
                          jsenum2str=jsenum2str,
                          format_value=format_value,
                          )
+    print(f'->{cs_path}')
     pfile = open(cs_path, 'w')
     pfile.write(f'{class_out}\n')
     pfile.close()
