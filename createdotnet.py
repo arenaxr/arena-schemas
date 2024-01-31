@@ -164,17 +164,18 @@ def generate_intermediate_json(list_fns):
 
         data_schema = {}
         data_schema['description'] = "Wraps all attributes in JSON."
-        data_schema['properties'] = collections.OrderedDict(
-            sorted(attr_schema.items()))
+        data_schema['properties'] = attr_schema
+        # data_schema['properties'] = collections.OrderedDict(
+        #     sorted(data_schema['properties'].items()))
 
         # export data class
         write_cs_class(data_schema, 'data', 'attributes')
 
 
 def write_cs_class(prop_schema, prop_name, tag_name):
-    if 'properties' in prop_schema:
-        prop_schema['properties'] = collections.OrderedDict(
-            sorted(prop_schema['properties'].items()))
+    # if 'properties' in prop_schema:
+    #     prop_schema['properties'] = collections.OrderedDict(
+    #         sorted(prop_schema['properties'].items()))
     prop_class = f"Arena{pascalcase(prop_name)}Json"
     prop_ns = snakecase(prop_name)
     if tag_name == 'objects':
