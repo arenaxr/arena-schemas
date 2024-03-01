@@ -108,6 +108,16 @@
                         "dark"
                     ]
                 },
+                "materialSides": {
+                    "type": "string",
+                    "title": "Material Sides",
+                    "default": "both",
+                    "enum": [
+                        "both",
+                        "front"
+                    ],
+                    "description": "Which sides display the rendered UI material"
+                },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
                     "title": "Parent",
