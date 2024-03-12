@@ -1,11 +1,12 @@
     """
     {{ prop_class }} attribute class to manage its properties in the ARENA: {{ prop_schema.description | replace("\n", " ") | replace("<a href='", "(") | replace("'>", ") ") | replace("</a>", "") }}
-    Usage: {{ prop_ns }}={{ prop_class }}(...)
+    Usage: {{ prop_dict }}={{ prop_class }}(...)
+
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}
-    {% if 'deprecated' not in prop and propname != 'object_type' %}
+    {% if 'deprecated' not in prop and propname != 'object_type' -%}
     :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %} {{ propname.replace('-', '_') }}: {% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}{% if prop.default %}{{ jsenum2str(prop) }} Defaults to '{{ prop.default }}'{% endif %} (optional)
-    {%- endif %}
+    {% endif %}
     {%- endfor %}
-    {%- endif %}
+    {%- endif -%}
     """

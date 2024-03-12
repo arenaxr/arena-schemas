@@ -199,7 +199,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
     if not os.path.isfile(py_path):
         with open(f'templates/py_{tag_name}_class.j2') as tfile:
             t = Template(tfile.read())
-        class_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
+        class_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
                              prop_class=prop_class, prop_name=prop_name)
         pfile = open(py_path, 'w')
         pfile.write(f'{class_out}\n')
@@ -213,7 +213,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
         t = Template(tfile.read())
         t.globals['jstype2pytype'] = jstype2pytype
         t.globals['jsenum2str'] = jsenum2str
-    docstr_out = t.render(prop_schema=prop_schema, prop_ns=prop_ns,
+    docstr_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
                           prop_class=prop_class, prop_name=prop_name)
     class_dec = f'class {prop_class}('
     pfile = open(py_path, 'w')

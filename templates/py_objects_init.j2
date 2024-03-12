@@ -1,6 +1,7 @@
 # This file is auto-generated from github.com/arenaxr/arena-schema, changes here may be overwritten.
 
 from .arena_object import *
+from .program import *
 {% for cname in classes -%}
 from .{{ cname }} import *
 {% endfor %}
