@@ -24,9 +24,9 @@ def jstype2cstype(jstype, arraytype):
         return "string"
     elif jstype == "array":
         if arraytype is not None:
-            return f"{{{jstype2cstype(arraytype, None)}}}"
+            return f"{jstype2cstype(arraytype, None)}[]"
         else:
-            return "{{}}"
+            return "[]"
     elif jstype == "object":
         return "object"
     else:
@@ -42,11 +42,12 @@ def format_value(type, value):
         return f'{"{0:g}".format(float(value))}f'
     elif type == 'integer':
         return f'{int(value)}'
+    elif type == 'object':
+        return f'JsonConvert.DeserializeObject("{value}")'
     elif type == 'array':
-        format_array = str(value).replace(
-            "[", "{").replace("]", "}").replace("'", "\"")
-        return f'{format_array}'
-    return f'{value}'
+        return f'{{{value}}}'
+    else:
+        return f'{value}'
 
 
 def jsenum2str(prop):
