@@ -13,7 +13,7 @@ jekyll: venv
 	$(VENV)/python createjekyll.py $(dst)
 
 dotnet: venv
-	$(VENV)/python createdotnet.py $(dst)
+	$(VENV)/python createdotnet.py $(src) $(dst)
 
 py: venv
 	$(VENV)/python createpy.py $(src) $(dst)

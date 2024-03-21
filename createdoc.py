@@ -11,7 +11,8 @@ ObjTypeDesc = {
     'object': 'AFrame 3D Object',
     'program': 'ARENA program data',
     'scene-options': 'ARENA scene options',
-    'landmarks': 'ARENA landmarks'
+    'landmarks': 'ARENA landmarks',
+    'camera-override': 'ARENA camera override data',
 }
 
 class Table:
