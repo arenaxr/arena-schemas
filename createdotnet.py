@@ -26,7 +26,7 @@ def jstype2cstype(jstype, arraytype):
         if arraytype is not None:
             return f"{jstype2cstype(arraytype, None)}[]"
         else:
-            return "[]"
+            return "object[]"
     elif jstype == "object":
         return "object"
     else:
@@ -34,26 +34,29 @@ def jstype2cstype(jstype, arraytype):
 
 
 def format_value(type, value):
+    print(f"{type}: '{value}'")
     if type == 'string':
-        return f'\"{value}\"'
+        return f'\"{str(value)}\"'
     elif type == 'boolean':
         return f'{str(value).lower()}'
     elif type == 'number':
-        return f'{"{0:g}".format(float(value))}f'
+        return f'{float(value):g}f'
     elif type == 'integer':
         return f'{int(value)}'
     elif type == 'object':
-        return f'JsonConvert.DeserializeObject("{value}")'
+        return f'JsonConvert.DeserializeObject(\"{value}\")'
     elif type == 'array':
-        return f'{{{value}}}'
+        array = []
+        for item in value:
+            array.append(format_value(None, json.dumps(item)))
+        return f'{{ {", ".join(array)} }}'
     else:
         return f'{value}'
 
 
 def jsenum2str(prop):
     if 'enum' in prop:
-        s = ', '
-        items = s.join(prop['enum'])
+        items = ', '.join(prop['enum'])
         return f' Allows [{items}]'
     return ''
 
