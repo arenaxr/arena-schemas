@@ -27,14 +27,13 @@ def jstype2cstype(jstype, arraytype):
             return f"{jstype2cstype(arraytype, None)}[]"
         else:
             return "object[]"
-    elif jstype == "object":
-        return "object"
-    else:
+    else:  # jstype == "object":
         return "object"
 
 
-def format_value(type, value):
-    print(f"{type}: '{value}'")
+def format_value(type, value, items_type=None):
+    print(f"{type} {items_type}: '{value}'")
+
     if type == 'string':
         return f'\"{str(value)}\"'
     elif type == 'boolean':
@@ -43,15 +42,13 @@ def format_value(type, value):
         return f'{float(value):g}f'
     elif type == 'integer':
         return f'{int(value)}'
-    elif type == 'object':
-        return f'JsonConvert.DeserializeObject(\"{value}\")'
     elif type == 'array':
         array = []
         for item in value:
-            array.append(format_value(None, json.dumps(item)))
+            array.append(format_value(items_type, json.dumps(item), None))
         return f'{{ {", ".join(array)} }}'
-    else:
-        return f'{value}'
+    else:  # type == 'object':
+        return f'JsonConvert.DeserializeObject(\"{str(value)}\")'
 
 
 def jsenum2str(prop):

@@ -44,10 +44,17 @@ namespace ArenaUnity.Schemas
         [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
         public {{ pascalcase(propname) }}Type {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
 {%- else %}
-        private static {% if prop.items %}{{ jstype2cstype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2cstype(prop.type, None) }}{% endif %} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop.type, prop.default) }}{% else %}null{% endif %};
+{%- if prop.items %}
+        private static {{ jstype2cstype(prop.type, prop['items']['type']) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop.type, prop.default, prop['items']['type']) }}{% else %}null{% endif %};
         [JsonProperty(PropertyName = "{{ propname }}")]
         [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
-        public {% if prop.items %}{{ jstype2cstype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2cstype(prop.type, None) }}{% endif %} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
+        public {{ jstype2cstype(prop.type, prop['items']['type']) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
+{%- else %}
+        private static {{ jstype2cstype(prop.type, None) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop.type, prop.default) }}{% else %}null{% endif %};
+        [JsonProperty(PropertyName = "{{ propname }}")]
+        [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
+        public {{ jstype2cstype(prop.type, None) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
+{%- endif %}
 {%- endif %}
         public bool ShouldSerialize{{ pascalcase(propname) }}()
         {
