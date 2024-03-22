@@ -1,30 +1,30 @@
-import collections
 import json
 import os
 import sys
 
-from caseconverter import pascalcase, snakecase, camelcase
-from jinja2 import Template
+from caseconverter import pascalcase, snakecase
+import jinja2
 
 output_folder = ''
 input_folder = ''
 attr_schema = {}
 
 
-def jstype2cstype(jstype, arraytype):
-    if jstype == "null":
-        return "null"
-    elif jstype == "number":
-        return "float"
+def jstype2cstype(jstype, arraytype, value=None):
+    nulldec = ""
+    if isinstance(value, jinja2.runtime.Undefined):
+        nulldec = "?"
+    if jstype == "number":
+        return f"float{nulldec}"
     elif jstype == "integer":
-        return "int"
+        return f"int{nulldec}"
     elif jstype == "boolean":
-        return "bool"
+        return f"bool{nulldec}"
     elif jstype == "string":
         return "string"
     elif jstype == "array":
-        return f"{jstype2cstype(arraytype, None)}[]"
-    else:  # jstype == "object":
+        return f"{jstype2cstype(arraytype, None, value)}[]"
+    else:  # jstype == "object" or  jstype == "null":
         return "object"
 
 
@@ -177,7 +177,7 @@ def write_cs_class(prop_schema, prop_name, tag_name):
 
     # add object class
     with open(f'templates/cs_{tag_name}_class.j2') as tfile:
-        t = Template(tfile.read())
+        t = jinja2.Template(tfile.read())
     class_out = t.render(prop_schema=prop_schema,
                          prop_class=prop_class,
                          prop_name=prop_name,
