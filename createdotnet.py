@@ -23,17 +23,12 @@ def jstype2cstype(jstype, arraytype):
     elif jstype == "string":
         return "string"
     elif jstype == "array":
-        if arraytype is not None:
-            return f"{jstype2cstype(arraytype, None)}[]"
-        else:
-            return "object[]"
+        return f"{jstype2cstype(arraytype, None)}[]"
     else:  # jstype == "object":
         return "object"
 
 
 def format_value(type, value, items_type=None):
-    print(f"{type} {items_type}: '{value}'")
-
     if type == 'string':
         return f'\"{str(value)}\"'
     elif type == 'boolean':
@@ -45,17 +40,14 @@ def format_value(type, value, items_type=None):
     elif type == 'array':
         array = []
         for item in value:
-            array.append(format_value(items_type, json.dumps(item), None))
+            if items_type == 'object':
+                array.append(format_value(items_type, json.dumps(item), None))
+            else:
+                array.append(format_value(items_type, item, None))
         return f'{{ {", ".join(array)} }}'
     else:  # type == 'object':
-        return f'JsonConvert.DeserializeObject(\"{str(value)}\")'
-
-
-def jsenum2str(prop):
-    if 'enum' in prop:
-        items = ', '.join(prop['enum'])
-        return f' Allows [{items}]'
-    return ''
+        new_var = str(value).replace("\"", "\'")
+        return f'JsonConvert.DeserializeObject(\"{new_var}\")'
 
 
 def parse_allof_ref(allof_schema, expand_refs=True):
@@ -191,7 +183,6 @@ def write_cs_class(prop_schema, prop_name, tag_name):
                          prop_name=prop_name,
                          pascalcase=pascalcase,
                          jstype2cstype=jstype2cstype,
-                         jsenum2str=jsenum2str,
                          format_value=format_value,
                          )
     print(f'->{cs_path}')
