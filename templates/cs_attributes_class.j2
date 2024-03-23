@@ -41,24 +41,19 @@ namespace ArenaUnity.Schemas
         private static {{ pascalcase(propname) }}Type def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ pascalcase(propname) }}Type.{{ pascalcase(prop.default) }}{% else %}null{% endif %};
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "{{ propname }}")]
-        [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
+        [Tooltip("{{ definition(propname, prop) }}")]
         public {{ pascalcase(propname) }}Type {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
 {%- else %}
-{%- if prop.items %}
-        private static {{ jstype2cstype(prop.type, prop['items']['type'], prop.default) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop.type, prop.default, prop['items']['type']) }}{% else %}null{% endif %};
+        private static {{ jstype2cstype(prop) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop) }}{% else %}null{% endif %};
         [JsonProperty(PropertyName = "{{ propname }}")]
-        [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
-        public {{ jstype2cstype(prop.type, prop['items']['type'], prop.default) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
-{%- else %}
-        private static {{ jstype2cstype(prop.type, None, prop.default) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop.type, prop.default) }}{% else %}null{% endif %};
-        [JsonProperty(PropertyName = "{{ propname }}")]
-        [Tooltip("{% if prop.description %}{{ prop.description.split('\n')[0] }}{% else %}{{ prop.title }}{% endif %}")]
-        public {{ jstype2cstype(prop.type, None, prop.default) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
-{%- endif %}
+        [Tooltip("{{ definition(propname, prop) }}")]
+        public {{ jstype2cstype(prop) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
 {%- endif %}
         public bool ShouldSerialize{{ pascalcase(propname) }}()
         {
-{%- if propname in prop_schema.required %}
+{%- if 'deprecated' in prop %}
+            return false; // deprecated in json schema
+{%- elif propname in prop_schema.required %}
             return true; // required in json schema
 {%- else %}
             // {{ propname }}

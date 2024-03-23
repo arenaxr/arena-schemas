@@ -12,25 +12,25 @@ attr_schema = {}
 
 
 def jstype2pytype(jstype, arraytype):
-    if jstype == "null":
-        return "None"
-    elif jstype == "number":
-        return "float"
-    elif jstype == "integer":
-        return "int"
-    elif jstype == "boolean":
-        return "bool"
-    elif jstype == "string":
-        return "str"
-    elif jstype == "array":
+    if jstype == 'null':
+        return 'None'
+    elif jstype == 'number':
+        return 'float'
+    elif jstype == 'integer':
+        return 'int'
+    elif jstype == 'boolean':
+        return 'bool'
+    elif jstype == 'string':
+        return 'str'
+    elif jstype == 'array':
         if arraytype is not None:
-            return f"list[{jstype2pytype(arraytype, None)}]"
+            return f'list[{jstype2pytype(arraytype, None)}]'
         else:
-            return "list"
-    elif jstype == "object":
-        return "dict"
+            return 'list'
+    elif jstype == 'object':
+        return 'dict'
     else:
-        return "dict"
+        return 'dict'
 
 
 def jsenum2str(prop):
@@ -147,7 +147,7 @@ def generate_intermediate_json(list_fns):
                 write_py_class(attr_schema[prop], prop, 'attributes')
 
         data_schema = {}
-        data_schema['description'] = "Wraps all attributes in JSON."
+        data_schema['description'] = 'Wraps all attributes in JSON.'
         data_schema['properties'] = collections.OrderedDict(
             sorted(attr_schema.items()))
 

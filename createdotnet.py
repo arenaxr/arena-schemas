@@ -10,44 +10,82 @@ input_folder = ''
 attr_schema = {}
 
 
-def jstype2cstype(jstype, arraytype, value=None):
-    nulldec = ""
-    if isinstance(value, jinja2.runtime.Undefined):
-        nulldec = "?"
-    if jstype == "number":
-        return f"float{nulldec}"
-    elif jstype == "integer":
-        return f"int{nulldec}"
-    elif jstype == "boolean":
-        return f"bool{nulldec}"
-    elif jstype == "string":
-        return "string"
-    elif jstype == "array":
-        return f"{jstype2cstype(arraytype, None, value)}[]"
-    else:  # jstype == "object" or  jstype == "null":
-        return "object"
+def get_prop(prop, key):
+    if key in prop:
+        return prop[key]
+    else:
+        return None
 
 
-def format_value(type, value, items_type=None):
-    if type == 'string':
-        return f'\"{str(value)}\"'
-    elif type == 'boolean':
-        return f'{str(value).lower()}'
-    elif type == 'number':
-        return f'{float(value):g}f'
-    elif type == 'integer':
-        return f'{int(value)}'
-    elif type == 'array':
+def definition(name, prop):
+    title = get_prop(prop, 'title')
+    description = get_prop(prop, 'description')
+    if description:
+        return description.split('\n')[0]
+    elif title:
+        return title
+    else:
+        return name
+
+
+def jstype2cstype(prop):
+    jstype = get_prop(prop, 'type')
+    ref = get_prop(prop, '$ref')
+    default = get_prop(prop, 'default')
+    print(f'{jstype}, {ref}, {default}')
+    nulldec = ''
+    if default is None:
+        nulldec = '?'
+    if jstype == 'number':
+        return f'float{nulldec}'
+    elif jstype == 'integer':
+        return f'int{nulldec}'
+    elif jstype == 'boolean':
+        return f'bool{nulldec}'
+    elif jstype == 'string':
+        return 'string'
+    elif jstype == 'array':
+        return f'{jstype2cstype(get_prop(prop, "items"))}[]'
+    else:  # jstype == 'object' or  jstype == 'null':
+        if ref:
+            ref_name = pascalcase(ref.split('/')[-1])
+            return f'Arena{ref_name}Json'
+        else:
+            return 'object'
+
+
+def format_value(prop):
+    jstype = get_prop(prop, 'type')
+    ref = get_prop(prop, '$ref')
+    default = get_prop(prop, 'default')
+    items = get_prop(prop, 'items')
+    # print(f'{jstype}, {ref}, {default}, {items}')
+    if default is None:
+        return 'null'
+    if jstype == 'string':
+        return f'\"{str(default)}\"'
+    elif jstype == 'boolean':
+        return f'{str(default).lower()}'
+    elif jstype == 'number':
+        return f'{float(default):g}f'
+    elif jstype == 'integer':
+        return f'{int(default)}'
+    elif jstype == 'array':
         array = []
-        for item in value:
+        items_type = get_prop(items, 'type')
+        for item in default:
             if items_type == 'object':
-                array.append(format_value(items_type, json.dumps(item), None))
+                array.append(format_value({'type': items_type, 'default': str(json.dumps(item))}))
             else:
-                array.append(format_value(items_type, item, None))
+                array.append(format_value({'type': items_type, 'default': str(item)}))
         return f'{{ {", ".join(array)} }}'
     else:  # type == 'object':
-        new_var = str(value).replace("\"", "\'")
-        return f'JsonConvert.DeserializeObject(\"{new_var}\")'
+        default_json = str(default).replace("\"", "\'")
+        if ref:
+            ref_name = pascalcase(ref.split('/')[-1])
+            return f'JsonConvert.DeserializeObject<Arena{ref_name}Json>(\"{default_json}\")'
+        else:
+            return f'JsonConvert.DeserializeObject(\"{default_json}\")'
 
 
 def parse_allof_ref(allof_schema, expand_refs=True):
@@ -184,6 +222,7 @@ def write_cs_class(prop_schema, prop_name, tag_name):
                          pascalcase=pascalcase,
                          jstype2cstype=jstype2cstype,
                          format_value=format_value,
+                         definition=definition,
                          )
     print(f'->{cs_path}')
     pfile = open(cs_path, 'w')

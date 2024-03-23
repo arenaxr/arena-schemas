@@ -2,7 +2,6 @@ import json
 import os
 import sys
 
-from mdutils.mdutils import MdUtils
 
 input_folder = 'docs'
 obj_schema_path = 'schemas/arena-schema-files.json'
