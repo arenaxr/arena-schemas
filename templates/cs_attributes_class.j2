@@ -18,7 +18,7 @@ using UnityEngine;
 namespace ArenaUnity.Schemas
 {
     /// <summary>
-    /// {{ prop_schema.description | replace("\n", " ") }}
+    /// {{ prop_schema.description | replace("\n\n", " ") }}
     /// </summary>
     [Serializable]
     public class {{ prop_class }}
@@ -29,7 +29,7 @@ namespace ArenaUnity.Schemas
         // {{ prop_name }} member-fields
 {% if prop_schema.properties -%}
 {% for propname, prop in prop_schema.properties.items() -%}
-{% if 'deprecated' not in prop and propname != 'object_type' %}
+{% if propname != 'object_type' %}
 {%- if 'enum' in prop and prop.type == 'string' %}
         public enum {{ pascalcase(propname) }}Type
         {

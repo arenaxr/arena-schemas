@@ -9,6 +9,14 @@ output_folder = ''
 input_folder = ''
 attr_schema = {}
 
+ObjTypeDesc = {
+    'object': 'AFrame 3D Object',
+    'program': 'ARENA program data',
+    'scene-options': 'ARENA scene options',
+    'landmarks': 'ARENA landmarks',
+    'camera-override': 'ARENA camera override data',
+}
+
 
 def get_prop(prop, key):
     if key in prop:
@@ -32,7 +40,7 @@ def jstype2cstype(prop):
     jstype = get_prop(prop, 'type')
     ref = get_prop(prop, '$ref')
     default = get_prop(prop, 'default')
-    print(f'{jstype}, {ref}, {default}')
+    # print(f'{jstype}, {ref}, {default}')
     nulldec = ''
     if default is None:
         nulldec = '?'
@@ -75,9 +83,11 @@ def format_value(prop):
         items_type = get_prop(items, 'type')
         for item in default:
             if items_type == 'object':
-                array.append(format_value({'type': items_type, 'default': str(json.dumps(item))}))
+                array.append(format_value(
+                    {'type': items_type, 'default': str(json.dumps(item))}))
             else:
-                array.append(format_value({'type': items_type, 'default': str(item)}))
+                array.append(format_value(
+                    {'type': items_type, 'default': str(item)}))
         return f'{{ {", ".join(array)} }}'
     else:  # type == 'object':
         default_json = str(default).replace("\"", "\'")
@@ -127,7 +137,7 @@ def main():
     input_folder = args[0]
 
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print('Supply a valid destination  schemas path! dst=arena-cs/arena')
+        print('Supply a valid destination schemas path! dst=arena-cs/arena')
         return
     output_folder = args[1]
 
@@ -161,8 +171,11 @@ def generate_intermediate_json(list_fns):
                 new_schema['properties']['data'] = parse_allof_ref(
                     new_schema['properties']['data'], False)
                 del new_schema['properties']['data']['allOf']
-            if 'deprecated' in new_schema and new_schema['deprecated']:
-                continue
+            if '$ref' in new_schema['properties']['data']:
+                key = new_schema['properties']['data']['$ref'].split('/')[-1]
+                new_schema['properties']['data'] = new_schema['definitions'][key]
+            # if 'deprecated' in new_schema and new_schema['deprecated']:
+            #     continue
 
             # generate definitions
             if 'definitions' not in new_schema:
@@ -170,7 +183,7 @@ def generate_intermediate_json(list_fns):
             if 'data' in new_schema['properties'] and 'properties' in new_schema['properties']['data']:
                 dprops = new_schema['properties']['data']['properties']
                 for key in dprops:
-                    if 'type' in dprops[key] and dprops[key]['type'] == 'object':
+                    if 'type' in dprops[key] and dprops[key]['type'] in ObjTypeDesc:
                         if key not in new_schema['definitions']:
                             new_schema['definitions'][key] = dprops[key]
                             new_schema['properties']['data']['properties'][key] = {
@@ -179,18 +192,23 @@ def generate_intermediate_json(list_fns):
             # write this object expanded json schema
             if 'properties' not in new_schema['properties']['data']:
                 continue
-            if 'object_type' not in new_schema['properties']['data']['properties']:
-                continue
+            # if 'object_type' not in new_schema['properties']['data']['properties']:
+            #     continue
 
             # export object classes
-            for object_type in new_schema['properties']['data']['properties']['object_type']['enum']:
-                new_schema['properties']['data']['description'] = new_schema['description']
-                write_cs_class(new_schema['properties']
-                               ['data'], object_type, 'objects')
+            new_schema['properties']['data']['description'] = definition(
+                new_schema['properties']['type'], new_schema)
+            if 'object_type' in new_schema['properties']['data']['properties']:
+                for object_type in new_schema['properties']['data']['properties']['object_type']['enum']:
+                    write_cs_class(
+                        new_schema['properties']['data'], object_type, 'objects')
+            else:
+                object_type = os.path.splitext(os.path.basename(fn))[0]
+                write_cs_class(new_schema['properties']['data'], object_type, 'objects')
 
         # export attribute classes
         for prop in attr_schema:
-            if attr_schema[prop]['type'] == 'object':
+            if attr_schema[prop]['type'] in ObjTypeDesc:
                 write_cs_class(attr_schema[prop], prop, 'attributes')
 
         data_schema = {}
