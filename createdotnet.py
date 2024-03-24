@@ -1,13 +1,15 @@
 import json
 import os
+import re
 import sys
 
-from caseconverter import pascalcase, snakecase
 import jinja2
+import num2words
+from caseconverter import pascalcase, snakecase
 
 output_folder = ''
 input_folder = ''
-attr_schema = {}
+obj_attr_schema = {}
 
 ObjTypeDesc = {
     'object': 'AFrame 3D Object',
@@ -34,6 +36,22 @@ def definition(name, prop):
         return title
     else:
         return name
+
+
+def enumcase(word):
+    if word and word[0:1].isdigit():
+        # convert if first char is a number, which is an illegal enum name in cs
+        sub_words = re.split(r'(\d+)', word)
+        num2worded = ('-'.join(list(map(lambda x: wordify(x), sub_words))))
+        return pascalcase(num2worded)
+    else:
+        return pascalcase(word)
+
+
+def wordify(txt):
+    if txt.isnumeric():
+        return num2words.num2words(txt)
+    return txt
 
 
 def jstype2cstype(prop):
@@ -99,7 +117,7 @@ def format_value(prop):
 
 
 def parse_allof_ref(allof_schema, expand_refs=True):
-    global input_folder, attr_classes, attr_schema
+    global input_folder, attr_classes, obj_attr_schema
     new_schema = allof_schema
     for props in allof_schema['allOf']:
         for key in props:
@@ -114,7 +132,7 @@ def parse_allof_ref(allof_schema, expand_refs=True):
                     for prop in sub_schema['properties']:
                         attr_class = pascalcase(prop)
                         attr_ns = snakecase(prop)
-                        attr_schema[prop] = sub_schema['properties'][prop]
+                        obj_attr_schema[prop] = sub_schema['properties'][prop]
                         if 'properties' in sub_schema['properties'][prop]:
                             attr_classes[attr_ns] = attr_class
                         else:
@@ -195,25 +213,34 @@ def generate_intermediate_json(list_fns):
             # if 'object_type' not in new_schema['properties']['data']['properties']:
             #     continue
 
-            # export object classes
             new_schema['properties']['data']['description'] = definition(
                 new_schema['properties']['type'], new_schema)
             if 'object_type' in new_schema['properties']['data']['properties']:
+                # export object classes
                 for object_type in new_schema['properties']['data']['properties']['object_type']['enum']:
                     write_cs_class(
                         new_schema['properties']['data'], object_type, 'objects')
             else:
-                object_type = os.path.splitext(os.path.basename(fn))[0]
-                write_cs_class(new_schema['properties']['data'], object_type, 'objects')
+                # export non-object high level classes
+                prop_name = os.path.splitext(os.path.basename(fn))[0]
+                write_cs_class(new_schema['properties']
+                               ['data'], prop_name, 'attributes')
+                for prop in new_schema['properties']['data']['properties']:
+                    if '$ref' in new_schema['properties']['data']['properties'][prop]:
+                        # export non-object attribute classes
+                        key = new_schema['properties']['data']['properties'][prop]['$ref'].split(
+                            '/')[-1]
+                        write_cs_class(
+                            new_schema['definitions'][key], key, 'attributes')
 
         # export attribute classes
-        for prop in attr_schema:
-            if attr_schema[prop]['type'] in ObjTypeDesc:
-                write_cs_class(attr_schema[prop], prop, 'attributes')
+        for prop in obj_attr_schema:
+            if obj_attr_schema[prop]['type'] in ObjTypeDesc:
+                write_cs_class(obj_attr_schema[prop], prop, 'attributes')
 
         data_schema = {}
         data_schema['description'] = "Wraps all attributes in JSON."
-        data_schema['properties'] = attr_schema
+        data_schema['properties'] = obj_attr_schema
         # data_schema['properties'] = collections.OrderedDict(
         #     sorted(data_schema['properties'].items()))
 
@@ -238,6 +265,7 @@ def write_cs_class(prop_schema, prop_name, tag_name):
                          prop_class=prop_class,
                          prop_name=prop_name,
                          pascalcase=pascalcase,
+                         enumcase=enumcase,
                          jstype2cstype=jstype2cstype,
                          format_value=format_value,
                          definition=definition,

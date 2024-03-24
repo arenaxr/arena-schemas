@@ -35,10 +35,10 @@ namespace ArenaUnity.Schemas
         {
 {%- for enum in prop.enum %}
             [EnumMember(Value = "{{ enum }}")]
-            {{ pascalcase(enum) }},
+            {{ enumcase(enum) }},
 {%- endfor %}
         }
-        private static {{ pascalcase(propname) }}Type def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ pascalcase(propname) }}Type.{{ pascalcase(prop.default) }}{% else %}null{% endif %};
+        private static {{ pascalcase(propname) }}Type def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ pascalcase(propname) }}Type.{{ enumcase(prop.default) }}{% else %}null{% endif %};
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "{{ propname }}")]
         [Tooltip("{{ definition(propname, prop) }}")]
