@@ -21,7 +21,6 @@ def main():
     md_lines = []
     md_lines.append('---\n')
     md_lines.append(f'title: {sec_sub_title}\n')
-    # md_lines.append(f'nav_order: {sec_nav_order}\n')  # let nav alphabetize
     md_lines.append('layout: default\n')
     md_lines.append(f'parent: {sec_title}\n')
     md_lines.append('has_children: true\n')
@@ -58,7 +57,6 @@ def main():
         md_lines = []
         md_lines.append('---\n')
         md_lines.append(f'title: {lines[1]}\n')
-        # md_lines.append(f'nav_order: {idx}\n')  # let nav alphabetize
         md_lines.append('layout: default\n')
         md_lines.append(f'parent: {sec_sub_title}\n')
         md_lines.append(f'grand_parent: {sec_title}\n')

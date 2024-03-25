@@ -80,7 +80,7 @@ def main():
     input_folder = args[0]
 
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print('Supply a valid destination  schemas path! dst=arena-py/arena')
+        print('Supply a valid destination schemas path! dst=arena-py/arena')
         return
     output_folder = args[1]
 
