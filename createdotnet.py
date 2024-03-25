@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import re
@@ -155,9 +156,14 @@ def main():
     input_folder = args[0]
 
     if (len(args) == 0 or not os.path.isdir(args[0])):
-        print('Supply a valid destination schemas path! dst=arena-unity/Runtime/Schemas)
+        print('Supply a valid destination schemas path! dst=arena-unity/Runtime/Schemas')
         return
     output_folder = args[1]
+
+    # clean dest
+
+    for oldpath in glob.iglob(os.path.join(output_folder, '*.cs')):
+        os.remove(oldpath)
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)

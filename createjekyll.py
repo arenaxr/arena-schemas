@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import sys
@@ -16,6 +17,10 @@ def main():
         os.mkdir(args[0])
 
     output_folder = args[0]
+
+    # clean dest
+    for oldpath in glob.iglob(os.path.join(output_folder, '*.md')):
+        os.remove(oldpath)
 
     # make jekyll index.md with objects list
     md_lines = []

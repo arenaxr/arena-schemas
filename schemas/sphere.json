@@ -439,7 +439,10 @@
                 "pauseEvents": {
                     "default": [],
                     "description": "Comma-separated list of events to listen to trigger pause. Can be resumed with resumeEvents.",
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "property": {
                     "description": "Property to animate. Can be a component name, a dot-delimited property of a component (e.g., material.color), or a plain attribute.",
@@ -448,7 +451,10 @@
                 "resumeEvents": {
                     "default": [],
                     "description": "Comma-separated list of events to listen to trigger resume after pausing.",
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "round": {
                     "default": false,
@@ -458,7 +464,10 @@
                 "startEvents": {
                     "default": [],
                     "description": "Comma-separated list of events to listen to trigger a restart and play. Animation will not autoplay if specified. startEvents will restart the animation, use pauseEvents to resume it. If there are other animation components on the entity animating the same property, those animations will be automatically paused to not conflict.",
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "to": {
                     "default": "",
@@ -832,7 +841,7 @@
                 },
                 "on": {
                     "description": "Event to listen 'on'.",
-                    "default": "",
+                    "default": "mousedown",
                     "enum": [
                         "mousedown",
                         "mouseup"

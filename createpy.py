@@ -84,6 +84,8 @@ def main():
         return
     output_folder = args[1]
 
+    # clean dest? no, we only edit existing docstrings, or make new classes
+
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     generate_intermediate_json(
