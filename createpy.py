@@ -3,8 +3,8 @@ import json
 import os
 import sys
 
+import jinja2
 from caseconverter import pascalcase, snakecase
-from jinja2 import Template
 
 output_folder = ''
 input_folder = ''
@@ -16,6 +16,15 @@ ObjTypeDesc = {
     'scene-options': 'ARENA scene options',
     'landmarks': 'ARENA landmarks',
     'camera-override': 'ARENA camera override data',
+}
+
+# define alternate py usages to add to docstring
+AltUsages = {
+    'click-listener': ['clickable=True'],
+    'color': ['color=Color(red,green,blue)', 'color=(red,green,blue)'],
+    'position': ['position=Position(x,y,z)', 'position=(x,y,z)'],
+    'rotation': ['rotation=Rotation(x,y,z,w)', 'rotation=Rotation(x,y,z)', 'rotation=(x,y,z,w)', 'rotation=(x,y,z)'],
+    'scale': ['scale=Scale(x,y,z)', 'scale=(x,y,z)'],
 }
 
 
@@ -184,7 +193,7 @@ def generate_intermediate_json(list_fns):
 
         # export attribute translation map
         with open('templates/py_attributes_translate.j2') as tfile:
-            t = Template(tfile.read())
+            t = jinja2.Template(tfile.read())
         py_path = os.path.join(output_folder, 'attributes', 'translate.py')
         print(f'->{py_path}')
         pfile = open(py_path, 'w')
@@ -196,7 +205,7 @@ def generate_intermediate_json(list_fns):
         # export objects init file
         obj_classes = collections.OrderedDict(sorted(obj_classes.items()))
         with open('templates/py_objects_init.j2') as tfile:
-            t = Template(tfile.read())
+            t = jinja2.Template(tfile.read())
         py_path = os.path.join(output_folder, 'objects', '__init__.py')
         print(f'->{py_path}')
         pfile = open(py_path, 'w')
@@ -207,7 +216,7 @@ def generate_intermediate_json(list_fns):
         # export attributes init file
         attr_classes = collections.OrderedDict(sorted(attr_classes.items()))
         with open('templates/py_attributes_init.j2') as tfile:
-            t = Template(tfile.read())
+            t = jinja2.Template(tfile.read())
         py_path = os.path.join(output_folder, 'attributes', '__init__.py')
         print(f'->{py_path}')
         pfile = open(py_path, 'w')
@@ -222,6 +231,12 @@ def write_py_class(prop_schema, prop_name, tag_name):
             sorted(prop_schema['properties'].items()))
     prop_class = pascalcase(prop_name)
     prop_ns = snakecase(prop_name)
+    prop_dict = prop_name.replace('-', '_')
+    uses = [f'`{prop_dict}={prop_class}(...)`']  # default usage
+    if prop_name in AltUsages:
+        for use in AltUsages[prop_name]:
+            uses.append(f'`{use}`')
+    prop_usage = ' or '.join(uses)
     if tag_name == 'objects':
         obj_classes[prop_ns] = prop_class
     py_path = os.path.join(output_folder, tag_name, f'{prop_ns}.py')
@@ -229,9 +244,12 @@ def write_py_class(prop_schema, prop_name, tag_name):
     # add object class if needed
     if not os.path.isfile(py_path):
         with open(f'templates/py_{tag_name}_class.j2') as tfile:
-            t = Template(tfile.read())
-        class_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
-                             prop_class=prop_class, prop_name=prop_name, definition=definition)
+            t = jinja2.Template(tfile.read())
+        class_out = t.render(prop_schema=prop_schema,
+                             prop_dict=prop_dict,
+                             prop_class=prop_class,
+                             prop_name=prop_name,
+                             definition=definition)
         print(f'->{py_path}')
         pfile = open(py_path, 'w')
         pfile.write(f'{class_out}\n')
@@ -242,11 +260,15 @@ def write_py_class(prop_schema, prop_name, tag_name):
     lines = pfile.readlines()
     pfile.close()
     with open(f'templates/py_{tag_name}_docstring.j2') as tfile:
-        t = Template(tfile.read())
+        t = jinja2.Template(tfile.read())
         t.globals['jstype2pytype'] = jstype2pytype
         t.globals['jsenum2str'] = jsenum2str
-    docstr_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
-                          prop_class=prop_class, prop_name=prop_name, definition=definition)
+    docstr_out = t.render(prop_schema=prop_schema,
+                          prop_dict=prop_dict,
+                          prop_class=prop_class,
+                          prop_name=prop_name,
+                          prop_usage=prop_usage,
+                          definition=definition)
     class_dec = f'class {prop_class}('
     print(f'->{py_path}')
     pfile = open(py_path, 'w')
