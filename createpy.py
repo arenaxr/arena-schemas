@@ -10,6 +10,32 @@ output_folder = ''
 input_folder = ''
 attr_schema = {}
 
+ObjTypeDesc = {
+    'object': 'AFrame 3D Object',
+    'program': 'ARENA program data',
+    'scene-options': 'ARENA scene options',
+    'landmarks': 'ARENA landmarks',
+    'camera-override': 'ARENA camera override data',
+}
+
+
+def get_prop(prop, key):
+    if key in prop:
+        return prop[key]
+    else:
+        return None
+
+
+def definition(name, prop):
+    title = get_prop(prop, 'title')
+    description = get_prop(prop, 'description')
+    if description:
+        return description.replace('\n', ' ').replace('  ', ' ').replace("<a href='", "<").replace("'>", "> ").replace("</a>", "")
+    elif title:
+        return title
+    else:
+        return name
+
 
 def jstype2pytype(jstype, arraytype):
     if jstype == 'null':
@@ -205,7 +231,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
         with open(f'templates/py_{tag_name}_class.j2') as tfile:
             t = Template(tfile.read())
         class_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
-                             prop_class=prop_class, prop_name=prop_name)
+                             prop_class=prop_class, prop_name=prop_name, definition=definition)
         print(f'->{py_path}')
         pfile = open(py_path, 'w')
         pfile.write(f'{class_out}\n')
@@ -220,7 +246,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
         t.globals['jstype2pytype'] = jstype2pytype
         t.globals['jsenum2str'] = jsenum2str
     docstr_out = t.render(prop_schema=prop_schema, prop_dict=prop_name.replace('-', '_'),
-                          prop_class=prop_class, prop_name=prop_name)
+                          prop_class=prop_class, prop_name=prop_name, definition=definition)
     class_dec = f'class {prop_class}('
     print(f'->{py_path}')
     pfile = open(py_path, 'w')

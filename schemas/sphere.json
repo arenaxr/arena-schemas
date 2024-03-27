@@ -795,6 +795,7 @@
             "description": "Load new URL when object is clicked. Requires click-listener.",
             "properties": {
                 "dest": {
+                    "description": "Where to open the URL.",
                     "default": "sametab",
                     "enum": [
                         "popup",
@@ -804,6 +805,7 @@
                     "type": "string"
                 },
                 "on": {
+                    "description": "A case-sensitive string representing the event type to listen for. See <a href='https://developer.mozilla.org/en-US/docs/Web/Events'>Web Events</a>.",
                     "default": "mousedown",
                     "enum": [
                         "mousedown",
@@ -812,8 +814,8 @@
                     "type": "string"
                 },
                 "url": {
+                    "description": "The destination url, e.g. https://example.com.",
                     "default": "",
-                    "title": "Landmark Url",
                     "format": "uri",
                     "type": "string"
                 }
@@ -928,19 +930,14 @@
                     "default": "",
                     "description": "Overrides the material source in all meshes of an object (e.g. a basic shape or a GLTF); Use, for example, to change the texture of a GLTF."
                 },
-                "encoding": {
-                    "default": "sRGBEncoding",
+                "colorSpace": {
+                    "description": "The material colorspace.",
+                    "default": "SRGBColorSpace",
                     "enum": [
-                        "LinearEncoding",
-                        "sRGBEncoding",
-                        "GammaEncoding",
-                        "RGBEEncoding",
-                        "LogLuvEncoding",
-                        "RGBM7Encoding",
-                        "RGBM16Encoding",
-                        "RGBDEncoding",
-                        "BasicDepthPacking",
-                        "RGBADepthPacking"
+                        "SRGBColorSpace",
+                        "LinearSRGBColorSpace",
+                        "DisplayP3ColorSpace",
+                        "NoColorSpace"
                     ],
                     "type": "string"
                 },
@@ -1087,7 +1084,7 @@
             "properties": {
                 "on": {
                     "default": "mousedown",
-                    "description": "A case-sensitive string representing the event type to listen for, e.g. 'mousedown', 'mouseup'. See <a href='https://developer.mozilla.org/en-US/docs/Web/Events'>Web Events</a>",
+                    "description": "A case-sensitive string representing the event type to listen for. See <a href='https://developer.mozilla.org/en-US/docs/Web/Events'>Web Events</a>",
                     "enum": [
                         "mousedown",
                         "mouseup",

@@ -188,7 +188,7 @@
                     "default": true
                 },
                 "value": {
-                    "description": "The actual content of the text. Line breaks and tabs are supported with \\n and \\t.",
+                    "description": "The actual content of the text. Line breaks and tabs are supported with `\\n` and `\\t`.",
                     "title": "Value (Text)",
                     "type": "string"
                 },

@@ -32,7 +32,7 @@ def definition(name, prop):
     title = get_prop(prop, 'title')
     description = get_prop(prop, 'description')
     if description:
-        return description.split('\n')[0]
+        return description.replace('\n', ' ').replace('  ', ' ')
     elif title:
         return title
     else:
@@ -161,7 +161,6 @@ def main():
     output_folder = args[1]
 
     # clean dest
-
     for oldpath in glob.iglob(os.path.join(output_folder, '*.cs')):
         os.remove(oldpath)
 
@@ -207,7 +206,7 @@ def generate_intermediate_json(list_fns):
             if 'data' in new_schema['properties'] and 'properties' in new_schema['properties']['data']:
                 dprops = new_schema['properties']['data']['properties']
                 for key in dprops:
-                    if 'type' in dprops[key] and dprops[key]['type'] in ObjTypeDesc:
+                    if 'type' in dprops[key] and dprops[key]['type'] == 'object':
                         if key not in new_schema['definitions']:
                             new_schema['definitions'][key] = dprops[key]
                             new_schema['properties']['data']['properties'][key] = {
@@ -216,8 +215,6 @@ def generate_intermediate_json(list_fns):
             # write this object expanded json schema
             if 'properties' not in new_schema['properties']['data']:
                 continue
-            # if 'object_type' not in new_schema['properties']['data']['properties']:
-            #     continue
 
             new_schema['properties']['data']['description'] = definition(
                 new_schema['properties']['type'], new_schema)
@@ -252,6 +249,8 @@ def generate_intermediate_json(list_fns):
 
         # export data class
         write_cs_class(data_schema, 'data', 'attributes')
+        # os.rename(os.path.join(output_folder, 'ArenaObjectDataJson.cs'),
+        #           os.path.join(output_folder, '../ArenaObjectDataJson.cs'))
 
 
 def write_cs_class(prop_schema, prop_name, tag_name):
