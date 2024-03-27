@@ -39,7 +39,7 @@ def definition(name, prop):
     title = get_prop(prop, 'title')
     description = get_prop(prop, 'description')
     if description:
-        return description.replace('\n', ' ').replace('  ', ' ').replace("<a href='", "<").replace("'>", "> ").replace("</a>", "")
+        return description.replace('\n', ' ').replace('\\', '\\\\').replace('  ', ' ').replace("<a href='", "<").replace("'>", "> ").replace("</a>", "")
     elif title:
         return title
     else:
