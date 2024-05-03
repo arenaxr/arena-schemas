@@ -11,6 +11,7 @@ from caseconverter import pascalcase, snakecase
 output_folder = ''
 input_folder = ''
 obj_attr_schema = {}
+log_todos = False
 
 ObjTypeDesc = {
     'object': 'AFrame 3D Object',
@@ -279,6 +280,14 @@ def write_cs_class(prop_schema, prop_name, tag_name):
     pfile = open(cs_path, 'w')
     pfile.write(f'{class_out}\n')
     pfile.close()
+
+    # log optional attribute TODOs
+    if log_todos and 'properties' in prop_schema:
+        print(
+            f'        // ARENA {prop_name} component unity conversion status:')
+        for propname, prop in prop_schema['properties'].items():
+            if propname != 'object_type':
+                print(f'        // TODO: {propname}')
 
 
 if __name__ == '__main__':
