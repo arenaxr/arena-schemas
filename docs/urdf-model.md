@@ -1,14 +1,16 @@
 
-Circle
-======
+URDF Model
+==========
 
 
-Circle Geometry.
+Load a URDF model.
+
+See guidance to store paths under <a href='https://docs.arenaxr.org/content/interface/filestore.html'>ARENA File Store, CDN, or DropBox</a>.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 
-Circle Attributes
-------------------
+URDF Model Attributes
+----------------------
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
@@ -17,20 +19,18 @@ Circle Attributes
 |type|string; Must be: ```object```|```'object'```|AFrame 3D Object|Yes|
 |action|string; One of: ```['create', 'delete', 'update']```|```'create'```|Message action create, update, delete.|Yes|
 |ttl|integer||When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.|No|
-|data|Circle data||Circle Data|Yes|
+|data|URDF Model data||URDF Model Data|Yes|
 
-### Circle Data Attributes
+### URDF Model Data Attributes
 
 |Attribute|Type|Default|Description|Required|
 | :--- | :--- | :--- | :--- | :--- |
-|object_type|string; Must be: ```circle```|```circle```|3D object type.|Yes|
-|radius|number|```1```|radius|Yes|
-|segments|integer|```32```|segments|No|
-|thetaLength|number|```360```|theta length|No|
-|thetaStart|number|```0```|theta start|No|
+|object_type|string; Must be: ```urdf-model```|```urdf-model```|3D object type.|Yes|
+|url|string||Use File Store paths under 'store/users/username', see CDN and other storage options in the description above.|Yes|
+|joints|string||Set joint values (in degrees) in the form 'JointName1: ValueInDegrees1, JointName2: ValueInDegrees2, ...'. |No|
 |parent|string||Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.|No|
-|position|[position](position)||3D object position.|Yes|
-|rotation|[rotation](rotation)||3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|Yes|
+|position|[position](position)||3D object position.|No|
+|rotation|[rotation](rotation)||3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.|No|
 |scale|[scale](scale)||3D object scale.|No|
 |animation|[animation](animation)||Animate and tween values.|No|
 |armarker|[armarker](armarker)||A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.|No|
@@ -52,15 +52,8 @@ Circle Attributes
 |shadow|[shadow](shadow)||The shadow component enables shadows for an entity and its children. Adding the shadow component alone is not enough to display shadows in your scene. We must have at least one light with castShadow: true enabled.|No|
 |sound|[sound](sound)||The sound component defines the entity as a source of sound or audio. The sound component can be positional and is thus affected by the component's position.|No|
 |textinput|[textinput](textinput)||Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires click-listener.|No|
-|url|string||Use File Store paths under 'store/users/username', see CDN and other storage options in the description above.|No|
 |remote-render|[remote-render](remote-render)||Whether or not an object should be remote rendered [Experimental].|No|
 |video-control|[video-control](video-control)||Adds a video to an entity and controls its playback.|No|
 |attribution|[attribution](attribution)||Attribution Component. Saves attribution data in any entity.|No|
 |spe-particles|[spe-particles](spe-particles)||GPU based particle systems in A-Frame.|No|
 |look-at|string||The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.|No|
-|buffer|boolean|```True```|Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).|No|
-|jitsi-video|[jitsi-video](jitsi-video)||Apply a jitsi video source to the geometry.|No|
-|material|[material](material)|```{'color': '#7f7f7f'}```|The material properties of the object's surface.|No|
-|multisrc|[multisrc](multisrc)||Define multiple visual sources applied to an object.|No|
-|screenshareable|boolean|```True```|Whether or not a user can screenshare on an object.|No|
-|skipCache|boolean|```False```|Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...).|No|

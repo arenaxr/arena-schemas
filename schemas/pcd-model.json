@@ -49,8 +49,8 @@
             "required": [
                 "object_type",
                 "url",
-                "pointColor",
                 "pointSize",
+                "opacity",
                 "position",
                 "rotation",
                 "scale"
@@ -81,7 +81,13 @@
                     "title": "Points Color",
                     "format": "color",
                     "type": "string",
-                    "default": "#7f7f7f"
+                    "default": ""
+                },
+                "opacity": {
+                    "description": "Opacity of all points.",
+                    "title": "Opacity",
+                    "type": "number",
+                    "default": 1
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
@@ -911,7 +917,7 @@
             "title": "Material extras",
             "type": "object",
             "required": [
-                "encoding",
+                "colorSpace",
                 "gltfOpacity"
             ]
         },
@@ -939,7 +945,7 @@
             ]
         },
         "sound": {
-            "description": "The sound component defines the entity as a source of sound or audio. The sound component is positional and is thus affected by the component's position.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/sound.html'>A-Frame Sound</a>.",
+            "description": "The sound component defines the entity as a source of sound or audio. The sound component can be positional and is thus affected by the component's position.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/sound.html'>A-Frame Sound</a>.",
             "properties": {
                 "autoplay": {
                     "default": false,
@@ -1018,7 +1024,7 @@
                     "type": "number"
                 }
             },
-            "title": "Positional Sound",
+            "title": "Sound",
             "type": "object"
         },
         "textinput": {
