@@ -217,10 +217,10 @@
                     }
                 },
                 "visible": {
-                    "title": "Visible",
-                    "description": "Whether the material is visible.",
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
                     "type": "boolean",
-                    "default": true
+                    "title": "Visible"
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",

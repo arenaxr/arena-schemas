@@ -107,6 +107,12 @@
                 },
                 "scale": {
                     "$ref": "#/definitions/scale"
+                },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
                 }
             }
         }

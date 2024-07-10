@@ -82,6 +82,12 @@
                 "scale": {
                     "$ref": "#/definitions/scale"
                 },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
+                },
                 "animation": {
                     "$ref": "#/definitions/animation"
                 },
@@ -1763,6 +1769,7 @@
                                 "y",
                                 "z"
                             ],
+                            "format": "grid",
                             "type": "object",
                             "title": "Position"
                         },
@@ -1791,6 +1798,7 @@
                                 "y",
                                 "z"
                             ],
+                            "format": "grid",
                             "type": "object",
                             "title": "Rotation"
                         }

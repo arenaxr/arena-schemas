@@ -48,7 +48,8 @@
             },
             "required": [
                 "object_type",
-                "url"
+                "url",
+                "urlBase"
             ],
             "properties": {
                 "object_type": {
@@ -63,6 +64,12 @@
                     "description": "Use File Store paths under 'store/users/username', see CDN and other storage options in the description above.",
                     "format": "uri",
                     "title": "Url",
+                    "type": "string"
+                },
+                "urlBase": {
+                    "description": "Base path for xacro/urdf package includes. This must be an absolute path with no trailing slash, e.g. '/store/users/username/robot'",
+                    "format": "uri",
+                    "title": "URL Base for Package Includes",
                     "type": "string"
                 },
                 "joints": {
@@ -83,6 +90,12 @@
                 },
                 "scale": {
                     "$ref": "#/definitions/scale"
+                },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
                 },
                 "animation": {
                     "$ref": "#/definitions/animation"

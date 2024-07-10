@@ -42,7 +42,6 @@
         },
         "data": {
             "title": "Ocean Data",
-            "format": "grid",
             "additionalProperties": true,
             "default": {
                 "object_type": "ocean",
@@ -133,6 +132,12 @@
                 },
                 "scale": {
                     "$ref": "#/definitions/scale"
+                },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
                 }
             }
         }

@@ -1,6 +1,6 @@
 {
-    "title": "Box",
-    "description": "Box Geometry.",
+    "title": "OBJ Model",
+    "description": "Loads a 3D model and material using a Wavefront (.OBJ) file and a .MTL file.\n\nSee guidance to store paths under <a href='https://docs.arenaxr.org/content/interface/filestore.html'>ARENA File Store, CDN, or DropBox</a>.",
     "required": [
         "object_id",
         "action",
@@ -41,21 +41,14 @@
             "type": "integer"
         },
         "data": {
-            "title": "Box Data",
+            "title": "OBJ Model Data",
             "additionalProperties": true,
             "default": {
-                "object_type": "box",
-                "material": {
-                    "color": "#7f7f7f"
-                }
+                "object_type": "obj-model"
             },
             "required": [
                 "object_type",
-                "width",
-                "height",
-                "depth",
-                "position",
-                "rotation"
+                "obj"
             ],
             "properties": {
                 "object_type": {
@@ -63,38 +56,20 @@
                     "title": "3D object type",
                     "description": "3D object type.",
                     "enum": [
-                        "box"
+                        "obj-model"
                     ]
                 },
-                "depth": {
-                    "type": "number",
-                    "title": "depth",
-                    "default": 1
+                "obj": {
+                    "description": "Url pointing to a .OBJ file. Use File Store paths under 'store/users/username', see CDN and other storage options in the description above.",
+                    "format": "uri",
+                    "title": "OBJ Wavefront Url",
+                    "type": "string"
                 },
-                "height": {
-                    "type": "number",
-                    "title": "height",
-                    "default": 1
-                },
-                "segmentsDepth": {
-                    "type": "integer",
-                    "title": "segments depth",
-                    "default": 1
-                },
-                "segmentsHeight": {
-                    "type": "integer",
-                    "title": "segments height",
-                    "default": 1
-                },
-                "segmentsWidth": {
-                    "type": "integer",
-                    "title": "segments width",
-                    "default": 1
-                },
-                "width": {
-                    "type": "number",
-                    "title": "width",
-                    "default": 1
+                "mtl": {
+                    "description": "Url pointing to a .MTL file. Optional if you wish to use the material component instead.",
+                    "format": "uri",
+                    "title": "MTL Url",
+                    "type": "string"
                 },
                 "parent": {
                     "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",

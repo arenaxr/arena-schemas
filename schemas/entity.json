@@ -80,6 +80,12 @@
                 "scale": {
                     "$ref": "#/definitions/scale"
                 },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
+                },
                 "animation": {
                     "$ref": "#/definitions/animation"
                 },
@@ -225,7 +231,6 @@
         },
         "panel": {
             "title": "UI Panel",
-            "format": "grid",
             "description": "The rounded UI panel primitive.",
             "type": "object",
             "properties": {

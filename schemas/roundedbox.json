@@ -42,7 +42,6 @@
         },
         "data": {
             "title": "Rounded Box Data",
-            "format": "grid",
             "additionalProperties": true,
             "default": {
                 "object_type": "roundedbox",
@@ -106,6 +105,12 @@
                 },
                 "scale": {
                     "$ref": "#/definitions/scale"
+                },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
                 },
                 "animation": {
                     "$ref": "#/definitions/animation"
@@ -1803,6 +1808,7 @@
                         "x",
                         "y"
                     ],
+                    "format": "grid",
                     "type": "object"
                 },
                 "opacity": {
@@ -1845,6 +1851,7 @@
                         "x",
                         "y"
                     ],
+                    "format": "grid",
                     "type": "object"
                 },
                 "roughness": {
@@ -1926,7 +1933,6 @@
                     "type": "integer"
                 }
             },
-            "format": "grid",
             "title": "Material",
             "type": "object"
         },

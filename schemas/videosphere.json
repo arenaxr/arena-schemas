@@ -110,6 +110,12 @@
                 "scale": {
                     "$ref": "#/definitions/scale"
                 },
+                "visible": {
+                    "default": true,
+                    "description": "Whether object is visible. Property is inherited.",
+                    "type": "boolean",
+                    "title": "Visible"
+                },
                 "buffer": {
                     "default": true,
                     "description": "Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...).",
@@ -372,6 +378,7 @@
                         "x",
                         "y"
                     ],
+                    "format": "grid",
                     "type": "object"
                 },
                 "opacity": {
@@ -414,6 +421,7 @@
                         "x",
                         "y"
                     ],
+                    "format": "grid",
                     "type": "object"
                 },
                 "roughness": {
@@ -495,7 +503,6 @@
                     "type": "integer"
                 }
             },
-            "format": "grid",
             "title": "Material",
             "type": "object"
         },
