@@ -26,6 +26,7 @@ AltUsages = {
     "rotation": ["rotation=Rotation(x,y,z,w)", "rotation=Rotation(x,y,z)", "rotation=(x,y,z,w)", "rotation=(x,y,z)"],
     "scale": ["scale=Scale(x,y,z)", "scale=(x,y,z)"],
 }
+FirstIterable = ["color", "position", "rotation", "scale"]
 
 
 def get_prop(prop, key):
@@ -237,6 +238,9 @@ def write_py_class(prop_schema, prop_name, tag_name):
         for use in AltUsages[prop_name]:
             uses.append(f"`{use}`")
     prop_usage = " or ".join(uses)
+    iterable = None
+    if prop_name in FirstIterable:
+        iterable = "|Iterable|Mapping"
     if tag_name == "objects":
         obj_classes[prop_ns] = prop_class
     py_path = os.path.join(output_folder, tag_name, f"{prop_ns}.py")
@@ -272,6 +276,7 @@ def write_py_class(prop_schema, prop_name, tag_name):
         prop_name=prop_name,
         prop_usage=prop_usage,
         definition=definition,
+        iterable=iterable,
     )
     class_dec = f"class {prop_class}("
     print(f"->{py_path}")
