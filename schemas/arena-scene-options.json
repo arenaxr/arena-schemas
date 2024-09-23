@@ -499,13 +499,9 @@
                 }
             },
             "required": [
-                "clickableOnlyEvents",
                 "maxAVDist",
                 "physics",
-                "privateScene",
-                "videoFrustumCulling",
-                "videoDistanceConstraints",
-                "videoDefaultResolutionConstraint"
+                "privateScene"
             ],
             "title": "Scene Options",
             "type": "object",
