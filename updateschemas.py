@@ -63,7 +63,7 @@ def generate_intermediate_json(list_fns):
             if "data" in new_schema["properties"] and "properties" in new_schema["properties"]["data"]:
                 dprops = new_schema["properties"]["data"]["properties"]
                 for key in dprops:
-                    if "type" in dprops[key] and dprops[key]["type"] == "object":
+                    if "type" in dprops[key] and dprops[key]["type"] == "object" and "deprecated" not in dprops[key]:
                         if key not in new_schema["definitions"]:
                             new_schema["definitions"][key] = dprops[key]
                             new_schema["properties"]["data"]["properties"][key] = {"$ref": f"#/definitions/{key}"}
