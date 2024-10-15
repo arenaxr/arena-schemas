@@ -1,6 +1,13 @@
+{% if 'deprecated' in prop_schema -%}
+from deprecated import deprecated
+
+{%- endif -%}
 from .arena_object import Object
 
 
+{% if 'deprecated' in prop_schema -%}
+@deprecated("{{ definition }}")
+{%- endif -%}
 class {{ prop_class }}(Object):
     """
     """

@@ -39,19 +39,26 @@ def get_prop(prop, key):
 def definition(name, prop):
     title = get_prop(prop, "title")
     description = get_prop(prop, "description")
+    deprecated = get_prop(prop, "deprecated")
+    define = None
     if description:
-        return (
-            description.replace("\n", " ")
-            .replace("\\", "\\\\")
-            .replace("  ", " ")
-            .replace("<a href='", "<")
-            .replace("'>", "> ")
-            .replace("</a>", "")
-        )
+        define = description
     elif title:
-        return title
+        define = title
     else:
-        return name
+        define = name
+    if deprecated:
+        define = f"*{define}*"  # add italics
+    return (
+        define.replace("\n", " ")
+        .replace("\\", "\\\\")
+        .replace("  ", " ")
+        .replace("<a href='", "<")
+        .replace("'>", "> ")
+        .replace("</a>", "")
+        .replace("deprecated", "**deprecated**")
+        .replace("DEPRECATED", "**DEPRECATED**")
+    )
 
 
 def jstype2pytype(jstype, arraytype):
@@ -157,8 +164,6 @@ def generate_intermediate_json(list_fns):
             if "allOf" in new_schema["properties"]["data"]:
                 new_schema["properties"]["data"] = parse_allof_ref(new_schema["properties"]["data"], False)
                 del new_schema["properties"]["data"]["allOf"]
-            if "deprecated" in new_schema and new_schema["deprecated"]:
-                continue
 
             # generate definitions
             if "definitions" not in new_schema:

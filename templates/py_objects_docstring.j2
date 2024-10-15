@@ -3,8 +3,8 @@
 
     {% if prop_schema.properties -%}
     {% for propname, prop in prop_schema.properties.items() -%}
-    {% if 'deprecated' not in prop and propname != 'object_type' -%}
-    :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %}{% if iterable and loop.index == 1 %}{{ iterable }}{% endif %} {{ propname.replace('-', '_') }}: {{ definition(propname, prop) }}{% if 'default' in prop %}{{ jsenum2str(prop) }} Defaults to '{{ prop.default }}'{% endif %} (optional)
+    {%if propname != 'object_type' -%}
+    :param {% if prop.items %}{{ jstype2pytype(prop.type, prop['items']['type']) }}{% else %}{{ jstype2pytype(prop.type, None) }}{% endif %}{% if iterable and loop.index == 1 %}{{ iterable }}{% endif %} {{ propname.replace('-', '_') }}: {{ definition(propname, prop) }}{% if 'default' in prop %}{{ jsenum2str(prop) }} Defaults to '{{ prop.default }}'{% endif %} {% if 'deprecated' in prop %}(deprecated){% else %}(optional){% endif %}
     {% endif %}
     {%- endfor %}
     {%- endif -%}
