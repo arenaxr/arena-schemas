@@ -48,10 +48,8 @@ def object_table(mdFile, md_title, obj, definitions={}):
         default = obj["default"]
     table_lines = Table.heading.copy()
     for prop, prop_obj in prop_list.items():
-        if "deprecated" in prop_obj:
-            continue  # stop processing deprecated properties
         line = [""] * 5
-        line[Table.cols.ATTR] = prop
+        line[Table.cols.ATTR] = f"**{prop}**"
         line[Table.cols.REQ] = "No"
         if "type" in prop_obj:
             line[Table.cols.TYPE] = prop_obj["type"]
@@ -94,6 +92,10 @@ def object_table(mdFile, md_title, obj, definitions={}):
                     overwrite=False,
                     wire_obj=False,
                 )
+        if "deprecated" in prop_obj:
+            for col in range(Table.cols.REQ + 1):
+                if line[col]:
+                    line[col] = f"~~{line[col]}~~"
         table_lines.extend(line)
 
     mdFile.new_table(
