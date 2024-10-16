@@ -41,12 +41,12 @@ namespace ArenaUnity.Schemas
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "{{ propname }}")]
         [{% if 'deprecated' in prop %}Obsolete{% else %}Tooltip{% endif %}("{{ definition(propname, prop) }}")]
-        public {{ pascalcase(propname) }}Type {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
+        public {{ pascalcase(propname) }}Type {{ pascalcase(propname) }} {% if 'deprecated' in prop %}{ get; protected set; } {% endif %}= def{{ pascalcase(propname) }};
 {%- else %}
         private static {{ jstype2cstype(prop) }} def{{ pascalcase(propname) }} = {% if 'default' in prop %}{{ format_value(prop) }}{% else %}null{% endif %};
         [JsonProperty(PropertyName = "{{ propname }}")]
         [{% if 'deprecated' in prop %}Obsolete{% else %}Tooltip{% endif %}("{{ definition(propname, prop) }}")]
-        public {{ jstype2cstype(prop) }} {{ pascalcase(propname) }} = def{{ pascalcase(propname) }};
+        public {{ jstype2cstype(prop) }} {{ pascalcase(propname) }} {% if 'deprecated' in prop %}{ get; protected set; } {% endif %}= def{{ pascalcase(propname) }};
 {%- endif %}
         public bool ShouldSerialize{{ pascalcase(propname) }}()
         {
