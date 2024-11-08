@@ -4,6 +4,7 @@ from .translate import *
 from .attribute import *
 from .color import *
 from .data import *
+from .data_event import *
 {%- for cname in classes %}
 {%- if classes[cname] %}
 from .{{ cname }} import *
