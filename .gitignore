@@ -127,3 +127,34 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.arena*
+token.json
+credentials.json
+*.log
+
+# Source for the following rules: https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Editors
+.vscode/
+.idea/
+
+# Mac/OSX
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# pip package
+build/
+*.egg
+*.egg-info/
+dist/
+
+# virtualenv
+env
+venv
+.venv
