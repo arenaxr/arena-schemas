@@ -1,0 +1,16 @@
+
+SSAO
+====
+
+
+Use screen space ambient occlusion (SSAO) post-processing effect.
+
+SSAO Attributes
+----------------
+
+|Attribute|Type|Default|Description|Required|
+| :--- | :--- | :--- | :--- | :--- |
+|**resolution**|number|```512```|Resolution of the SSAO effect (width and height).|Yes|
+|**kernelRadius**|number|```8```|Kernel radius of the SSAO effect.|Yes|
+|**minDistance**|number|```0.005```|Minimum distance of the SSAO effect.|Yes|
+|**maxDistance**|number|```0.1```|Maximum distance of the SSAO effect.|Yes|

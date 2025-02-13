@@ -176,6 +176,9 @@
                 "material-extras": {
                     "$ref": "#/definitions/material-extras"
                 },
+                "model-container": {
+                    "$ref": "#/definitions/model-container"
+                },
                 "shadow": {
                     "$ref": "#/definitions/shadow"
                 },
@@ -965,6 +968,39 @@
                 "colorSpace",
                 "gltfOpacity"
             ]
+        },
+        "model-container": {
+            "description": "Overrides absolute size for a 3D model. The model can be a glTF, glb, obj, or any other supported format. The model will be rescaled to fit to the sizes specified for each axes.",
+            "properties": {
+                "x": {
+                    "default": 1,
+                    "description": "Size of the model in the x-axis.",
+                    "type": "number"
+                },
+                "y": {
+                    "default": 1,
+                    "description": "Size of the model in the y-axis.",
+                    "type": "number"
+                },
+                "z": {
+                    "default": 1,
+                    "description": "Size of the model in the z-axis.",
+                    "type": "number"
+                },
+                "uniform": {
+                    "default": true,
+                    "description": "Whether to scale the model uniformly.",
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z",
+                "uniform"
+            ],
+            "title": "Model Container",
+            "type": "object"
         },
         "shadow": {
             "title": "Shadow",
@@ -1793,20 +1829,8 @@
                         "y": 0
                     },
                     "description": "Texture offset to be used.",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y"
-                    ],
-                    "format": "grid",
-                    "type": "object"
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "opacity": {
                     "default": 1,
@@ -1836,20 +1860,8 @@
                         "y": 1
                     },
                     "description": "How many times a texture (defined by src) repeats in the X and Y direction.",
-                    "properties": {
-                        "x": {
-                            "type": "number"
-                        },
-                        "y": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y"
-                    ],
-                    "format": "grid",
-                    "type": "object"
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "roughness": {
                     "default": 0,

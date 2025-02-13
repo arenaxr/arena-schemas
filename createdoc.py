@@ -96,6 +96,16 @@ def object_table(mdFile, md_title, obj, definitions={}):
             for col in range(Table.cols.REQ + 1):
                 if line[col]:
                     line[col] = f"~~{line[col]}~~"
+
+        elif "type" in prop_obj and prop_obj["type"] == "object":
+            if "properties" in obj:
+                write_md(
+                    obj["properties"][prop],
+                    os.path.join(output_folder, f"{prop}.md"),
+                    overwrite=True,
+                    wire_obj=False,
+                )
+
         table_lines.extend(line)
 
     mdFile.new_table(
