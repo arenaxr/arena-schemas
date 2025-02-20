@@ -3,7 +3,7 @@ Multi Source
 ============
 
 
-Define multiple visual sources applied to an object.
+Define multiple visual sources applied to an object. Requires `material` attribute.
 
 Multi Source Attributes
 ------------------------
