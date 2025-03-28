@@ -229,7 +229,7 @@ def generate_intermediate_json(list_fns):
 
         # export attribute classes
         for prop in obj_attr_schema:
-            if obj_attr_schema[prop]["type"] in ObjTypeDesc:
+            if "type" in obj_attr_schema[prop] and obj_attr_schema[prop]["type"] in ObjTypeDesc:
                 write_cs_class(obj_attr_schema[prop], prop, "attributes")
 
         data_schema = {}
