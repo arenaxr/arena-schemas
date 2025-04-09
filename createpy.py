@@ -189,7 +189,7 @@ def generate_intermediate_json(list_fns):
 
         # export attribute classes
         for prop in attr_schema:
-            if attr_schema[prop]["type"] == "object":
+            if "type" in attr_schema[prop] and attr_schema[prop]["type"] == "object":
                 write_py_class(attr_schema[prop], prop, "attributes")
 
         data_schema = {}
