@@ -1675,6 +1675,25 @@
             "title": "SPE Particles",
             "type": "object"
         },
+        "vector2": {
+            "title": "Vector2",
+            "format": "grid",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y"
+            ],
+            "type": "object"
+        },
         "jitsi-video": {
             "description": "Apply a jitsi video source to the geometry.",
             "title": "Jitsi Video",
@@ -2215,6 +2234,33 @@
                     "description": "The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity.",
                     "title": "Look At",
                     "type": "string"
+                },
+                "vector2": {
+                    "$ref": "#/definitions/vector2"
+                },
+                "vector3": {
+                    "title": "Vector3",
+                    "format": "grid",
+                    "properties": {
+                        "x": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "y": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "z": {
+                            "default": 0,
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "x",
+                        "y",
+                        "z"
+                    ],
+                    "type": "object"
                 },
                 "buffer": {
                     "default": true,

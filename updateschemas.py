@@ -5,53 +5,6 @@ import sys
 output_folder = "schemas"
 input_folder = ""
 
-
-dft_definitions = {
-   "vector2":{
-      "title":"Vector2",
-      "format":"grid",
-      "properties":{
-         "x":{
-            "default":0,
-            "type":"number"
-         },
-         "y":{
-            "default":0,
-            "type":"number"
-         }
-      },
-      "required":[
-         "x",
-         "y"
-      ],
-      "type":"object"
-   },
-   "vector3":{
-      "title":"Vector3",
-      "format":"grid",
-      "properties":{
-         "x":{
-            "default":0,
-            "type":"number"
-         },
-         "y":{
-            "default":0,
-            "type":"number"
-         },
-         "z":{
-            "default":0,
-            "type":"number"
-         }
-      },
-      "required":[
-         "x",
-         "y",
-         "z"
-      ],
-      "type":"object"
-   }
-}
-
 def parse_allof_ref(allof_schema):
     global input_folder
     new_schema = allof_schema
@@ -105,7 +58,7 @@ def generate_intermediate_json(list_fns):
 
             # generate definitions
             if "definitions" not in new_schema:
-                new_schema["definitions"] = dft_definitions
+                new_schema["definitions"] = {}
             if "data" in new_schema["properties"] and "properties" in new_schema["properties"]["data"]:
                 dprops = new_schema["properties"]["data"]["properties"]
                 for key in dprops:
