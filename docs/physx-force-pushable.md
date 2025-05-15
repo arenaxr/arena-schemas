@@ -1,0 +1,14 @@
+
+PhysX Pushable
+==============
+
+
+Makes a physx-body object pushable by the user. Requires `click-listener` attribute. Requires `scene-options: physics`.
+
+PhysX Pushable Attributes
+--------------------------
+
+|Attribute|Type|Default|Description|Required|
+| :--- | :--- | :--- | :--- | :--- |
+|**on**|string; One of: ```['mousedown', 'mouseup']```|```'mousedown'```|Event to listen 'on'.|No|
+|**force**|number|```10```|Force to apply to the object.|Yes|

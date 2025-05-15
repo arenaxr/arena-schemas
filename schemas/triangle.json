@@ -733,6 +733,30 @@
             "title": "PhysX Joint Driver",
             "type": "object"
         },
+        "physx-force-pushable": {
+            "description": "Makes a physx-body object pushable by the user. Requires `click-listener` attribute. Requires `scene-options: physics`.",
+            "title": "PhysX Pushable",
+            "type": "object",
+            "properties": {
+                "on": {
+                    "default": "mousedown",
+                    "description": "Event to listen 'on'.",
+                    "enum": [
+                        "mousedown",
+                        "mouseup"
+                    ],
+                    "type": "string"
+                },
+                "force": {
+                    "default": 10,
+                    "type": "number",
+                    "description": "Force to apply to the object."
+                }
+            },
+            "required": [
+                "force"
+            ]
+        },
         "goto-landmark": {
             "description": "Teleports user to the landmark with the given name. Requires `click-listener` attribute.",
             "properties": {
@@ -2097,27 +2121,7 @@
                     "$ref": "#/definitions/physx-joint-driver"
                 },
                 "physx-force-pushable": {
-                    "description": "Makes a physx-body object pushable by the user. Requires `click-listener` attribute. Requires `scene-options: physics`.",
-                    "title": "PhysX Pushable",
-                    "properties": {
-                        "on": {
-                            "default": "mousedown",
-                            "description": "Event to listen 'on'.",
-                            "enum": [
-                                "mousedown",
-                                "mouseup"
-                            ],
-                            "type": "string"
-                        },
-                        "force": {
-                            "default": 10,
-                            "type": "number",
-                            "description": "Force to apply to the object."
-                        }
-                    },
-                    "required": [
-                        "force"
-                    ]
+                    "$ref": "#/definitions/physx-force-pushable"
                 },
                 "physx-grabbable": {
                     "description": "Makes a physx-body object grabbable by the user's hands. Requires `scene-options: physics`.",
