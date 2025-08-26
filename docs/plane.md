@@ -1,9 +1,11 @@
 
-Plane
-=====
+`plane`
+=======
 
 
 Plane Geometry.
+
+This is the schema for Plane, the properties of wire object type `plane`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

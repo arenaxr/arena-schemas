@@ -1,11 +1,13 @@
 
-Image
-=====
+`image`
+=======
 
 
 Display an image on a plane.
 
 See guidance to store paths under <a href='https://docs.arenaxr.org/content/interface/filestore.html'>ARENA File Store, CDN, or DropBox</a>.
+
+This is the schema for Image, the properties of wire object type `image`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

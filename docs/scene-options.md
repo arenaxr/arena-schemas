@@ -1,9 +1,11 @@
 
-Scene Options
-=============
+`scene-options`
+===============
 
 
 ARENA Scene Options.
+
+This is the schema for Scene Options, the properties of object `scene-options`.
 
 Scene Options Attributes
 -------------------------

@@ -1,9 +1,11 @@
 
-PhysX Body
-==========
+`physx-body`
+============
 
 
 Turns an entity into a PhysX rigid body. This is the main component for creating physics objects. There are 3 types of rigid bodies: dynamic objects that have physics simulated on them, static objects that cannot move, and kinematic objects that can be moved programmatically but not by simulation. Requires `scene-options: physics`.
+
+This is the schema for PhysX Body, the properties of object `physx-body`.
 
 PhysX Body Attributes
 ----------------------

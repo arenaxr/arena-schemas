@@ -1,9 +1,11 @@
 
-Attribution
-===========
+`attribution`
+=============
 
 
 Attribution Component. Saves attribution data in any entity.
+
+This is the schema for Attribution, the properties of object `attribution`.
 
 Attribution Attributes
 -----------------------

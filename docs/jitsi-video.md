@@ -1,9 +1,11 @@
 
-Jitsi Video
-===========
+`jitsi-video`
+=============
 
 
 Apply a jitsi video source to the geometry.
+
+This is the schema for Jitsi Video, the properties of object `jitsi-video`.
 
 Jitsi Video Attributes
 -----------------------

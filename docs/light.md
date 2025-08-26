@@ -1,11 +1,13 @@
 
-Light
-=====
+`light`
+=======
 
 
 A light.
 
 More properties at <a href='https://aframe.io/docs/1.5.0/components/light.html'>A-Frame Light</a>.
+
+This is the schema for Light, the properties of wire object type `light`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

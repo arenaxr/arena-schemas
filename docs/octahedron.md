@@ -1,9 +1,11 @@
 
-Octahedron
-==========
+`octahedron`
+============
 
 
 Octahedron Geometry.
+
+This is the schema for Octahedron, the properties of wire object type `octahedron`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

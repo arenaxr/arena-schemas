@@ -1,9 +1,11 @@
 
-Goto URL
-========
+`goto-url`
+==========
 
 
 Load new URL when object is clicked. Requires `click-listener` attribute.
+
+This is the schema for Goto URL, the properties of object `goto-url`.
 
 Goto URL Attributes
 --------------------

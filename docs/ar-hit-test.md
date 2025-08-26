@@ -1,11 +1,13 @@
 
-AR Hit Test Settings
-====================
+`ar-hit-test`
+=============
 
 
 A-Frame AR Hit Test Settings.
 
 More properties at <a href='https://aframe.io/docs/1.5.0/components/ar-hit-test.html'>AR Hit Test</a> component.
+
+This is the schema for AR Hit Test Settings, the properties of object `ar-hit-test`.
 
 AR Hit Test Settings Attributes
 --------------------------------

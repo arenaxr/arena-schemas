@@ -1,9 +1,11 @@
 
-Model Container
-===============
+`model-container`
+=================
 
 
 Overrides absolute size for a 3D model. The model can be a glTF, glb, obj, or any other supported format. The model will be rescaled to fit to the sizes specified for each axes.
+
+This is the schema for Model Container, the properties of object `model-container`.
 
 Model Container Attributes
 ---------------------------

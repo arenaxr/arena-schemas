@@ -1,11 +1,13 @@
 
-OBJ Model
-=========
+`obj-model`
+===========
 
 
 Loads a 3D model and material using a Wavefront (.OBJ) file and a .MTL file.
 
 See guidance to store paths under <a href='https://docs.arenaxr.org/content/interface/filestore.html'>ARENA File Store, CDN, or DropBox</a>.
+
+This is the schema for OBJ Model, the properties of wire object type `obj-model`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

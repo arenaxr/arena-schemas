@@ -1,9 +1,11 @@
 
-Camera
-======
+`camera`
+========
 
 
 Camera is the pose and arena-user component data representing a user avatar.
+
+This is the schema for Camera, the properties of wire object type `camera`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

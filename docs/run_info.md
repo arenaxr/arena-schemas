@@ -1,9 +1,11 @@
 
-Execution info
-==============
+`run_info`
+==========
 
 
 Program execution info, added at runtime.
+
+This is the schema for Execution info, the properties of object `run_info`.
 
 Execution info Attributes
 --------------------------

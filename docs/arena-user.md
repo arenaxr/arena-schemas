@@ -1,9 +1,11 @@
 
-User Avatar
-===========
+`arena-user`
+============
 
 
 Another user's camera in the ARENA. Handles Jitsi and display name updates.
+
+This is the schema for User Avatar, the properties of object `arena-user`.
 
 User Avatar Attributes
 -----------------------

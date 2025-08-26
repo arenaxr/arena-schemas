@@ -1,9 +1,11 @@
 
-Cube (deprecated; don't use)
-============================
+`cube`
+======
 
 
 Cube (=Box) Geometry (deprecated); Supported for Legacy reasons; Please use Box in new scenes
+
+This is the schema for Cube (deprecated; don't use), the properties of wire object type `cube`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

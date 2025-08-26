@@ -1,9 +1,11 @@
 
-Physics Settings
-================
+`physics`
+=========
 
 
 Clientside PhysX-based physics system. Required for all physx-* components
+
+This is the schema for Physics Settings, the properties of object `physics`.
 
 Physics Settings Attributes
 ----------------------------

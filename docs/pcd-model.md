@@ -1,11 +1,13 @@
 
-PCD Model
-=========
+`pcd-model`
+===========
 
 
 Load a PCD model.
 
 Format: <a href='https://pointclouds.org/documentation/tutorials/index.html'>Point Clouds</a>. See guidance to store paths under <a href='https://docs.arenaxr.org/content/interface/filestore.html'>ARENA File Store, CDN, or DropBox</a>.
+
+This is the schema for PCD Model, the properties of wire object type `pcd-model`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

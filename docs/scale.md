@@ -1,9 +1,11 @@
 
-Scale
-=====
+`scale`
+=======
 
 
 3D object scale.
+
+This is the schema for Scale, the properties of object `scale`.
 
 Scale Attributes
 -----------------

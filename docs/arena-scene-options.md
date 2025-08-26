@@ -1,9 +1,9 @@
 
-Scene Config
-============
+`scene-options`
+===============
 
 
-Scene Config
+This is the schema for Scene Config, the properties of wire object type `scene-options`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

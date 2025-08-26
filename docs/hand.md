@@ -1,9 +1,11 @@
 
-Hand
-====
+`hand`
+======
 
 
 Hand is the (left or right) hand metadata pose and controller type of the user avatar.
+
+This is the schema for Hand, the properties of wire object type `hand`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

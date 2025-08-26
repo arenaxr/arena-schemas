@@ -1,9 +1,11 @@
 
-Video
-=====
+`video-control`
+===============
 
 
 Adds a video to an entity and controls its playback.
+
+This is the schema for Video, the properties of object `video-control`.
 
 Video Attributes
 -----------------

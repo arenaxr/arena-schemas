@@ -1,9 +1,11 @@
 
-Text Input
-==========
+`textinput`
+===========
 
 
 Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires `click-listener` attribute.
+
+This is the schema for Text Input, the properties of object `textinput`.
 
 Text Input Attributes
 ----------------------

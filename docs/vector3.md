@@ -1,9 +1,9 @@
 
-Vector3
-=======
+`vector3`
+=========
 
 
-Vector3
+This is the schema for Vector3, the properties of object `vector3`.
 
 Vector3 Attributes
 -------------------

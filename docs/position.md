@@ -1,9 +1,11 @@
 
-Position
-========
+`position`
+==========
 
 
 3D object position.
+
+This is the schema for Position, the properties of object `position`.
 
 Position Attributes
 --------------------

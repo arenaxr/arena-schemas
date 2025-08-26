@@ -1,9 +1,11 @@
 
-ARENAUI Button Panel
-====================
+`arenaui-button-panel`
+======================
 
 
 ARENAUI element which displays a vertical or horizontal panel of buttons.
+
+This is the schema for ARENAUI Button Panel, the properties of wire object type `arenaui-button-panel`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

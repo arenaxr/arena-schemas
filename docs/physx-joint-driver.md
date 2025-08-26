@@ -1,9 +1,11 @@
 
-PhysX Joint Driver
-==================
+`physx-joint-driver`
+====================
 
 
 Creates a driver which exerts force to return the joint to the initial position with the given velocity characteristics. Can only be used on an entity with a physx-joint component. Currently only supports D6 joint type. Requires `scene-options: physics`.
+
+This is the schema for PhysX Joint Driver, the properties of object `physx-joint-driver`.
 
 PhysX Joint Driver Attributes
 ------------------------------

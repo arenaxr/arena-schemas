@@ -1,9 +1,11 @@
 
-Box Collision Listener
-======================
+`box-collision-listener`
+========================
 
 
 Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps.
+
+This is the schema for Box Collision Listener, the properties of object `box-collision-listener`.
 
 Box Collision Listener Attributes
 ----------------------------------

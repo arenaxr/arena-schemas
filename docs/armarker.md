@@ -1,9 +1,11 @@
 
-ARMarker
-========
+`armarker`
+==========
 
 
 A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world.
+
+This is the schema for ARMarker, the properties of object `armarker`.
 
 ARMarker Attributes
 --------------------

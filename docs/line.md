@@ -1,9 +1,11 @@
 
-Line
-====
+`line`
+======
 
 
 Draw a line.
+
+This is the schema for Line, the properties of wire object type `line`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

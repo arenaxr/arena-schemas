@@ -1,11 +1,13 @@
 
-SPE Particles
-=============
+`spe-particles`
+===============
 
 
 GPU based particle systems in A-Frame.
 
 More properties at <a href='https://github.com/harlyq/aframe-spe-particles-component'>A-Frame SPE Particles</a> component.
+
+This is the schema for SPE Particles, the properties of object `spe-particles`.
 
 SPE Particles Attributes
 -------------------------

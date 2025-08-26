@@ -1,9 +1,11 @@
 
-Blip Effect
-===========
+`blip`
+======
 
 
 When the object is created or deleted, it will animate in/out of the scene instead of appearing/disappearing instantly. Must have a geometric mesh.
+
+This is the schema for Blip Effect, the properties of object `blip`.
 
 Blip Effect Attributes
 -----------------------

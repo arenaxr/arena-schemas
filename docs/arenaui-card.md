@@ -1,9 +1,11 @@
 
-ARENAUI Card Panel
-==================
+`arenaui-card`
+==============
 
 
 ARENAUI element which displays text and optionally an image.
+
+This is the schema for ARENAUI Card Panel, the properties of wire object type `arenaui-card`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

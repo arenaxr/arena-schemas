@@ -1,9 +1,9 @@
 
-Program
-=======
+`program`
+=========
 
 
-Program
+This is the schema for Program, the properties of wire object type `program`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

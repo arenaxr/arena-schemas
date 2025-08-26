@@ -1,9 +1,11 @@
 
-Multi Source
-============
+`multisrc`
+==========
 
 
 Define multiple visual sources applied to an object. Requires `material` attribute.
+
+This is the schema for Multi Source, the properties of object `multisrc`.
 
 Multi Source Attributes
 ------------------------

@@ -89,6 +89,7 @@ def object_table(mdFile, md_title, obj, definitions={}):
                 write_md(
                     definitions[obj_name],
                     os.path.join(output_folder, f"{obj_name}.md"),
+                    obj_name,
                     overwrite=False,
                     wire_obj=False,
                 )
@@ -102,6 +103,7 @@ def object_table(mdFile, md_title, obj, definitions={}):
                 write_md(
                     obj["properties"][prop],
                     os.path.join(output_folder, f"{prop}.md"),
+                    prop,
                     overwrite=True,
                     wire_obj=False,
                 )
@@ -113,18 +115,24 @@ def object_table(mdFile, md_title, obj, definitions={}):
     )
 
 
-def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
+def write_md(json_obj, md_fn, object_name, overwrite=True, wire_obj=True):
     if not overwrite:
         if os.path.isfile(md_fn):
             return
     print("->", md_fn)
 
-    md_title = json_obj["title"]
-    mdFile = MdUtils(file_name=md_fn, title=md_title)
+    title = json_obj["title"]
+    mdFile = MdUtils(file_name=md_fn, title=f"`{object_name}`")
 
-    desc = md_title
+    # include which type/attribute this is for
+    if wire_obj:
+        schema_desc = f"This is the schema for {title}, the properties of wire object type `{object_name}`."
+    else:
+        schema_desc = f"This is the schema for {title}, the properties of object `{object_name}`."
+
+    desc = schema_desc
     if "description" in json_obj:
-        desc = json_obj["description"]
+        desc = f"{json_obj["description"]}\n\n{schema_desc}"
     mdFile.new_paragraph(desc)
 
     if wire_obj:
@@ -132,12 +140,12 @@ def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
             "All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes"
         )
 
-    mdFile.new_header(level=2, title=f"\n{md_title} Attributes", style="setext", add_table_of_contents="n")
+    mdFile.new_header(level=2, title=f"\n{title} Attributes", style="setext", add_table_of_contents="n")
 
-    object_table(mdFile, md_title, json_obj)
+    object_table(mdFile, title, json_obj)
 
     if "example" in json_obj:
-        mdFile.new_header(level=2, title=f"\n{md_title} Example", style="setext", add_table_of_contents="n")
+        mdFile.new_header(level=2, title=f"\n{title} Example", style="setext", add_table_of_contents="n")
         mdFile.insert_code(code=json.dumps(json_obj["example"], indent=4), language="json")
 
     if not "properties" in json_obj:
@@ -148,13 +156,13 @@ def write_md(json_obj, md_fn, overwrite=True, wire_obj=True):
         mdFile.create_md_file()
         return
 
-    mdFile.new_header(level=3, title=f"{md_title} Data Attributes", add_table_of_contents="n")
+    mdFile.new_header(level=3, title=f"{title} Data Attributes", add_table_of_contents="n")
 
     if "$ref" in json_obj["properties"]["data"]:
         obj_name = json_obj["properties"]["data"]["$ref"][len("#/definitions/") :]
-        object_table(mdFile, md_title, json_obj["definitions"][obj_name], json_obj["definitions"])
+        object_table(mdFile, title, json_obj["definitions"][obj_name], json_obj["definitions"])
     else:
-        object_table(mdFile, md_title, json_obj["properties"]["data"], json_obj["definitions"])
+        object_table(mdFile, title, json_obj["properties"]["data"], json_obj["definitions"])
 
     mdFile.create_md_file()
 
@@ -171,7 +179,7 @@ def main():
             md_filename = os.path.join(output_folder, f"{filename_noext}.md")
             with open(json_filename) as f:
                 json_obj = json.load(f)
-            write_md(json_obj, md_filename)
+            write_md(json_obj, md_filename, filename_noext.removeprefix("arena-"))
             continue
         else:
             continue

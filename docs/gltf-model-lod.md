@@ -1,9 +1,11 @@
 
-GLTF Model Level of Detail
-==========================
+`gltf-model-lod`
+================
 
 
 Simple switch between the default gltf-model and a detailed one when a user camera is within specified distance. Requires `object_type: gltf-model`.
+
+This is the schema for GLTF Model Level of Detail, the properties of object `gltf-model-lod`.
 
 GLTF Model Level of Detail Attributes
 --------------------------------------

@@ -1,9 +1,11 @@
 
-Pixel
-=====
+`pixel`
+=======
 
 
 Use Pixelation post-processing effect.
+
+This is the schema for Pixel, the properties of object `pixel`.
 
 Pixel Attributes
 -----------------

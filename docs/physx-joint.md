@@ -1,9 +1,11 @@
 
-PhysX Joint
-===========
+`physx-joint`
+=============
 
 
 Creates a PhysX joint between an ancestor rigid body and a target rigid body. Position and rotation of the entity will be used to create the corresponding joint. Requires `scene-options: physics`.
+
+This is the schema for PhysX Joint, the properties of object `physx-joint`.
 
 PhysX Joint Attributes
 -----------------------

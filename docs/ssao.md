@@ -1,9 +1,11 @@
 
-SSAO
-====
+`ssao`
+======
 
 
 Use screen space ambient occlusion (SSAO) post-processing effect.
+
+This is the schema for SSAO, the properties of object `ssao`.
 
 SSAO Attributes
 ----------------

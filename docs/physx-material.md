@@ -1,9 +1,11 @@
 
-PhysX Material
-==============
+`physx-material`
+================
 
 
 Controls physics properties for individual shapes or rigid bodies. Can be set on an entity with physx-body or on shapes contained within it. Requires `scene-options: physics`.
+
+This is the schema for PhysX Material, the properties of object `physx-material`.
 
 PhysX Material Attributes
 --------------------------

@@ -1,11 +1,13 @@
 
-Sound
-=====
+`sound`
+=======
 
 
 The sound component defines the entity as a source of sound or audio. The sound component can be positional and is thus affected by the component's position.
 
 More properties at <a href='https://aframe.io/docs/1.5.0/components/sound.html'>A-Frame Sound</a>.
+
+This is the schema for Sound, the properties of object `sound`.
 
 Sound Attributes
 -----------------

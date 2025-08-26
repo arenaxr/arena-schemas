@@ -1,9 +1,11 @@
 
-Goto Landmark
-=============
+`goto-landmark`
+===============
 
 
 Teleports user to the landmark with the given name. Requires `click-listener` attribute.
+
+This is the schema for Goto Landmark, the properties of object `goto-landmark`.
 
 Goto Landmark Attributes
 -------------------------

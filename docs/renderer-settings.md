@@ -1,9 +1,11 @@
 
-Renderer Settings
-=================
+`renderer-settings`
+===================
 
 
 These settings are fed into three.js WebGLRenderer properties.
+
+This is the schema for Renderer Settings, the properties of object `renderer-settings`.
 
 Renderer Settings Attributes
 -----------------------------

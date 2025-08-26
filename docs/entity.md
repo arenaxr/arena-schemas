@@ -1,9 +1,11 @@
 
-Entity (generic object)
-=======================
+`entity`
+========
 
 
 Entities are the base of all objects in the scene. Entities are containers into which components can be attached.
+
+This is the schema for Entity (generic object), the properties of wire object type `entity`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

@@ -1,9 +1,11 @@
 
-Event
-=====
+`event`
+=======
 
 
 Generate an event message for an object.
+
+This is the schema for Event, the properties of wire object type `event`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

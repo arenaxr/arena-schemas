@@ -1,9 +1,11 @@
 
-OpenVPS Settings
-================
+`openvps`
+=========
 
 
 Set an OpenVPS server to localize by camera image on mobile devices
+
+This is the schema for OpenVPS Settings, the properties of object `openvps`.
 
 OpenVPS Settings Attributes
 ----------------------------

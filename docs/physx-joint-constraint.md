@@ -1,9 +1,11 @@
 
-PhysX Joint Constraint
-======================
+`physx-joint-constraint`
+========================
 
 
 Adds a constraint to a physx-joint. Supported joints are D6, Revolute and Prismatic. Can only be used on an entity with the physx-joint component. Requires `scene-options: physics`.
+
+This is the schema for PhysX Joint Constraint, the properties of object `physx-joint-constraint`.
 
 PhysX Joint Constraint Attributes
 ----------------------------------

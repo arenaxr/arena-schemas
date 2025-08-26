@@ -1,9 +1,11 @@
 
-UI Panel
-========
+`panel`
+=======
 
 
 The rounded UI panel primitive.
+
+This is the schema for UI Panel, the properties of object `panel`.
 
 UI Panel Attributes
 --------------------

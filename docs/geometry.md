@@ -1,9 +1,11 @@
 
-Geometry
-========
+`geometry`
+==========
 
 
 The primitive mesh geometry.
+
+This is the schema for Geometry, the properties of object `geometry`.
 
 Geometry Attributes
 --------------------

@@ -1,9 +1,11 @@
 
-Post-Processing Effects
-=======================
+`post-processing`
+=================
 
 
 These effects are enabled in desktop and XR views.
+
+This is the schema for Post-Processing Effects, the properties of object `post-processing`.
 
 Post-Processing Effects Attributes
 -----------------------------------

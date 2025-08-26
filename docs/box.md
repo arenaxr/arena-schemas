@@ -1,9 +1,11 @@
 
-Box
-===
+`box`
+=====
 
 
 Box Geometry.
+
+This is the schema for Box, the properties of wire object type `box`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

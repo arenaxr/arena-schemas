@@ -1,11 +1,13 @@
 
-GLTF Morph
-==========
+`gltf-morph`
+============
 
 
 Allows you to target and control a gltf model's morphTargets created in Blender. Requires `object_type: gltf-model`.
 
 More properties at <a href='https://github.com/elbobo/aframe-gltf-morph-component'>A-Frame GLTF Morph</a> component.
+
+This is the schema for GLTF Morph, the properties of object `gltf-morph`.
 
 GLTF Morph Attributes
 ----------------------

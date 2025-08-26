@@ -1,9 +1,11 @@
 
-Glitch
-======
+`glitch`
+========
 
 
 Use Glitch post-processing effect.
+
+This is the schema for Glitch, the properties of object `glitch`.
 
 Glitch Attributes
 ------------------

@@ -1,9 +1,11 @@
 
-ARENAUI Prompt
-==============
+`arenaui-prompt`
+================
 
 
 ARENAUI element which displays prompt with button actions.
+
+This is the schema for ARENAUI Prompt, the properties of wire object type `arenaui-prompt`.
 
 All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
 

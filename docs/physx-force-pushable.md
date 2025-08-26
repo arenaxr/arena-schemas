@@ -1,9 +1,11 @@
 
-PhysX Pushable
-==============
+`physx-force-pushable`
+======================
 
 
 Makes a physx-body object pushable by the user. Requires `click-listener` attribute. Requires `scene-options: physics`.
+
+This is the schema for PhysX Pushable, the properties of object `physx-force-pushable`.
 
 PhysX Pushable Attributes
 --------------------------

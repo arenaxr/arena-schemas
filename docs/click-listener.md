@@ -1,9 +1,11 @@
 
-Click Listener
-==============
+`click-listener`
+================
 
 
 Object will listen for mouse events like clicks.
+
+This is the schema for Click Listener, the properties of object `click-listener`.
 
 Click Listener Attributes
 --------------------------
