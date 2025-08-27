@@ -3,7 +3,7 @@
 =========
 
 
-This is the schema for Vector23, the properties of object `vector2`.
+This is the schema for Vector2, the properties of object `vector2`.
 
 Vector2 Attributes
 -------------------
