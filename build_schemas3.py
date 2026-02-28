@@ -582,6 +582,21 @@ class DotnetGenerator:
              print("Warning: templates/cs_class3.j2 missing, skipping dotnet.")
              return
 
+        def wordify(txt):
+            import num2words
+            if txt.isnumeric(): return num2words.num2words(txt)
+            return txt
+
+        def enumcase(word):
+            if word and word[0:1].isdigit():
+                sub_words = re.split(r"(\d+)", word)
+                num2worded = "-".join(list(map(wordify, sub_words)))
+                return pascalcase(num2worded)
+            return pascalcase(word)
+
+        env.globals["enumcase"] = enumcase
+        env.globals["pascalcase"] = pascalcase
+
         def write_cs(obj: SchemaObject, wire_obj: bool):
             class_name = pascalcase(obj.name)
 
@@ -590,11 +605,16 @@ class DotnetGenerator:
             for p_name, p in obj.properties.items():
                 cs_type = cls.get_cs_type(p)
                 p_dict = {
-                     "cs_name": p_name,
+                     "name": p_name,
+                     "cs_name": pascalcase(p_name),
                      "cs_type": cs_type,
                      "description": p.description or f"The {p_name} property.",
                      "required": p.required,
-                     "default_formatted": cls.format_default(p, cs_type)
+                     "default_formatted": cls.format_default(p, cs_type),
+                     "default": p.default,
+                     "deprecated": p.deprecated,
+                     "enum": p.enum,
+                     "enum_name": f"{pascalcase(p_name)}Type" if p.enum else ""
                 }
                 cs_props.append(p_dict)
 

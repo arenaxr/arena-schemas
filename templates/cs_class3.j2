@@ -11,6 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using UnityEngine;
 using ArenaUnity.Schemas.Includes;
 
 namespace ArenaUnity.Schemas
@@ -21,11 +26,54 @@ namespace ArenaUnity.Schemas
     [Serializable]
     public class Arena{{ cs_class_name }}Json
     {
+{% if wire_obj %}
+        [JsonIgnore]
+        public readonly string componentName = "{{ obj.name }}";
+{% else %}
+        public readonly string object_type = "{{ obj.name }}";
+{% endif %}
+        // {{ obj.name }} member-fields
 {% for p in properties %}
-        /// <summary>
-        /// {{ p.description }}
-        /// </summary>
-        public {{ p.cs_type }} {{ p.cs_name }};{{ ' // Default: ' ~ p.default_formatted if p.default_formatted else '' }}{{ ' (Required)' if p.required else '' }}
+{% if p.enum and p.cs_type == 'string' %}
+        public enum {{ p.enum_name }}
+        {
+{% for enum in p.enum %}
+            [EnumMember(Value = "{{ enum }}")]
+            {{ enumcase(enum) }},
 {% endfor %}
+        }
+        private static {{ p.enum_name }} def{{ p.cs_name }} = {% if p.default is not none %}{{ p.enum_name }}.{{ enumcase(p.default) }}{% else %}0{% endif %};
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty(PropertyName = "{{ p.name }}")]
+        [{{ "Obsolete" if p.deprecated else "Tooltip" }}("{{ p.description | replace('\n', ' ') | replace('"', '\\"') }}")]
+        public {{ p.enum_name }} {{ p.cs_name }} {{ "{ get; protected set; }" if p.deprecated else "" }} = def{{ p.cs_name }};
+{% else %}
+        private static {{ p.cs_type }} def{{ p.cs_name }} = {% if p.default_formatted %}{{ p.default_formatted }}{% else %}null{% endif %};
+        [JsonProperty(PropertyName = "{{ p.name }}")]
+        [{{ "Obsolete" if p.deprecated else "Tooltip" }}("{{ p.description | replace('\n', ' ') | replace('"', '\\"') }}")]
+        public {{ p.cs_type }} {{ p.cs_name }} {{ "{ get; protected set; }" if p.deprecated else "" }} = def{{ p.cs_name }};
+{% endif %}
+        public bool ShouldSerialize{{ p.cs_name }}()
+        {
+{% if p.deprecated %}
+            return false; // deprecated in json schema
+{% elif p.required %}
+            return true; // required in json schema
+{% else %}
+            // {{ p.name }}
+            return ({{ p.cs_name }} != def{{ p.cs_name }});
+{% endif %}
+        }
+{% endfor %}
+        // General json object management
+        [OnError]
+        internal void OnError(StreamingContext context, ErrorContext errorContext)
+        {
+            Debug.LogWarning($"{errorContext.Error.Message}: {errorContext.OriginalObject}");
+            errorContext.Handled = true;
+        }
+
+        [JsonExtensionData]
+        private IDictionary<string, JToken> _additionalData;
     }
 }
