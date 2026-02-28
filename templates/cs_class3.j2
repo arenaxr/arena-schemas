@@ -27,10 +27,10 @@ namespace ArenaUnity.Schemas
     public class Arena{{ cs_class_name }}Json
     {
 {% if wire_obj %}
+        public readonly string object_type = "{{ obj.name }}";
+{% else %}
         [JsonIgnore]
         public readonly string componentName = "{{ obj.name }}";
-{% else %}
-        public readonly string object_type = "{{ obj.name }}";
 {% endif %}
         // {{ obj.name }} member-fields
 {% for p in properties %}
