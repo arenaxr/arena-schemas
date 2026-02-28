@@ -101,13 +101,19 @@ class SchemaLoader:
                         # Legacy compatibility: in original schemas, refs to #properties
                         # actually intend to merge the entire schema block (properties+required)
                         if path == ["properties"]:
-                            return self._resolve_refs(ext_schema, ext_file, ext_schema.get("definitions", {}))
+                            resolved = self._resolve_refs(ext_schema, ext_file, ext_schema.get("definitions", {}))
+                            if isinstance(resolved, dict): resolved["__orig_ref"] = parts[0].replace(".json", "").split("/")[-1]
+                            return resolved
 
                         curr = ext_schema
                         for p in path: curr = curr.get(p, {})
-                        return self._resolve_refs(curr, ext_file, ext_schema.get("definitions", {}))
+                        resolved = self._resolve_refs(curr, ext_file, ext_schema.get("definitions", {}))
+                        if isinstance(resolved, dict): resolved["__orig_ref"] = path[-1]
+                        return resolved
                     else:
-                        return self._resolve_refs(ext_schema, ext_file, ext_schema.get("definitions", {}))
+                        resolved = self._resolve_refs(ext_schema, ext_file, ext_schema.get("definitions", {}))
+                        if isinstance(resolved, dict): resolved["__orig_ref"] = parts[0].replace(".json", "").split("/")[-1]
+                        return resolved
 
                 # Internal map ref against local definitions
                 else:
@@ -115,7 +121,9 @@ class SchemaLoader:
                     if path[0] == "definitions" and path[1] in definitions:
                         # Copy the dict so we don't accidentally mutate definitions
                         resolved = dict(definitions[path[1]])
-                        return self._resolve_refs(resolved, base_file, definitions)
+                        resolved = self._resolve_refs(resolved, base_file, definitions)
+                        if isinstance(resolved, dict): resolved["__orig_ref"] = path[1]
+                        return resolved
 
             # standard traversal
             return {k: self._resolve_refs(v, base_file, definitions) for k, v in node.items()}
@@ -174,6 +182,21 @@ class SchemaLoader:
                         comp.description = prop_data.get("description", "")
                         self.components[prop_name] = comp
 
+            # 3. Explicitly extract external definitions as components
+            # (Matches legacy logic: definitions-common and definitions-geometry)
+            def_files = ["schemas/definitions-common.json", "schemas/definitions-geometry.json"]
+            for def_file in def_files:
+                def_schema = self.get_raw(def_file)
+                defs = def_schema.get("definitions", {})
+                for def_name, def_data in defs.items():
+                    if def_name not in self.components and (def_data.get("type") == "object" or "properties" in def_data):
+                        expanded_def = self._resolve_refs(def_data, def_file, defs)
+                        comp = self._create_schema_object(def_name, expanded_def)
+                        comp.is_component = True
+                        comp.title = expanded_def.get("title", def_name.title())
+                        comp.description = expanded_def.get("description", "")
+                        self.components[def_name] = comp
+
     def _create_schema_object(self, name: str, schema_dict: dict) -> SchemaObject:
         """Hydrates a SchemaObject dataclass from a processed schema dictionary."""
         obj = SchemaObject(name=name)
@@ -199,9 +222,11 @@ class SchemaLoader:
                 p_obj.array_item_type = items.get("type", "object")
 
             # Has a ref?
-            if p_data.get("$ref") or (t == "object" and "properties" in p_data):
+            orig_ref = p_data.get("__orig_ref")
+            if orig_ref or (t == "object" and "properties" in p_data):
                 p_obj.is_ref = True
-                p_obj.ref_name = pascalcase(p_data.get("$ref", f"#/{p_name}").split("/")[-1])
+                p_obj.ref_name = pascalcase(orig_ref if orig_ref else p_name)
+                # If we detected an orig_ref, ensure it overwrites the type name
                 p_obj.type_name = p_obj.ref_name # e.g. 'Vector3'
 
             obj.properties[p_name] = p_obj
