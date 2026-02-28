@@ -1,28 +1,20 @@
-
-`scene-options`
-===============
+# `arena-scene-options`
 
 
-This is the schema for Scene Config, the properties of wire object type `scene-options`.
 
-All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+This is the schema for Scene Config, the properties of wire object type `arena-scene-options`.
 
-Scene Config Attributes
-------------------------
+All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-|Attribute|Type|Default|Description|Required|
+## Scene Config Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**object_id**|string|```'scene-options'```|A uuid or otherwise unique identifier for this object.|Yes|
-|**persist**|boolean|```True```|Persist this object in the database.|Yes|
-|**type**|string; Must be: ```scene-options```|```'scene-options'```|ARENA scene options|Yes|
-|**action**|string; One of: ```['create', 'delete', 'update']```|```'create'```|Message action create, update, delete.|Yes|
-|**data**|Scene Config data||Scene Config Data|Yes|
+| **data** | Scene Config data | | Scene Config object data properties as defined below | Yes |
+| **env-presets** | [EnvPresets](EnvPresets) |  | A-Frame Environment presets.
 
-### Scene Config Data Attributes
+More properties at <a href='https://github.com/supermedium/aframe-environment-component'>A-Frame Environment Component</a>. | Yes |
+| **renderer-settings** | [RendererSettings](RendererSettings) |  | These settings are fed into three.js WebGLRenderer properties. | No |
+| **scene-options** | [SceneOptions](SceneOptions) |  | ARENA Scene Options. | Yes |
+| **post-processing** | [PostProcessing](PostProcessing) |  | These effects are enabled in desktop and XR views. | No |
 
-|Attribute|Type|Default|Description|Required|
-| :--- | :--- | :--- | :--- | :--- |
-|**env-presets**|[env-presets](env-presets)||A-Frame Environment presets.|Yes|
-|**renderer-settings**|[renderer-settings](renderer-settings)||These settings are fed into three.js WebGLRenderer properties.|No|
-|**scene-options**|[scene-options](scene-options)||ARENA Scene Options.|Yes|
-|**post-processing**|[post-processing](post-processing)||These effects are enabled in desktop and XR views.|No|

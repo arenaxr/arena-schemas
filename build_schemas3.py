@@ -35,6 +35,23 @@ class SchemaObject:
     description: str = ""
     properties: Dict[str, SchemaProperty] = field(default_factory=dict)
     is_component: bool = False # e.g. position, rotation vs box, light
+    inline_properties: set = field(default_factory=set)
+
+
+# We will create a fresh structure
+def extract_inline_keys(node: dict) -> set:
+    """Helper to find all inline property keys defined in the raw unexpanded schema data block."""
+    keys = set()
+    if isinstance(node, dict):
+        if "properties" in node and isinstance(node["properties"], dict):
+            keys.update(node["properties"].keys())
+        for k, v in node.items():
+            if k != "$ref":
+                keys.update(extract_inline_keys(v))
+    elif isinstance(node, list):
+        for item in node:
+            keys.update(extract_inline_keys(item))
+    return keys
 
 
 # ---------------------------------------------------------------------------
@@ -161,9 +178,13 @@ class SchemaLoader:
             obj_types = data_props.get("properties", {}).get("object_type", {}).get("enum", [])
 
             # Most things will have an enum array e.g. ["box"], we create an object for each
+            raw_data_props = raw_schema.get("properties", {}).get("data", {})
+            inline_props = extract_inline_keys(raw_data_props)
+
             for ot in (obj_types if obj_types else [base_name]):
                 obj = self._create_schema_object(ot, data_props)
                 obj.is_component = False
+                obj.inline_properties = inline_props
                 obj.title = expanded.get("title", f"{ot.title()} Data")
                 obj.description = expanded.get("description", "")
                 self.arena_objects[ot] = obj
@@ -183,14 +204,17 @@ class SchemaLoader:
                         self.components[prop_name] = comp
 
             # 3. Explicitly extract external definitions as components
-            # (Matches legacy logic: definitions-common and definitions-geometry)
-            def_files = ["schemas/definitions-common.json", "schemas/definitions-geometry.json"]
-            for def_file in def_files:
-                def_schema = self.get_raw(def_file)
+            # Loop through all files to grab any definitions (like vector3, env-presets, etc)
+            for fn, fn_schema in obj_schemas.items():
+                def_schema = self.get_raw(fn_schema["file"])
+                # Extract definitions from top-level and data-level
                 defs = def_schema.get("definitions", {})
+                if "properties" in def_schema and "data" in def_schema["properties"]:
+                    defs.update(def_schema["properties"]["data"].get("definitions", {}))
+
                 for def_name, def_data in defs.items():
                     if def_name not in self.components and (def_data.get("type") == "object" or "properties" in def_data):
-                        expanded_def = self._resolve_refs(def_data, def_file, defs)
+                        expanded_def = self._resolve_refs(def_data, fn_schema["file"], defs)
                         comp = self._create_schema_object(def_name, expanded_def)
                         comp.is_component = True
                         comp.title = expanded_def.get("title", def_name.title())
@@ -603,6 +627,11 @@ class DotnetGenerator:
             # Format properties specifically for C# rendering
             cs_props = []
             for p_name, p in obj.properties.items():
+                if wire_obj and p_name not in obj.inline_properties:
+                    continue
+                if p_name == "object_type":
+                    continue
+
                 cs_type = cls.get_cs_type(p)
                 p_dict = {
                      "name": p_name,
@@ -628,7 +657,7 @@ class DotnetGenerator:
             p_path = os.path.join(out_folder, f"Arena{class_name}Json.cs")
             print(f"-> {p_path}")
             with open(p_path, "w", encoding='utf-8') as f:
-                f.write(out)
+                f.write(f"{out.rstrip()}\n")
 
         for _, obj in loader.arena_objects.items(): write_cs(obj, wire_obj=True)
         for _, obj in loader.components.items(): write_cs(obj, wire_obj=False)

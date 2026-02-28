@@ -1,38 +1,5 @@
 {
-    "title": "Event",
-    "description": "Generate an event message for an object.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data"
-    ],
-    "definitions": {
-        "vector3": {
-            "title": "Vector3",
-            "format": "grid",
-            "properties": {
-                "x": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "y": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "z": {
-                    "default": 0,
-                    "type": "number"
-                }
-            },
-            "required": [
-                "x",
-                "y",
-                "z"
-            ],
-            "type": "object"
-        }
-    },
+    "format": "grid",
     "properties": {
         "object_id": {
             "description": "A uuid or otherwise unique identifier for this object.",
@@ -82,19 +49,54 @@
                     "type": "string"
                 },
                 "targetPosition": {
-                    "description": "The event destination position in 3D.",
+                    "title": "Vector3",
                     "format": "grid",
-                    "$ref": "#/definitions/vector3"
+                    "properties": {
+                        "x": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "y": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "z": {
+                            "default": 0,
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "x",
+                        "y",
+                        "z"
+                    ],
+                    "type": "object",
+                    "__orig_ref": "vector3"
                 },
                 "originPosition": {
-                    "description": "The event origination position in 3D.",
+                    "title": "Vector3",
                     "format": "grid",
-                    "$ref": "#/definitions/vector3",
-                    "default": {
-                        "x": 0,
-                        "y": 1.6,
-                        "z": 0
-                    }
+                    "properties": {
+                        "x": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "y": {
+                            "default": 0,
+                            "type": "number"
+                        },
+                        "z": {
+                            "default": 0,
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "x",
+                        "y",
+                        "z"
+                    ],
+                    "type": "object",
+                    "__orig_ref": "vector3"
                 },
                 "source": {
                     "title": "DEPRECATED (source)",
@@ -121,6 +123,41 @@
                 "target",
                 "targetPosition"
             ]
+        }
+    },
+    "__orig_ref": "definitions-arena-event",
+    "title": "Event",
+    "description": "Generate an event message for an object.",
+    "required": [
+        "object_id",
+        "action",
+        "type",
+        "data"
+    ],
+    "definitions": {
+        "vector3": {
+            "title": "Vector3",
+            "format": "grid",
+            "properties": {
+                "x": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "y": {
+                    "default": 0,
+                    "type": "number"
+                },
+                "z": {
+                    "default": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y",
+                "z"
+            ],
+            "type": "object"
         }
     }
 }
