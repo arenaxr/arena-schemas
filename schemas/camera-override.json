@@ -30,7 +30,7 @@
                     }
                 },
                 {
-                    "$ref": "./schemas/definitions-entity.json#/properties"
+                    "$ref": "./schemas/definitions-entity.json#properties"
                 }
             ],
             "required": [

@@ -1,22 +1,22 @@
 run: venv
-	$(VENV)/python main.py
+	$(VENV)/python build_schemas.py main
 
 update: venv
 	rm -f schemas/*.json
-	$(VENV)/python updateschemas.py $(src)
+	$(VENV)/python build_schemas.py update $(src)
 
 docs: venv
 	rm -f docs/*.md
-	$(VENV)/python createdoc.py
+	$(VENV)/python build_schemas.py doc
 
 jekyll: venv
-	$(VENV)/python createjekyll.py $(dst)
+	$(VENV)/python build_schemas.py jekyll $(dst)
 
 dotnet: venv
-	$(VENV)/python createdotnet.py $(src) $(dst)
+	$(VENV)/python build_schemas.py dotnet $(src) $(dst)
 
 py: venv
-	$(VENV)/python createpy.py $(src) $(dst)
+	$(VENV)/python build_schemas.py py $(src) $(dst)
 
 show-req: venv
 		$(VENV)/pip freeze

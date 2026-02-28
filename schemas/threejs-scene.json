@@ -311,17 +311,20 @@
             "properties": {
                 "x": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 }
             },
@@ -420,7 +423,11 @@
                 "loop": {
                     "default": 0,
                     "description": "How many times the animation should repeat. If the value is true, the animation will repeat infinitely.",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "integer",
+                        "boolean"
+                    ]
                 },
                 "pauseEvents": {
                     "default": [],
@@ -431,6 +438,7 @@
                     }
                 },
                 "property": {
+                    "default": "",
                     "description": "Property to animate. Can be a component name, a dot-delimited property of a component (e.g., material.color), or a plain attribute.",
                     "type": "string"
                 },
@@ -1500,7 +1508,7 @@
                 },
                 "activeMultiplier": {
                     "description": "Multiply the rate of particles emission, if larger than 1 then the particles will be emitted in bursts. note, very large numbers will emit all particles at once.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "affectedByFog": {
@@ -1510,7 +1518,7 @@
                 },
                 "alphaTest": {
                     "description": "Alpha values below the alphaTest threshold are considered invisible.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "angle": {
@@ -1600,22 +1608,22 @@
                 },
                 "drag": {
                     "description": "Apply resistance to moving the particle, 0 is no resistance, 1 is full resistance, particle will stop moving at half of it's maxAge.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "dragSpread": {
                     "description": "Spread to apply to the drag attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "duration": {
                     "description": "Duration of the emitter (seconds), if less than 0 then continuously emit particles.",
-                    "default": "-1",
+                    "default": -1,
                     "type": "number"
                 },
                 "emitterScale": {
                     "description": "Global scaling factor for all particles from the emitter.",
-                    "default": "100",
+                    "default": 100,
                     "type": "number"
                 },
                 "enableInEditor": {
@@ -1640,12 +1648,12 @@
                 },
                 "maxAge": {
                     "description": "Maximum age of a particle before reusing.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "maxAgeSpread": {
                     "description": "Variance for the 'maxAge' attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "opacity": {
@@ -1672,7 +1680,7 @@
                 },
                 "particleCount": {
                     "description": "Maximum number of particles for this emitter.",
-                    "default": "100",
+                    "default": 100,
                     "type": "integer"
                 },
                 "positionDistribution": {
@@ -1708,7 +1716,7 @@
                 },
                 "radius": {
                     "description": "Radius of the disc or sphere emitter (ignored for box). note radius of 0 will prevent velocity and acceleration if they use a sphere or disc distribution.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "radiusScale": {
@@ -1777,7 +1785,7 @@
                 },
                 "rotation": {
                     "description": "Rotation in degrees.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "rotationAxis": {
@@ -1802,7 +1810,7 @@
                 },
                 "rotationSpread": {
                     "description": "Rotation variance in degrees.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "rotationStatic": {
@@ -1840,12 +1848,12 @@
                 },
                 "textureFrameCount": {
                     "description": "Number of frames in the spritesheet, negative numbers default to textureFrames.x * textureFrames.y.",
-                    "default": "-1",
+                    "default": -1,
                     "type": "integer"
                 },
                 "textureFrameLoop": {
                     "description": "Number of times the spritesheet should be looped over the lifetime of a particle.",
-                    "default": "1",
+                    "default": 1,
                     "type": "integer"
                 },
                 "textureFrames": {
@@ -1895,12 +1903,12 @@
                 },
                 "wiggle": {
                     "description": "Extra distance the particle moves over its lifetime.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "wiggleSpread": {
                     "description": "+- spread for the wiggle attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 }
             },

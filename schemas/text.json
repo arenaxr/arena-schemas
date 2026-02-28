@@ -131,22 +131,10 @@
                         "sourcecodepro"
                     ]
                 },
-                "fontImage": {
-                    "description": "Font image texture path to render text. Defaults to the font's name with extension replaced to .png. Don't need to specify if using a stock font. (derived from font name).",
-                    "type": "string"
-                },
-                "height": {
-                    "description": "Height of text block. (derived from text size).",
-                    "type": "number"
-                },
                 "letterSpacing": {
                     "description": "Letter spacing in pixels.",
                     "type": "number",
                     "default": 0
-                },
-                "lineHeight": {
-                    "description": "Line height in pixels. (derived from font file).",
-                    "type": "number"
                 },
                 "opacity": {
                     "description": "Opacity, on a scale from 0 to 1, where 0 means fully transparent and 1 means fully opaque.",
@@ -211,19 +199,10 @@
                         "nowrap"
                     ]
                 },
-                "width": {
-                    "description": "Width in meters. (derived from geometry if exists).",
-                    "type": "number",
-                    "default": 5
-                },
                 "wrapCount": {
                     "description": "Number of characters before wrapping text (more or less).",
                     "type": "number",
                     "default": 40
-                },
-                "wrapPixels": {
-                    "description": "Number of pixels before wrapping text. (derived from wrapCount).",
-                    "type": "number"
                 },
                 "xOffset": {
                     "description": "X-offset to apply to add padding.",
@@ -328,17 +307,20 @@
             "properties": {
                 "x": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 }
             },

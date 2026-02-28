@@ -377,17 +377,20 @@
             "properties": {
                 "x": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "y": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 },
                 "z": {
                     "default": 1,
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
                     "type": "number"
                 }
             },
@@ -486,7 +489,11 @@
                 "loop": {
                     "default": 0,
                     "description": "How many times the animation should repeat. If the value is true, the animation will repeat infinitely.",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "integer",
+                        "boolean"
+                    ]
                 },
                 "pauseEvents": {
                     "default": [],
@@ -497,6 +504,7 @@
                     }
                 },
                 "property": {
+                    "default": "",
                     "description": "Property to animate. Can be a component name, a dot-delimited property of a component (e.g., material.color), or a plain attribute.",
                     "type": "string"
                 },
@@ -1566,7 +1574,7 @@
                 },
                 "activeMultiplier": {
                     "description": "Multiply the rate of particles emission, if larger than 1 then the particles will be emitted in bursts. note, very large numbers will emit all particles at once.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "affectedByFog": {
@@ -1576,7 +1584,7 @@
                 },
                 "alphaTest": {
                     "description": "Alpha values below the alphaTest threshold are considered invisible.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "angle": {
@@ -1666,22 +1674,22 @@
                 },
                 "drag": {
                     "description": "Apply resistance to moving the particle, 0 is no resistance, 1 is full resistance, particle will stop moving at half of it's maxAge.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "dragSpread": {
                     "description": "Spread to apply to the drag attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "duration": {
                     "description": "Duration of the emitter (seconds), if less than 0 then continuously emit particles.",
-                    "default": "-1",
+                    "default": -1,
                     "type": "number"
                 },
                 "emitterScale": {
                     "description": "Global scaling factor for all particles from the emitter.",
-                    "default": "100",
+                    "default": 100,
                     "type": "number"
                 },
                 "enableInEditor": {
@@ -1706,12 +1714,12 @@
                 },
                 "maxAge": {
                     "description": "Maximum age of a particle before reusing.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "maxAgeSpread": {
                     "description": "Variance for the 'maxAge' attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "opacity": {
@@ -1738,7 +1746,7 @@
                 },
                 "particleCount": {
                     "description": "Maximum number of particles for this emitter.",
-                    "default": "100",
+                    "default": 100,
                     "type": "integer"
                 },
                 "positionDistribution": {
@@ -1774,7 +1782,7 @@
                 },
                 "radius": {
                     "description": "Radius of the disc or sphere emitter (ignored for box). note radius of 0 will prevent velocity and acceleration if they use a sphere or disc distribution.",
-                    "default": "1",
+                    "default": 1,
                     "type": "number"
                 },
                 "radiusScale": {
@@ -1843,7 +1851,7 @@
                 },
                 "rotation": {
                     "description": "Rotation in degrees.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "rotationAxis": {
@@ -1868,7 +1876,7 @@
                 },
                 "rotationSpread": {
                     "description": "Rotation variance in degrees.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "rotationStatic": {
@@ -1906,12 +1914,12 @@
                 },
                 "textureFrameCount": {
                     "description": "Number of frames in the spritesheet, negative numbers default to textureFrames.x * textureFrames.y.",
-                    "default": "-1",
+                    "default": -1,
                     "type": "integer"
                 },
                 "textureFrameLoop": {
                     "description": "Number of times the spritesheet should be looped over the lifetime of a particle.",
-                    "default": "1",
+                    "default": 1,
                     "type": "integer"
                 },
                 "textureFrames": {
@@ -1961,12 +1969,12 @@
                 },
                 "wiggle": {
                     "description": "Extra distance the particle moves over its lifetime.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 },
                 "wiggleSpread": {
                     "description": "+- spread for the wiggle attribute.",
-                    "default": "0",
+                    "default": 0,
                     "type": "number"
                 }
             },
@@ -1993,7 +2001,7 @@
             ]
         },
         "material": {
-            "description": "The material properties of the object's surface.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/material.html'>A-Frame Material</a>.",
+            "description": "The material properties of the object's surface.\n\nMore properties at <a href='https://aframe.io/docs/1.7.0/components/material.html'>A-Frame Material</a>.",
             "properties": {
                 "alphaTest": {
                     "default": 0,
@@ -2001,6 +2009,34 @@
                     "maximum": 1,
                     "description": "Alpha test threshold for transparency.",
                     "type": "number"
+                },
+                "ambientOcclusionMap": {
+                    "description": "Ambient occlusion map. Requires `shader: standard` or `phong`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "ambientOcclusionMapIntensity": {
+                    "default": 1,
+                    "description": "Intensity of the ambient occlusion map. Requires `shader: standard` or `phong`.",
+                    "type": "number"
+                },
+                "ambientOcclusionTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the ambient occlusion map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "ambientOcclusionTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the ambient occlusion map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "anisotropy": {
                     "default": 0,
@@ -2019,6 +2055,34 @@
                         "multiply"
                     ],
                     "type": "string"
+                },
+                "bumpMap": {
+                    "description": "Bump map. Used to add the illusion of surface detail without geometry. Requires `shader: phong`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "bumpMapScale": {
+                    "default": 1,
+                    "description": "Scale of the bump map effect. Requires `shader: phong`.",
+                    "type": "number"
+                },
+                "bumpTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the bump map. Requires `shader: phong`.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "bumpTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the bump map. Requires `shader: phong`.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "color": {
                     "default": "#ffffff",
@@ -2046,6 +2110,39 @@
                     "description": "Render when depth test succeeds.",
                     "type": "boolean"
                 },
+                "displacementBias": {
+                    "default": 0.5,
+                    "description": "The zero point of the displacement map. Requires `shader: standard` or `phong`.",
+                    "type": "number"
+                },
+                "displacementMap": {
+                    "description": "Displacement map. Distorts a simpler model at a high resolution. Requires `shader: standard` or `phong`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "displacementScale": {
+                    "default": 1,
+                    "description": "Scale of the displacement map effect. Requires `shader: standard` or `phong`.",
+                    "type": "number"
+                },
+                "displacementTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the displacement map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "displacementTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the displacement map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
                 "dithering": {
                     "default": true,
                     "description": "Whether material is dithered with noise. Removes banding from gradients like ones produced by lighting.",
@@ -2062,6 +2159,11 @@
                     "description": "Intensity of the emissive lighting component. Requires `shader: standard` or `phong`.",
                     "type": "number"
                 },
+                "envMap": {
+                    "default": "",
+                    "description": "Environment cubemap texture for reflections. Can be a selector or comma-separated list of URLs. Requires `shader: standard` or `phong`.",
+                    "type": "string"
+                },
                 "flatShading": {
                     "default": false,
                     "description": "Use THREE.FlatShading rather than THREE.StandardShading.",
@@ -2072,17 +2174,67 @@
                     "description": "Whether or not material is affected by fog.",
                     "type": "boolean"
                 },
-                "height": {
-                    "default": 256,
-                    "description": "Height of video (in pixels), if defining a video texture. Requires `shader: standard` or `flat`.",
-                    "type": "integer"
-                },
                 "metalness": {
                     "default": 0,
                     "minimum": 0,
                     "maximum": 1,
                     "description": "How metallic the material is from 0 to 1. Requires `shader: standard`.",
                     "type": "number"
+                },
+                "metalnessMap": {
+                    "description": "Metalness map. Requires `shader: standard`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "metalnessTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the metalness map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "metalnessTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the metalness map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "normalMap": {
+                    "description": "Normal map. Defines the angle of the surface at each point. Requires `shader: standard` or `phong`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "normalScale": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Scale of the effect of the normal map in the X and Y directions.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "normalTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the normal map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "normalTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the normal map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "npot": {
                     "default": false,
@@ -2129,11 +2281,34 @@
                     "format": "grid"
                 },
                 "roughness": {
-                    "default": 0,
+                    "default": 0.5,
                     "minimum": 0,
                     "maximum": 1,
                     "description": "How rough the material is from 0 to 1. A rougher material will scatter reflected light in more directions than a smooth material. Requires `shader: standard`.",
                     "type": "number"
+                },
+                "roughnessMap": {
+                    "description": "Roughness map. Requires `shader: standard`.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "roughnessTextureOffset": {
+                    "default": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "description": "Texture offset for the roughness map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
+                },
+                "roughnessTextureRepeat": {
+                    "default": {
+                        "x": 1,
+                        "y": 1
+                    },
+                    "description": "Texture repeat for the roughness map.",
+                    "$ref": "#/definitions/vector2",
+                    "format": "grid"
                 },
                 "shader": {
                     "default": "standard",
@@ -2166,6 +2341,11 @@
                     "format": "color",
                     "type": "string"
                 },
+                "sphericalEnvMap": {
+                    "description": "Environment spherical texture for reflections. Requires `shader: standard` or `phong`.",
+                    "format": "uri",
+                    "type": "string"
+                },
                 "src": {
                     "description": "URI, relative or full path of an image/video file. e.g. 'store/users/wiselab/images/360falls.mp4'.",
                     "format": "uri",
@@ -2190,11 +2370,6 @@
                     "default": true,
                     "description": "Whether material is visible. Raycasters will ignore invisible materials.",
                     "type": "boolean"
-                },
-                "width": {
-                    "default": 512,
-                    "description": "Width of video (in pixels), if defining a video texture. Requires `shader: standard` or `flat`.",
-                    "type": "integer"
                 },
                 "wireframe": {
                     "default": false,
