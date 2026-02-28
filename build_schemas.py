@@ -133,9 +133,11 @@ def cmd_update(args):
 # ---------------------------------------------------------------------------
 
 def cmd_main(args):
-    arena_objects_schema_path = "schemas/input/arena-obj3d.json"
-    obj_schema_path = "schemas/input/arena-schema-files.json"
+    input_folder = args.src
     output_folder = "schemas/"
+
+    arena_objects_schema_path = os.path.join(input_folder, "arena-obj3d.json")
+    obj_schema_path = os.path.join(input_folder, "arena-schema-files.json")
 
     with open(arena_objects_schema_path) as f:
         schema = json.load(f)
@@ -844,6 +846,8 @@ def generate_intermediate_json_cs(list_fns, input_folder, output_folder):
             if "type" in obj_attr_schema[prop] and obj_attr_schema[prop]["type"] in ObjTypeDesc:
                 write_cs_class(obj_attr_schema[prop], prop, "attributes", output_folder, obj_classes)
 
+
+
         data_schema = {}
         data_schema["description"] = "Wraps all attributes in JSON."
         data_schema["properties"] = obj_attr_schema
@@ -880,6 +884,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="commands", required=True)
 
     parser_main = subparsers.add_parser("main", help="Run main schema builder logic")
+    parser_main.add_argument("src", help="Source folder of schemas (e.g. from arena-web-core/build/schemas)")
     parser_main.set_defaults(func=cmd_main)
 
     parser_update = subparsers.add_parser("update", help="Update intermediate schemas")

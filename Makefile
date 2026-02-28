@@ -1,5 +1,5 @@
 run: venv
-	$(VENV)/python build_schemas.py main
+	$(VENV)/python build_schemas.py main $(src)
 
 update: venv
 	rm -f schemas/*.json
