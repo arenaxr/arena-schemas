@@ -24,9 +24,9 @@ This is the schema for Scene Options, the properties of object `scene-options`.
 | **videoDistanceConstraints** | boolean | `True` | If false, will disable video distance constraints (video resolution decreases with distance from users in view). | No |
 | **videoDefaultResolutionConstraint** | number | `180` | Sets the default max resolution for all users. Ignored when videoDistanceConstraints = true. | No |
 | **volume** | number | `1` | Volume for users in a scene. | No |
-| **physics** | [Physics](Physics) |  | Clientside PhysX-based physics system. Required for all physx-* components | Yes |
-| **ar-hit-test** | [ArHitTest](ArHitTest) |  | A-Frame AR Hit Test Settings.
+| **physics** | [Physics](physics) |  | Clientside PhysX-based physics system. Required for all physx-* components | Yes |
+| **ar-hit-test** | [ArHitTest](ar-hit-test) |  | A-Frame AR Hit Test Settings.
 
 More properties at <a href='https://aframe.io/docs/1.5.0/components/ar-hit-test.html'>AR Hit Test</a> component. | No |
-| **openvps** | [Openvps](Openvps) |  | Set an OpenVPS server to localize by camera image on mobile devices | No |
+| **openvps** | [Openvps](openvps) |  | Set an OpenVPS server to localize by camera image on mobile devices | No |
 

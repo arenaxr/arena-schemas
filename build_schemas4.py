@@ -23,7 +23,8 @@ class SchemaProperty:
     is_array: bool = False
     array_item_type: str = ""
     is_ref: bool = False      # Is it strictly a referenced object?
-    ref_name: str = ""        # e.g., Vector3
+    ref_name: str = ""        # e.g., Vector3 (display name)
+    ref_link: str = ""        # e.g., vector3 (filename for .md links)
     deprecated: bool = False
     enum: List[str] = field(default_factory=list)
 
@@ -310,6 +311,7 @@ class SchemaLoader:
             if orig_ref or (t == "object" and "properties" in p_data):
                 p_obj.is_ref = True
                 p_obj.ref_name = pascalcase(orig_ref if orig_ref else p_name)
+                p_obj.ref_link = orig_ref if orig_ref else p_name
                 # If we detected an orig_ref, ensure it overwrites the type name
                 p_obj.type_name = p_obj.ref_name # e.g. 'Vector3'
 
@@ -354,11 +356,11 @@ class MarkdownGenerator:
             dft_str = cls.format_value(p) if p.default is not None else ""
 
             if p.is_ref:
-                type_str = f"[{p.ref_name}]({p.ref_name})"
+                type_str = f"[{p.ref_name}]({p.ref_link})"
 
             if p.is_array:
                 if p.is_ref:
-                    type_str = f"[{p.ref_name}]({p.ref_name})[]"
+                    type_str = f"[{p.ref_name}]({p.ref_link})[]"
                 else:
                     type_str = f"{p.array_item_type}[]"
 

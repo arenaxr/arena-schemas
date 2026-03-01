@@ -13,8 +13,8 @@ This is the schema for PhysX Joint Driver, the properties of object `physx-joint
 | **damping** | number | `1` | Damping to apply to the drive. | No |
 | **forceLimit** | number | `3.4028234663852886e+38` | Maximum amount of force used to get to the target position. | No |
 | **useAcceleration** | boolean | `True` | If true, will operate directly on body acceleration rather than on force. | No |
-| **linearVelocity** | [Vector3](Vector3) |  | Vector3 | No |
-| **angularVelocity** | [Vector3](Vector3) |  | Vector3 | No |
+| **linearVelocity** | [Vector3](vector3) |  | Vector3 | No |
+| **angularVelocity** | [Vector3](vector3) |  | Vector3 | No |
 | **lockOtherAxes** | boolean | `False` | If true, will automatically lock axes which are not being driven. | No |
 | **slerpRotation** | boolean | `True` | If true, uses SLERP rotation mode. If false, will use SWING mode. | No |
 

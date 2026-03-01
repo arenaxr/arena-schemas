@@ -8,11 +8,11 @@ This is the schema for Post-Processing Effects, the properties of object `post-p
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **bloom** | [Bloom](Bloom) |  | Use bloom post-processing effect. | No |
-| **sao** | [Sao](Sao) |  | Use scalable ambient occlusion (SAO) post-processing effect. | No |
-| **ssao** | [Ssao](Ssao) |  | Use screen space ambient occlusion (SSAO) post-processing effect. | No |
-| **pixel** | [Pixel](Pixel) |  | Use Pixelation post-processing effect. | No |
-| **glitch** | [Glitch](Glitch) |  | Use Glitch post-processing effect. | No |
-| **fxaa** | [Fxaa](Fxaa) |  | Use FXAA post-processing effect. You may want to place this last in effects list. | No |
-| **smaa** | [Smaa](Smaa) |  | Use SMAA post-processing effect. You may want to place this last in effects list. | No |
+| **bloom** | [Bloom](bloom) |  | Use bloom post-processing effect. | No |
+| **sao** | [Sao](sao) |  | Use scalable ambient occlusion (SAO) post-processing effect. | No |
+| **ssao** | [Ssao](ssao) |  | Use screen space ambient occlusion (SSAO) post-processing effect. | No |
+| **pixel** | [Pixel](pixel) |  | Use Pixelation post-processing effect. | No |
+| **glitch** | [Glitch](glitch) |  | Use Glitch post-processing effect. | No |
+| **fxaa** | [Fxaa](fxaa) |  | Use FXAA post-processing effect. You may want to place this last in effects list. | No |
+| **smaa** | [Smaa](smaa) |  | Use SMAA post-processing effect. You may want to place this last in effects list. | No |
 

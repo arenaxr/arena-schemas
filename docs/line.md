@@ -12,12 +12,12 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | :--- | :--- | :--- | :--- | :--- |
 | **data** | Line data | | Line object data properties as defined below | Yes |
 | **color** | string | `'#74BEC1'` | Line color. | Yes |
-| **end** | [Vector3](Vector3) |  | Vector3 | Yes |
+| **end** | [Vector3](vector3) |  | Vector3 | Yes |
 | **opacity** | number | `1` | Line opacity. | No |
-| **start** | [Vector3](Vector3) |  | Vector3 | Yes |
+| **start** | [Vector3](vector3) |  | Vector3 | Yes |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
-| **position** | [Position](Position) |  | 3D object position. | No |
-| **rotation** | [Rotation](Rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | No |
-| **scale** | [Scale](Scale) |  | 3D object scale. | No |
+| **position** | [Position](position) |  | 3D object position. | No |
+| **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | No |
+| **scale** | [Scale](scale) |  | 3D object scale. | No |
 

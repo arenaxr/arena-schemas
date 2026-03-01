@@ -16,8 +16,8 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **lineWidthStyler** | string; One of: `['default', 'grow', 'shrink', 'center-sharp', 'center-smooth', 'sine-wave']` | `'default'` | Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. You may also choose one of the preset functions. | Yes |
 | **path** | string | `'-2 -1 0, 0 20 0, 10 -1 10'` | Comma-separated list of x y z coordinates of the line vertices. | Yes |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
-| **position** | [Position](Position) |  | 3D object position. | No |
-| **rotation** | [Rotation](Rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | No |
-| **scale** | [Scale](Scale) |  | 3D object scale. | No |
+| **position** | [Position](position) |  | 3D object position. | No |
+| **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | No |
+| **scale** | [Scale](scale) |  | 3D object scale. | No |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
 

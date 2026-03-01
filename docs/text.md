@@ -32,8 +32,8 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **xOffset** | number | `0` | X-offset to apply to add padding. | No |
 | **zOffset** | number | `0.001` | Z-offset to apply to avoid Z-fighting if using with a geometry as a background. | No |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
-| **position** | [Position](Position) |  | 3D object position. | Yes |
-| **rotation** | [Rotation](Rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |
-| **scale** | [Scale](Scale) |  | 3D object scale. | No |
+| **position** | [Position](position) |  | 3D object position. | Yes |
+| **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |
+| **scale** | [Scale](scale) |  | 3D object scale. | No |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
 

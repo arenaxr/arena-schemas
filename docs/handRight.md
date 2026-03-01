@@ -14,8 +14,8 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **url** | string | `'static/models/hands/valve_index_left.gltf'` | Path to user avatar hand model. | Yes |
 | **dep** | string | `''` | Camera object_id this hand belongs to. | Yes |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
-| **position** | [Position](Position) |  | 3D object position. | Yes |
-| **rotation** | [Rotation](Rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |
-| **scale** | [Scale](Scale) |  | 3D object scale. | No |
+| **position** | [Position](position) |  | 3D object position. | Yes |
+| **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |
+| **scale** | [Scale](scale) |  | 3D object scale. | No |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
 
