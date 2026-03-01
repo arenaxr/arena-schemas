@@ -305,6 +305,12 @@ class SchemaLoader:
                 p_obj.is_array = True
                 items = p_data.get("items", {})
                 p_obj.array_item_type = items.get("type", "object")
+                # Check if array items are a referenced object
+                items_ref = items.get("__orig_ref")
+                if items_ref or (items.get("type") == "object" and "properties" in items):
+                    p_obj.is_ref = True
+                    p_obj.ref_name = pascalcase(items_ref if items_ref else p_name)
+                    p_obj.ref_link = items_ref if items_ref else p_name
 
             # Has a ref?
             orig_ref = p_data.get("__orig_ref")

@@ -11,7 +11,7 @@ This is the schema for Scene Options, the properties of object `scene-options`.
 | **originMarker** | boolean | `True` | Include a default 15cm x 15cm AprilTag marker 0 at the origin of the scene. | Yes |
 | **clickableOnlyEvents** | boolean | `True` | True = publish only mouse events for objects with click-listeners; False = all objects publish mouse events. | No |
 | **distanceModel** | string; One of: `['exponential', 'inverse', 'linear']` | `'inverse'` | Algorithm to use to reduce the volume of the audio source as it moves away from the listener. | No |
-| **sceneHeadModels** | object[] | `[]` | Define the default head model(s) for the scene in a list. Users may still choose from the ARENA default list of head models as well. | No |
+| **sceneHeadModels** | [SceneHeadModels](sceneHeadModels)[] | `[]` | Define the default head model(s) for the scene in a list. Users may still choose from the ARENA default list of head models as well. | No |
 | **jitsiHost** | string | `'jitsi0.andrew.cmu.edu:8443'` | Jitsi host used for this scene. | No |
 | **maxAVDist** | number | `20` | Maximum distance between cameras/users until audio and video are cut off. For saving bandwidth on scenes with large amounts of user activity at once. | Yes |
 | **navMesh** | string | `''` | Navigation Mesh URL. | No |

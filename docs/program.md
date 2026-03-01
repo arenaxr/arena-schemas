@@ -18,6 +18,6 @@ This is the schema for Program Data, the properties of object `program`.
 | **parent** | string; Must be: `arena-rt1` | `arena-rt1` | Request the orchestrator to deploy to this runtime (can be a runtime name or UUID); Temporarily must be arena-rt1. | Yes |
 | **args** | string[] |  | Command-line arguments (passed in argv). Supports variables: ${scene}, ${mqtth}, ${userid}, ${username}, ${runtimeid}, ${moduleid}, ${query-string-key}. | No |
 | **env** | string[] | `['MID=${moduleid}', 'SCENE=${scene}', 'NAMESPACE=${namespace}', 'MQTTH=${mqtth}', 'REALM=realm']` | Environment variables. Supports variables: ${scene}, ${namespace}, ${mqtth}, ${userid}, ${username}, ${runtimeid}, ${moduleid}, ${query-string-key}. | Yes |
-| **channels** | object[] | `[{'path': '/ch/${scene}', 'type': 'pubsub', 'mode': 'rw', 'params': {'topic': 'realm/s/${scene}/${namespace}'}}]` | Channels describe files representing access to IO from pubsub and client sockets (possibly more in the future; currently only supported for WASM programs). | No |
+| **channels** | [Channels](channels)[] | `[{'path': '/ch/${scene}', 'type': 'pubsub', 'mode': 'rw', 'params': {'topic': 'realm/s/${scene}/${namespace}'}}]` | Channels describe files representing access to IO from pubsub and client sockets (possibly more in the future; currently only supported for WASM programs). | No |
 | **run_info** | [RunInfo](run_info) |  | Program execution info, added at runtime. | No |
 

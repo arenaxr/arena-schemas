@@ -11,7 +11,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
 | **data** | ARENAUI Button Panel data | | ARENAUI Button Panel object data properties as defined below | Yes |
-| **buttons** | object[] | `[{'name': 'Option 1'}, {'name': 'Option 2'}]` | Buttons | Yes |
+| **buttons** | [Buttons](buttons)[] | `[{'name': 'Option 1'}, {'name': 'Option 2'}]` | Buttons | Yes |
 | **title** | string | `''` | Title to display above buttons (optional). | Yes |
 | **vertical** | boolean | `False` | Vertical button layout | Yes |
 | **font** | string; One of: `['Roboto', 'Roboto-Mono']` | `'Roboto'` | Font to use for button text. | No |

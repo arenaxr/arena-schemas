@@ -20,7 +20,7 @@ This is the schema for SPE Particles, the properties of object `spe-particles`.
 | **angleSpread** | number[] | `[0]` | Spread in angle over the particle's lifetime, max 4 elements. | No |
 | **blending** | string; One of: `['no', 'normal', 'additive', 'subtractive', 'multiply', 'custom']` | `'normal'` | Blending mode, when drawing particles. | No |
 | **color** | string[] | `['#fff']` | Array of colors over the particle's lifetime, max 4 elements. | No |
-| **colorSpread** | object[] | `[]` | Spread to apply to colors, spread an array of vec3 (r g b) with 0 for no spread. note the spread will be re-applied through-out the lifetime of the particle. | No |
+| **colorSpread** | [Vector3](vector3)[] | `[]` | Spread to apply to colors, spread an array of vec3 (r g b) with 0 for no spread. note the spread will be re-applied through-out the lifetime of the particle. | No |
 | **depthTest** | boolean | `True` | If true, don't render a particle's pixels if something is closer in the depth buffer. | No |
 | **depthWrite** | boolean | `False` | If true, particles write their depth into the depth buffer. this should be false if we use transparent particles. | No |
 | **direction** | string; One of: `['forward', 'backward']` | `'forward'` | Make the emitter operate forward or backward in time. | No |
