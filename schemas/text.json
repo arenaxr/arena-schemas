@@ -1,329 +1,157 @@
 {
-    "format": "grid",
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object.",
-            "minLength": 3,
-            "type": "string"
-        },
-        "persist": {
-            "default": true,
-            "description": "Persist this object in the database.",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the message types.",
-            "enum": [
-                "object"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "create",
-            "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
-            "type": "string"
-        },
-        "ttl": {
-            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
-            "type": "number"
-        },
-        "private": {
-            "description": "If true, interactions with this object should not be broadcasted to other clients, but rather sent on private topics",
-            "type": "boolean",
-            "default": false
-        },
-        "program_id": {
-            "description": "The program_id on private program topics that interactions to be directed to, if the private flag is set true. Ignored if private flag is false.",
-            "type": "string"
-        },
-        "data": {
-            "properties": {
-                "object_type": {
-                    "type": "string",
-                    "title": "3D object type",
-                    "description": "3D object type.",
-                    "enum": [
-                        "text"
-                    ]
-                },
-                "align": {
-                    "type": "string",
-                    "description": "Multi-line text alignment.",
-                    "default": "left",
-                    "enum": [
-                        "left",
-                        "center",
-                        "right"
-                    ]
-                },
-                "alphaTest": {
-                    "description": "Discard text pixels if alpha is less than this value.",
-                    "default": 0.5,
-                    "type": "number"
-                },
-                "anchor": {
-                    "type": "string",
-                    "description": "Horizontal positioning.",
-                    "default": "center",
-                    "enum": [
-                        "left",
-                        "right",
-                        "center",
-                        "align"
-                    ]
-                },
-                "baseline": {
-                    "type": "string",
-                    "description": "Vertical positioning.",
-                    "default": "center",
-                    "enum": [
-                        "top",
-                        "center",
-                        "bottom"
-                    ]
-                },
-                "color": {
-                    "description": "Text color.",
-                    "default": "#000000",
-                    "format": "color",
-                    "type": "string"
-                },
-                "font": {
-                    "description": "Font to render text, either the name of one of A-Frame's stock fonts or a URL to a font file.",
-                    "type": "string",
-                    "default": "roboto",
-                    "enum": [
-                        "aileronsemibold",
-                        "dejavu",
-                        "exo2bold",
-                        "exo2semibold",
-                        "kelsonsans",
-                        "monoid",
-                        "mozillavr",
-                        "roboto",
-                        "sourcecodepro"
-                    ]
-                },
-                "letterSpacing": {
-                    "description": "Letter spacing in pixels.",
-                    "type": "number",
-                    "default": 0
-                },
-                "opacity": {
-                    "description": "Opacity, on a scale from 0 to 1, where 0 means fully transparent and 1 means fully opaque.",
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 1,
-                    "default": 1
-                },
-                "shader": {
-                    "type": "string",
-                    "description": "Shader used to render text.",
-                    "default": "sdf",
-                    "enum": [
-                        "portal",
-                        "flat",
-                        "standard",
-                        "sdf",
-                        "msdf",
-                        "ios10hls",
-                        "skyshader",
-                        "gradientshader"
-                    ]
-                },
-                "side": {
-                    "type": "string",
-                    "description": "Side to render.",
-                    "default": "double",
-                    "enum": [
-                        "front",
-                        "back",
-                        "double"
-                    ]
-                },
-                "tabSize": {
-                    "description": "Tab size in spaces.",
-                    "type": "number",
-                    "default": 4
-                },
-                "text": {
-                    "title": "DEPRECATED (text)",
-                    "type": "string",
-                    "description": "DEPRECATED: data.text is deprecated for object_type: text, use data.value instead.",
-                    "deprecated": true
-                },
-                "transparent": {
-                    "description": "Whether text is transparent.",
-                    "type": "boolean",
-                    "default": true
-                },
-                "value": {
-                    "description": "The actual content of the text. Line breaks and tabs are supported with `\\n` and `\\t`.",
-                    "title": "Value (Text)",
-                    "type": "string"
-                },
-                "whiteSpace": {
-                    "type": "string",
-                    "description": "How whitespace should be handled.",
-                    "default": "normal",
-                    "enum": [
-                        "normal",
-                        "pre",
-                        "nowrap"
-                    ]
-                },
-                "wrapCount": {
-                    "description": "Number of characters before wrapping text (more or less).",
-                    "type": "number",
-                    "default": 40
-                },
-                "xOffset": {
-                    "description": "X-offset to apply to add padding.",
-                    "type": "number",
-                    "default": 0
-                },
-                "zOffset": {
-                    "description": "Z-offset to apply to avoid Z-fighting if using with a geometry as a background.",
-                    "type": "number",
-                    "default": 0.001
-                },
-                "parent": {
-                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
-                    "title": "Parent",
-                    "type": "string"
-                },
-                "position": {
-                    "description": "3D object position.",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Position"
-                },
-                "rotation": {
-                    "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
-                    "properties": {
-                        "w": {
-                            "default": 1,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "x": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "w",
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Rotation"
-                },
-                "scale": {
-                    "description": "3D object scale.",
-                    "id": "scale",
-                    "properties": {
-                        "x": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Scale"
-                },
-                "visible": {
-                    "default": true,
-                    "description": "Whether object is visible. Property is inherited.",
-                    "type": "boolean",
-                    "title": "Visible"
-                }
-            },
-            "required": [
-                "object_type",
-                "font",
-                "side",
-                "value",
-                "color",
-                "position",
-                "rotation"
-            ],
-            "__orig_ref": "definitions-entity",
-            "title": "Text Data",
-            "additionalProperties": true,
-            "default": {
-                "object_type": "text"
-            }
-        }
-    },
-    "__orig_ref": "definitions-arena-object",
     "title": "Text",
     "description": "Display text.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>A-Frame Text</a>.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data",
-        "persist"
-    ]
+    "allOf": [
+        {
+            "$ref": "./schemas/definitions-arena-object.json#properties"
+        },
+        {
+            "properties": {
+                "data": {
+                    "allOf": [
+                        {
+                            "properties": {
+                                "object_type": {
+                                    "type": "string",
+                                    "title": "3D object type",
+                                    "description": "3D object type.",
+                                    "enum": ["text"]
+                                },
+                                "align": {
+                                    "type": "string",
+                                    "description": "Multi-line text alignment.",
+                                    "default": "left",
+                                    "enum": ["left", "center", "right"]
+                                },
+                                "alphaTest": {
+                                    "description": "Discard text pixels if alpha is less than this value.",
+                                    "default": 0.5,
+                                    "type": "number"
+                                },
+                                "anchor": {
+                                    "type": "string",
+                                    "description": "Horizontal positioning.",
+                                    "default": "center",
+                                    "enum": ["left", "right", "center", "align"]
+                                },
+                                "baseline": {
+                                    "type": "string",
+                                    "description": "Vertical positioning.",
+                                    "default": "center",
+                                    "enum": ["top", "center", "bottom"]
+                                },
+                                "color": {
+                                    "description": "Text color.",
+                                    "default": "#000000",
+                                    "format": "color",
+                                    "type": "string"
+                                },
+                                "font": {
+                                    "description": "Font to render text, either the name of one of A-Frame's stock fonts or a URL to a font file.",
+                                    "type": "string",
+                                    "default": "roboto",
+                                    "enum": [
+                                        "aileronsemibold",
+                                        "dejavu",
+                                        "exo2bold",
+                                        "exo2semibold",
+                                        "kelsonsans",
+                                        "monoid",
+                                        "mozillavr",
+                                        "roboto",
+                                        "sourcecodepro"
+                                    ]
+                                },
+                                "letterSpacing": {
+                                    "description": "Letter spacing in pixels.",
+                                    "type": "number",
+                                    "default": 0
+                                },
+                                "opacity": {
+                                    "description": "Opacity, on a scale from 0 to 1, where 0 means fully transparent and 1 means fully opaque.",
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1,
+                                    "default": 1
+                                },
+                                "shader": {
+                                    "type": "string",
+                                    "description": "Shader used to render text.",
+                                    "default": "sdf",
+                                    "enum": [
+                                        "portal",
+                                        "flat",
+                                        "standard",
+                                        "sdf",
+                                        "msdf",
+                                        "ios10hls",
+                                        "skyshader",
+                                        "gradientshader"
+                                    ]
+                                },
+                                "side": {
+                                    "type": "string",
+                                    "description": "Side to render.",
+                                    "default": "double",
+                                    "enum": ["front", "back", "double"]
+                                },
+                                "tabSize": {
+                                    "description": "Tab size in spaces.",
+                                    "type": "number",
+                                    "default": 4
+                                },
+                                "text": {
+                                    "title": "DEPRECATED (text)",
+                                    "type": "string",
+                                    "description": "DEPRECATED: data.text is deprecated for object_type: text, use data.value instead.",
+                                    "deprecated": true
+                                },
+                                "transparent": {
+                                    "description": "Whether text is transparent.",
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "value": {
+                                    "description": "The actual content of the text. Line breaks and tabs are supported with `\\n` and `\\t`.",
+                                    "title": "Value (Text)",
+                                    "type": "string"
+                                },
+                                "whiteSpace": {
+                                    "type": "string",
+                                    "description": "How whitespace should be handled.",
+                                    "default": "normal",
+                                    "enum": ["normal", "pre", "nowrap"]
+                                },
+                                "wrapCount": {
+                                    "description": "Number of characters before wrapping text (more or less).",
+                                    "type": "number",
+                                    "default": 40
+                                },
+                                "xOffset": {
+                                    "description": "X-offset to apply to add padding.",
+                                    "type": "number",
+                                    "default": 0
+                                },
+                                "zOffset": {
+                                    "description": "Z-offset to apply to avoid Z-fighting if using with a geometry as a background.",
+                                    "type": "number",
+                                    "default": 0.001
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "./schemas/definitions-entity.json#properties"
+                        }
+                    ],
+                    "title": "Text Data",
+                    "additionalProperties": true,
+                    "default": {
+                        "object_type": "text"
+                    },
+                    "required": ["object_type", "font", "side", "value", "color", "position", "rotation"]
+                }
+            }
+        }
+    ],
+    "required": ["object_id", "action", "type", "data", "persist"]
 }

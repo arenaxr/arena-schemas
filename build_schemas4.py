@@ -230,16 +230,15 @@ class SchemaLoader:
                         target_data = prop_data.get("items", {})
 
                     # If this is strictly a reference to a definition, its structural type is that definition.
-                    # We shouldn't generate a wrapper component (like "rotationAxis") for it.
                     orig_ref = target_data.get("__orig_ref")
                     ref_path = target_data.get("$ref")
                     if ref_path and not orig_ref:
-                         orig_ref = ref_path.split("/")[-1].replace(".json", "").replace("#properties", "")
+                         # Attempt to parse out a usable name
+                         orig_ref = ref_path.split("/")[-1].replace(".json", "").replace("#properties", "").split("#")[-1]
 
-                    if orig_ref and orig_ref in defs:
-                         # We already generated a component for this definition block
-                         pass
-                    elif prop_name not in self.components:
+                    target_name = orig_ref if orig_ref else prop_name
+
+                    if target_name not in self.components:
                         # If this object was already fully expanded by _resolve_refs in the base dict, use that directly
                         expanded_prop = target_data
                         if "__orig_ref" in target_data or "$ref" in target_data:
@@ -248,16 +247,16 @@ class SchemaLoader:
                         # Sometimes references don't have properties directly inside them if they just point
                         if not isinstance(expanded_prop, dict) or ("properties" not in expanded_prop and "type" not in expanded_prop):
                             # Try to see if it's already an expanded component
-                            if isinstance(expanded_prop, dict) and len(expanded_prop) > 0 and prop_name != "data":
+                            if isinstance(expanded_prop, dict) and len(expanded_prop) > 0 and target_name != "data":
                                 pass
                             else:
                                 continue
 
-                        comp = self._create_schema_object(prop_name, expanded_prop)
+                        comp = self._create_schema_object(target_name, expanded_prop)
                         comp.is_component = True
-                        comp.title = expanded_prop.get("title", prop_name.title())
+                        comp.title = expanded_prop.get("title", target_name.title())
                         comp.description = expanded_prop.get("description", "")
-                        self.components[prop_name] = comp
+                        self.components[target_name] = comp
 
                 # Recursively look deeper for nested objects like position inside other components
                 if isinstance(prop_data, dict) and "properties" in prop_data:

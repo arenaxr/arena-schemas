@@ -1,252 +1,82 @@
 {
-    "format": "grid",
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object.",
-            "minLength": 3,
-            "type": "string"
-        },
-        "persist": {
-            "default": true,
-            "description": "Persist this object in the database.",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the message types.",
-            "enum": [
-                "object"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "create",
-            "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
-            "type": "string"
-        },
-        "ttl": {
-            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
-            "type": "number"
-        },
-        "private": {
-            "description": "If true, interactions with this object should not be broadcasted to other clients, but rather sent on private topics",
-            "type": "boolean",
-            "default": false
-        },
-        "program_id": {
-            "description": "The program_id on private program topics that interactions to be directed to, if the private flag is set true. Ignored if private flag is false.",
-            "type": "string"
-        },
-        "data": {
-            "properties": {
-                "object_type": {
-                    "type": "string",
-                    "title": "3D object type",
-                    "description": "3D object type.",
-                    "enum": [
-                        "line"
-                    ]
-                },
-                "color": {
-                    "title": "Color",
-                    "description": "Line color.",
-                    "default": "#74BEC1",
-                    "format": "color",
-                    "type": "string"
-                },
-                "end": {
-                    "title": "Vector3",
-                    "format": "grid",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "type": "object",
-                    "__orig_ref": "vector3"
-                },
-                "opacity": {
-                    "title": "Opacity",
-                    "description": "Line opacity.",
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 1,
-                    "default": 1
-                },
-                "start": {
-                    "title": "Vector3",
-                    "format": "grid",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "type": "object",
-                    "__orig_ref": "vector3"
-                },
-                "visible": {
-                    "default": true,
-                    "description": "Whether object is visible. Property is inherited.",
-                    "type": "boolean",
-                    "title": "Visible"
-                },
-                "parent": {
-                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
-                    "title": "Parent",
-                    "type": "string"
-                },
-                "position": {
-                    "description": "3D object position.",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Position"
-                },
-                "rotation": {
-                    "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
-                    "properties": {
-                        "w": {
-                            "default": 1,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "x": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "w",
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Rotation"
-                },
-                "scale": {
-                    "description": "3D object scale.",
-                    "id": "scale",
-                    "properties": {
-                        "x": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Scale"
-                }
-            },
-            "required": [
-                "object_type",
-                "start",
-                "end",
-                "color"
-            ],
-            "__orig_ref": "definitions-entity",
-            "title": "Line Data",
-            "additionalProperties": true,
-            "default": {
-                "object_type": "line"
-            }
-        }
-    },
-    "__orig_ref": "definitions-arena-object",
     "title": "Line",
     "description": "Draw a line.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data",
-        "persist"
+    "allOf": [
+        {
+            "$ref": "./schemas/definitions-arena-object.json#properties"
+        },
+        {
+            "properties": {
+                "data": {
+                    "allOf": [
+                        {
+                            "properties": {
+                                "object_type": {
+                                    "type": "string",
+                                    "title": "3D object type",
+                                    "description": "3D object type.",
+                                    "enum": ["line"]
+                                },
+                                "color": {
+                                    "title": "Color",
+                                    "description": "Line color.",
+                                    "default": "#74BEC1",
+                                    "format": "color",
+                                    "type": "string"
+                                },
+                                "end": {
+                                    "title": "vertex B (end)",
+                                    "description": "End coordinate.",
+                                    "format": "grid",
+                                    "$ref": "#/definitions/vector3",
+                                    "default": {
+                                        "x": -0.5,
+                                        "y": -0.5,
+                                        "z": 0
+                                    }
+                                },
+                                "opacity": {
+                                    "title": "Opacity",
+                                    "description": "Line opacity.",
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1,
+                                    "default": 1
+                                },
+                                "start": {
+                                    "title": "vertex A (start)",
+                                    "description": "Start point coordinate.",
+                                    "format": "grid",
+                                    "$ref": "#/definitions/vector3",
+                                    "default": {
+                                        "x": 0,
+                                        "y": 0.5,
+                                        "z": 0
+                                    }
+                                },
+                                "visible": {
+                                    "title": "Visible",
+                                    "description": "Whether the material is visible.",
+                                    "type": "boolean",
+                                    "default": true
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "./schemas/definitions-entity.json#properties"
+                        }
+                    ],
+                    "title": "Line Data",
+                    "additionalProperties": true,
+                    "default": {
+                        "object_type": "line"
+                    },
+                    "required": ["object_type", "start", "end", "color"]
+                }
+            }
+        }
     ],
+    "required": ["object_id", "action", "type", "data", "persist"],
     "definitions": {
         "vector3": {
             "title": "Vector3",
@@ -265,11 +95,7 @@
                     "type": "number"
                 }
             },
-            "required": [
-                "x",
-                "y",
-                "z"
-            ],
+            "required": ["x", "y", "z"],
             "type": "object"
         }
     }

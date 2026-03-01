@@ -1,218 +1,62 @@
 {
-    "format": "grid",
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object.",
-            "minLength": 3,
-            "type": "string"
-        },
-        "persist": {
-            "default": true,
-            "description": "Persist this object in the database.",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the message types.",
-            "enum": [
-                "object"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "create",
-            "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
-            "type": "string"
-        },
-        "ttl": {
-            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
-            "type": "number"
-        },
-        "private": {
-            "description": "If true, interactions with this object should not be broadcasted to other clients, but rather sent on private topics",
-            "type": "boolean",
-            "default": false
-        },
-        "program_id": {
-            "description": "The program_id on private program topics that interactions to be directed to, if the private flag is set true. Ignored if private flag is false.",
-            "type": "string"
-        },
-        "data": {
-            "properties": {
-                "object_type": {
-                    "type": "string",
-                    "title": "3D object type",
-                    "description": "3D object type.",
-                    "enum": [
-                        "thickline"
-                    ]
-                },
-                "color": {
-                    "default": "#000000",
-                    "format": "color",
-                    "description": "Line color.",
-                    "type": "string"
-                },
-                "lineWidth": {
-                    "type": "number",
-                    "title": "Line width",
-                    "description": "Width of line in px.",
-                    "default": 1
-                },
-                "lineWidthStyler": {
-                    "type": "string",
-                    "title": "Line width styler",
-                    "description": "Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. You may also choose one of the preset functions.",
-                    "default": "default",
-                    "enum": [
-                        "default",
-                        "grow",
-                        "shrink",
-                        "center-sharp",
-                        "center-smooth",
-                        "sine-wave"
-                    ]
-                },
-                "path": {
-                    "type": "string",
-                    "title": "Line path",
-                    "description": "Comma-separated list of x y z coordinates of the line vertices.",
-                    "default": "-2 -1 0, 0 20 0, 10 -1 10"
-                },
-                "parent": {
-                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
-                    "title": "Parent",
-                    "type": "string"
-                },
-                "position": {
-                    "description": "3D object position.",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Position"
-                },
-                "rotation": {
-                    "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
-                    "properties": {
-                        "w": {
-                            "default": 1,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "x": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "w",
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Rotation"
-                },
-                "scale": {
-                    "description": "3D object scale.",
-                    "id": "scale",
-                    "properties": {
-                        "x": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Scale"
-                },
-                "visible": {
-                    "default": true,
-                    "description": "Whether object is visible. Property is inherited.",
-                    "type": "boolean",
-                    "title": "Visible"
-                }
-            },
-            "required": [
-                "object_type",
-                "path",
-                "lineWidth",
-                "lineWidthStyler",
-                "color"
-            ],
-            "__orig_ref": "definitions-entity",
-            "title": "Thickline Data",
-            "additionalProperties": true,
-            "default": {
-                "object_type": "thickline"
-            }
-        }
-    },
-    "__orig_ref": "definitions-arena-object",
     "title": "Thickline",
     "description": "Draw a line that can have a custom width.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data",
-        "persist"
-    ]
+    "allOf": [
+        {
+            "$ref": "./schemas/definitions-arena-object.json#properties"
+        },
+        {
+            "properties": {
+                "data": {
+                    "allOf": [
+                        {
+                            "properties": {
+                                "object_type": {
+                                    "type": "string",
+                                    "title": "3D object type",
+                                    "description": "3D object type.",
+                                    "enum": ["thickline"]
+                                },
+                                "color": {
+                                    "default": "#000000",
+                                    "format": "color",
+                                    "description": "Line color.",
+                                    "type": "string"
+                                },
+                                "lineWidth": {
+                                    "type": "number",
+                                    "title": "Line width",
+                                    "description": "Width of line in px.",
+                                    "default": 1
+                                },
+                                "lineWidthStyler": {
+                                    "type": "string",
+                                    "title": "Line width styler",
+                                    "description": "Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. You may also choose one of the preset functions.",
+                                    "default": "default",
+                                    "enum": ["default", "grow", "shrink", "center-sharp", "center-smooth", "sine-wave"]
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "title": "Line path",
+                                    "description": "Comma-separated list of x y z coordinates of the line vertices.",
+                                    "default": "-2 -1 0, 0 20 0, 10 -1 10"
+                                }
+                            }
+                        },
+                        {
+                            "$ref": "./schemas/definitions-entity.json#properties"
+                        }
+                    ],
+                    "title": "Thickline Data",
+                    "additionalProperties": true,
+                    "default": {
+                        "object_type": "thickline"
+                    },
+                    "required": ["object_type", "path", "lineWidth", "lineWidthStyler", "color"]
+                }
+            }
+        }
+    ],
+    "required": ["object_id", "action", "type", "data", "persist"]
 }

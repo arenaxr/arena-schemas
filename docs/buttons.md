@@ -1,0 +1,17 @@
+# `buttons`
+
+
+
+This is the schema for Buttons, the properties of object `buttons`.
+
+## Buttons Attributes
+
+| Attribute | Type | Default | Description | Required |
+| :--- | :--- | :--- | :--- | :--- |
+| **name** | string |  | Button Name | Yes |
+| **img** | string |  | Optional, leave blank for text button. | No |
+| **size** | number | `0.3` | Optional | No |
+| **height** | number |  | Optional for image buttons, overrides size. | No |
+| **width** | number |  | Optional for image buttons, overrides size. | No |
+| **borderRadius** | number |  | Optional for image buttons, overrides default 0.075. | No |
+

@@ -1,243 +1,93 @@
 {
-    "format": "grid",
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object.",
-            "minLength": 3,
-            "type": "string"
+    "title": "Ocean",
+    "description": "Flat-shaded ocean primitive.",
+    "allOf": [
+        {
+            "$ref": "./schemas/definitions-arena-object.json#properties"
         },
-        "persist": {
-            "default": true,
-            "description": "Persist this object in the database.",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the message types.",
-            "enum": [
-                "object"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "create",
-            "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
-            "type": "string"
-        },
-        "ttl": {
-            "description": "When applied to an entity, the entity will remove itself from DOM after the specified number of seconds. Update is allowed, which will reset the timer to start from that moment.",
-            "type": "number"
-        },
-        "private": {
-            "description": "If true, interactions with this object should not be broadcasted to other clients, but rather sent on private topics",
-            "type": "boolean",
-            "default": false
-        },
-        "program_id": {
-            "description": "The program_id on private program topics that interactions to be directed to, if the private flag is set true. Ignored if private flag is false.",
-            "type": "string"
-        },
-        "data": {
+        {
             "properties": {
-                "object_type": {
-                    "type": "string",
-                    "title": "3D object type",
-                    "description": "3D object type.",
-                    "enum": [
-                        "ocean"
-                    ]
-                },
-                "width": {
-                    "description": "Width of the ocean area.",
-                    "default": 10,
-                    "minValue": 0,
-                    "type": "number"
-                },
-                "depth": {
-                    "description": "Depth of the ocean area.",
-                    "default": 10,
-                    "minValue": 0,
-                    "type": "number"
-                },
-                "density": {
-                    "description": "Density of waves.",
-                    "default": 10,
-                    "type": "number"
-                },
-                "amplitude": {
-                    "description": "Wave amplitude.",
-                    "default": 0.1,
-                    "type": "number"
-                },
-                "amplitudeVariance": {
-                    "description": "Wave amplitude variance.",
-                    "default": 0.3,
-                    "type": "number"
-                },
-                "speed": {
-                    "description": "Wave speed.",
-                    "default": 1,
-                    "type": "number"
-                },
-                "speedVariance": {
-                    "description": "Wave speed variance.",
-                    "default": 2,
-                    "type": "number"
-                },
-                "color": {
-                    "description": "Wave color.",
-                    "default": "#7AD2F7",
-                    "format": "color",
-                    "type": "string"
-                },
-                "opacity": {
-                    "description": "Wave opacity.",
-                    "default": 0.8,
-                    "minimum": 0,
-                    "maximum": 1,
-                    "type": "number"
-                },
-                "parent": {
-                    "description": "Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation.",
-                    "title": "Parent",
-                    "type": "string"
-                },
-                "position": {
-                    "description": "3D object position.",
-                    "properties": {
-                        "x": {
-                            "default": 0,
-                            "type": "number"
+                "data": {
+                    "allOf": [
+                        {
+                            "properties": {
+                                "object_type": {
+                                    "type": "string",
+                                    "title": "3D object type",
+                                    "description": "3D object type.",
+                                    "enum": ["ocean"]
+                                },
+                                "width": {
+                                    "description": "Width of the ocean area.",
+                                    "default": 10,
+                                    "minValue": 0,
+                                    "type": "number"
+                                },
+                                "depth": {
+                                    "description": "Depth of the ocean area.",
+                                    "default": 10,
+                                    "minValue": 0,
+                                    "type": "number"
+                                },
+                                "density": {
+                                    "description": "Density of waves.",
+                                    "default": 10,
+                                    "type": "number"
+                                },
+                                "amplitude": {
+                                    "description": "Wave amplitude.",
+                                    "default": 0.1,
+                                    "type": "number"
+                                },
+                                "amplitudeVariance": {
+                                    "description": "Wave amplitude variance.",
+                                    "default": 0.3,
+                                    "type": "number"
+                                },
+                                "speed": {
+                                    "description": "Wave speed.",
+                                    "default": 1,
+                                    "type": "number"
+                                },
+                                "speedVariance": {
+                                    "description": "Wave speed variance.",
+                                    "default": 2,
+                                    "type": "number"
+                                },
+                                "color": {
+                                    "description": "Wave color.",
+                                    "default": "#7AD2F7",
+                                    "format": "color",
+                                    "type": "string"
+                                },
+                                "opacity": {
+                                    "description": "Wave opacity.",
+                                    "default": 0.8,
+                                    "minimum": 0,
+                                    "maximum": 1,
+                                    "type": "number"
+                                }
+                            }
                         },
-                        "y": {
-                            "default": 0,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "type": "number"
+                        {
+                            "$ref": "./schemas/definitions-entity.json#properties"
+                        }
+                    ],
+                    "title": "Ocean Data",
+                    "additionalProperties": true,
+                    "default": {
+                        "object_type": "ocean",
+                        "rotation": {
+                            "w": -0.70711,
+                            "x": 0.70711,
+                            "y": 0,
+                            "z": 0
                         }
                     },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Position"
-                },
-                "rotation": {
-                    "description": "3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format.",
-                    "properties": {
-                        "w": {
-                            "default": 1,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "x": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 0,
-                            "minimum": -1,
-                            "maximum": 1,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "w",
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Rotation"
-                },
-                "scale": {
-                    "description": "3D object scale.",
-                    "id": "scale",
-                    "properties": {
-                        "x": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "y": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        },
-                        "z": {
-                            "default": 1,
-                            "minimum": 0,
-                            "exclusiveMinimum": true,
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "x",
-                        "y",
-                        "z"
-                    ],
-                    "format": "grid",
-                    "type": "object",
-                    "title": "Scale"
-                },
-                "visible": {
-                    "default": true,
-                    "description": "Whether object is visible. Property is inherited.",
-                    "type": "boolean",
-                    "title": "Visible"
-                }
-            },
-            "required": [
-                "object_type",
-                "width",
-                "depth",
-                "color",
-                "position",
-                "rotation"
-            ],
-            "__orig_ref": "definitions-entity",
-            "title": "Ocean Data",
-            "additionalProperties": true,
-            "default": {
-                "object_type": "ocean",
-                "rotation": {
-                    "w": -0.70711,
-                    "x": 0.70711,
-                    "y": 0,
-                    "z": 0
+                    "required": ["object_type", "width", "depth", "color", "position", "rotation"]
                 }
             }
         }
-    },
-    "__orig_ref": "definitions-arena-object",
-    "title": "Ocean",
-    "description": "Flat-shaded ocean primitive.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data",
-        "persist"
-    ]
+    ],
+    "required": ["object_id", "action", "type", "data", "persist"]
 }
