@@ -12,7 +12,7 @@ make update src=~/git/arena-services-docker/arena-web-core/build/schemas
 ## Generate Linked Markdown (required)
 Step 2. This will take the expanded json schema in our local schema dir `./schemas/`, and generate formatted tables of schema in Markdown format linked together with descriptions in our local markdown output folder `./docs`, removing older `.md` Markdown files if needed.
 ```bash
-make docs
+make docs dst=./docs
 ```
 
 ## Generate Jekyll Markdown (optional)
@@ -25,21 +25,21 @@ make jekyll dst=~/git/arena-docs/content/schemas/message
 This will read directly from your `src` directory of message schema (usually `arena-web-core/build`), and update your local `arena-py` repo at the `dst` location. It will generate missing classes in Python, and update only the first docstring of any existing Python classes.
 
 ```bash
-make py src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-py/arena
+make py dst=~/git/arena-py/arena
 ```
 
 ## Generate Unity Schema Classes (independent)
 This will read directly from your `src` directory of message schema (usually `arena-web-core/build`), and update your local `arena-unity` repo at the `dst` location. It will overwrite the entire folder and write the JSON serialization classes for the entire schema in .NET C# for Unity.
 
 ```bash
-make dotnet src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-unity/Runtime/Schemas
+make dotnet dst=~/git/arena-unity/Runtime/Schemas
 ```
 
 ## Update Repos Everything All At Once
 ```bash
-make update src=~/git/arena-services-docker/arena-web-core/build
-make docs
+make update src=~/git/arena-services-docker/arena-web-core/build/schemas
+make docs dst=./docs
 make jekyll dst=~/git/arena-docs/content/schemas/message
-make py src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-py/arena
-make dotnet src=~/git/arena-services-docker/arena-web-core/build dst=~/git/arena-unity/Runtime/Schemas
+make py dst=~/git/arena-py/arena
+make dotnet dst=~/git/arena-unity/Runtime/Schemas
 ```
