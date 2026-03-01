@@ -23,9 +23,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |
 | **scale** | [Scale](scale) |  | 3D object scale. | No |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
-| **animation** | [Animation](animation) |  | Animate and tween values.
-
-More properties at <a href='https://aframe.io/docs/1.5.0/components/animation.html'>A-Frame Animation</a> component. Easing properties are detailed at <a href='https://easings.net'>easings.net</a>. | No |
+| **animation** | [Animation](animation) |  | Animate and tween values.  More properties at <a href='https://aframe.io/docs/1.5.0/components/animation.html'>A-Frame Animation</a> component. Easing properties are detailed at <a href='https://easings.net'>easings.net</a>. | No |
 | **armarker** | [Armarker](armarker) |  | A location marker (such as an AprilTag, a lightAnchor, or an UWB tag), used to anchor scenes, or scene objects, in the real world. | No |
 | **click-listener** | [ClickListener](click-listener) |  | Object will listen for mouse events like clicks. | No |
 | **box-collision-listener** | [BoxCollisionListener](box-collision-listener) |  | Listen for bounding-box collisions with user camera and hands. Must be applied to an object or model with geometric mesh. Collisions are determined by course bounding-box overlaps. | No |
@@ -48,29 +46,21 @@ More properties at <a href='https://aframe.io/docs/1.5.0/components/animation.ht
 | **show-on-enter-vr** | boolean; Must be: `True` | `True` | Show object when entering VR. Hidden otherwise. | No |
 | **impulse** | ~~object~~ | ~~~~ | ~~DEPRECATED: data.impulse is deprecated, use data.physx-force-pushable instead.~~ | ~~No~~ |
 | **landmark** | [Landmark](landmark) |  | Define entities as a landmark; Landmarks appears in the landmark list and you can move (teleport) to them; You can define the behavior of the teleport: if you will be at a fixed or random distance, looking at the landmark, fixed offset or if it is constrained by a navmesh (when it exists). | No |
-| **material-extras** | [MaterialExtras](material-extras) |  | Define extra material properties, namely texture encoding, whether to render the material's color and render order. Requires `material` attribute.
-
-More properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>THREE.js Material</a>. | No |
+| **material-extras** | [MaterialExtras](material-extras) |  | Define extra material properties, namely texture encoding, whether to render the material's color and render order. Requires `material` attribute.  More properties at <a href='https://threejs.org/docs/#api/en/materials/Material'>THREE.js Material</a>. | No |
 | **model-container** | [ModelContainer](model-container) |  | Overrides absolute size for a 3D model. The model can be a glTF, glb, obj, or any other supported format. The model will be rescaled to fit to the sizes specified for each axes. | No |
 | **shadow** | [Shadow](shadow) |  | The shadow component enables shadows for an entity and its children. Adding the shadow component alone is not enough to display shadows in your scene. We must have at least one light with castShadow: true enabled. | No |
-| **sound** | [Sound](sound) |  | The sound component defines the entity as a source of sound or audio. The sound component can be positional and is thus affected by the component's position.
-
-More properties at <a href='https://aframe.io/docs/1.5.0/components/sound.html'>A-Frame Sound</a>. | No |
+| **sound** | [Sound](sound) |  | The sound component defines the entity as a source of sound or audio. The sound component can be positional and is thus affected by the component's position.  More properties at <a href='https://aframe.io/docs/1.5.0/components/sound.html'>A-Frame Sound</a>. | No |
 | **submodel-parent** | string | `''` | When this object is parented to a hierarchical model, it attaches to a named sub-component of that model instead of the root position. Requires `parent` attribute. | No |
 | **textinput** | [Textinput](textinput) |  | Opens an HTML prompt when clicked. Sends text input as an event on MQTT. Requires `click-listener` attribute. | No |
 | **remote-render** | [RemoteRender](remote-render) |  | Whether or not an object should be remote rendered [Experimental]. | No |
 | **video-control** | [VideoControl](video-control) |  | Adds a video to an entity and controls its playback. | No |
 | **attribution** | [Attribution](attribution) |  | Attribution Component. Saves attribution data in any entity. | No |
-| **spe-particles** | [SpeParticles](spe-particles) |  | GPU based particle systems in A-Frame.
-
-More properties at <a href='https://github.com/harlyq/aframe-spe-particles-component'>A-Frame SPE Particles</a> component. | No |
+| **spe-particles** | [SpeParticles](spe-particles) |  | GPU based particle systems in A-Frame.  More properties at <a href='https://github.com/harlyq/aframe-spe-particles-component'>A-Frame SPE Particles</a> component. | No |
 | **look-at** | string |  | The look-at component defines the behavior for an entity to dynamically rotate or face towards another entity or position. Use '#my-camera' to face the user camera, otherwise can take either a vec3 position or a query selector to another entity. | No |
 | **buffer** | boolean | `True` | Transform geometry into a BufferGeometry to reduce memory usage at the cost of being harder to manipulate (geometries only: box, circle, cone, ...). | No |
 | **color** | ~~string~~ | ~~~~ | ~~DEPRECATED: data.color is deprecated for primitive geometry, use data.material.color instead.~~ | ~~No~~ |
 | **jitsi-video** | [JitsiVideo](jitsi-video) |  | Apply a jitsi video source to the geometry. | No |
-| **material** | [Material](material) |  | The material properties of the object's surface.
-
-More properties at <a href='https://aframe.io/docs/1.7.0/components/material.html'>A-Frame Material</a>. | No |
+| **material** | [Material](material) |  | The material properties of the object's surface.  More properties at <a href='https://aframe.io/docs/1.7.0/components/material.html'>A-Frame Material</a>. | No |
 | **multisrc** | [Multisrc](multisrc) |  | Define multiple visual sources applied to an object. Requires `material` attribute. | No |
 | **screenshareable** | boolean | `True` | Whether or not a user can screenshare on an object. | No |
 | **skipCache** | boolean | `False` | Disable retrieving the shared geometry object from the cache. (geometries only: box, circle, cone, ...). | No |

@@ -358,7 +358,7 @@ class MarkdownGenerator:
         for p_name, p in obj.properties.items():
             req = "Yes" if p.required else "No"
             type_str = p.type_name
-            desc_str = p.description or p_name
+            desc_str = (p.description or p_name).replace("\n", " ")
             dft_str = cls.format_value(p) if p.default is not None else ""
 
             if p.is_ref:
