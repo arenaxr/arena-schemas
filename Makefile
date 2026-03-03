@@ -2,11 +2,9 @@ run:
 	./.venv/bin/python build_schemas4.py all $(src)
 
 update: venv
-	rm -f schemas/*.json
 	$(VENV)/python build_schemas4.py update $(src)
 
 docs: venv
-	rm -f docs/*.md
 	$(VENV)/python build_schemas4.py docs $(dst)
 
 jekyll: venv
