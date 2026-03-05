@@ -15,6 +15,6 @@ This is the schema for Physics Settings, the properties of object `physics`.
 | **speed** | number | `1` | Simulation speed multiplier. Increase or decrease to speed up or slow down simulation time | No |
 | **groundCollisionLayers** | number[] | `[2]` | Which collision layers the ground belongs to | No |
 | **groundCollisionMask** | number[] | `[1, 2, 3, 4]` | Which collision layers will collide with the ground | No |
-| **gravity** | [Vector3](vector3) |  | Vector3 | No |
+| **gravity** | [Vector3](vector3) | `{'x': 0, 'y': -9.8, 'z': 0}` | Gravity vector in m/s^2 | No |
 | **stats** | string[] | `[]` | Where to output performance stats:, panel, console, events (or some combination) | No |
 

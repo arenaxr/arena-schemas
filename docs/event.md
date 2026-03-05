@@ -11,8 +11,8 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
 | **target** | string |  | The `object_id` of event destination. | Yes |
-| **targetPosition** | [Vector3](vector3) |  | Vector3 | Yes |
-| **originPosition** | [Vector3](vector3) |  | Vector3 | No |
+| **targetPosition** | [Vector3](vector3) |  | The event destination position in 3D. | Yes |
+| **originPosition** | [Vector3](vector3) | `{'x': 0, 'y': 1.6, 'z': 0}` | The event origination position in 3D. | No |
 | **source** | ~~string~~ | ~~~~ | ~~DEPRECATED: data.source is deprecated for clientEvent, use data.target instead.~~ | ~~No~~ |
 | **position** | ~~object~~ | ~~~~ | ~~DEPRECATED: data.position is deprecated for clientEvent, use data.targetPosition instead.~~ | ~~No~~ |
 | **clickPos** | ~~object~~ | ~~~~ | ~~DEPRECATED: data.clickPos is deprecated for clientEvent, use data.originPosition instead.~~ | ~~No~~ |

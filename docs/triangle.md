@@ -11,9 +11,9 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
 | **object_type** | string; Must be: `triangle` | `triangle` | 3D object type. | Yes |
-| **vertexA** | [Vector3](vector3) |  | Vector3 | Yes |
-| **vertexB** | [Vector3](vector3) |  | Vector3 | Yes |
-| **vertexC** | [Vector3](vector3) |  | Vector3 | Yes |
+| **vertexA** | [Vector3](vector3) | `{'x': 0, 'y': 0.5, 'z': 0}` | Vector3 | Yes |
+| **vertexB** | [Vector3](vector3) | `{'x': -0.5, 'y': -0.5, 'z': 0}` | Vector3 | Yes |
+| **vertexC** | [Vector3](vector3) | `{'x': 0.5, 'y': -0.5, 'z': 0}` | Vector3 | Yes |
 
 
 ### Entity Properties

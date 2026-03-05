@@ -165,6 +165,9 @@ class SchemaLoader:
                 ref = node["$ref"]
                 parts = ref.split("#")
 
+                # Collect sibling keys (non-$ref) to merge back after resolution
+                sibling_keys = {k: v for k, v in node.items() if k != "$ref"}
+
                 if parts[0]:
                     ext_schema = self.get_raw(parts[0])
                     if len(parts) > 1 and parts[1]:
@@ -182,6 +185,11 @@ class SchemaLoader:
                         resolved = self._resolve_refs(curr, parts[0], ext_schema.get("definitions", {}))
                         if isinstance(resolved, dict):
                             resolved["__orig_ref"] = path[-1]
+                        # Merge sibling keys (description, default, etc.) back
+                        if isinstance(resolved, dict) and sibling_keys:
+                            for sk, sv in sibling_keys.items():
+                                if sk not in resolved:
+                                    resolved[sk] = sv
                         return resolved
                     else:
                         resolved = self._resolve_refs(
@@ -197,6 +205,11 @@ class SchemaLoader:
                         resolved = self._resolve_refs(resolved, base_file, definitions)
                         if isinstance(resolved, dict):
                             resolved["__orig_ref"] = path[1]
+                        # Merge sibling keys back
+                        if isinstance(resolved, dict) and sibling_keys:
+                            for sk, sv in sibling_keys.items():
+                                if sk not in resolved:
+                                    resolved[sk] = sv
                         return resolved
 
             return {k: self._resolve_refs(v, base_file, definitions) for k, v in node.items()}
@@ -933,6 +946,20 @@ class DotnetGenerator:
         return f"{cs}[]" if prop.is_array else cs
 
     @classmethod
+    def _format_cs_value(cls, val) -> str:
+        """Format a Python value as a C# literal for object initializers."""
+        if isinstance(val, bool):
+            return str(val).lower()
+        if isinstance(val, float) or isinstance(val, int):
+            return f"{val}f"
+        if isinstance(val, str):
+            return f'"{val}"'
+        if isinstance(val, dict):
+            # Nested object — not handled, fall back
+            return "null"
+        return str(val)
+
+    @classmethod
     def format_default(cls, prop: SchemaProperty, cs_type: str) -> str:
         d = prop.default
         if d is None:
@@ -940,24 +967,27 @@ class DotnetGenerator:
         if isinstance(d, bool):
             return str(d).lower()
         if isinstance(d, list):
-            # Array initializer
+            # Array initializer — use shorthand { items }
             base_type = cs_type.rstrip("[]")
             if not d:
-                return f"Array.Empty<{base_type}>()"
-            # Check if any items are complex (dicts) — use deserializer
+                return "{  }"
+            # Complex items (dicts) — object initializer
             if any(isinstance(item, dict) for item in d):
-                json_str = json.dumps(d).replace('"', '\\"')
-                return f'JsonConvert.DeserializeObject<{base_type}[]>("{json_str}")'
+                obj_inits = []
+                for item in d:
+                    props = ", ".join(f"{pascalcase(k)} = {cls._format_cs_value(v)}" for k, v in item.items())
+                    obj_inits.append(f"new() {{ {props} }}")
+                return f"{{ {', '.join(obj_inits)} }}"
             if base_type == "float":
                 items = ", ".join(f"{x}f" for x in d)
             elif base_type == "string":
                 items = ", ".join(f'"{x}"' for x in d)
             else:
                 items = ", ".join(str(x) for x in d)
-            return f"new {base_type}[] {{ {items} }}"
+            return f"{{ {items} }}"
         if isinstance(d, dict):
-            json_str = json.dumps(d).replace('"', '\\"')
-            return f'JsonConvert.DeserializeObject<{cs_type}>("{json_str}")'
+            props = ", ".join(f"{pascalcase(k)} = {cls._format_cs_value(v)}" for k, v in d.items())
+            return f"new() {{ {props} }}"
         if cs_type in ("float", "float[]"):
             return f"{d}f"
         if cs_type == "string":
@@ -1004,7 +1034,22 @@ class DotnetGenerator:
             for p_name, p in obj.properties.items():
                 if wire_obj and p_name not in obj.inline_properties:
                     continue
+                if wire_obj and p_name == "object_type":
+                    continue  # handled by readonly field in template
                 cs_type = cls.get_cs_type(p)
+
+                # Determine JsonConverter type
+                json_converter = ""
+                if p.is_ref and p.ref_name == "Vector3":
+                    json_converter = "ArenaVector3JsonConverter"
+                elif p.is_ref and p.ref_name == "Vector2":
+                    json_converter = "ArenaVector2JsonConverter"
+                elif "color" in p_name.lower():
+                    if p.is_array:
+                        json_converter = "ArenaColorArrayJsonConverter"
+                    elif cs_type == "string":
+                        json_converter = "ArenaColorJsonConverter"
+
                 cs_props.append({
                     "name": p_name,
                     "cs_name": pascalcase(p_name),
@@ -1016,6 +1061,8 @@ class DotnetGenerator:
                     "deprecated": p.deprecated,
                     "enum": p.enum,
                     "enum_name": f"{pascalcase(p_name)}Type" if p.enum else "",
+                    "is_ref": p.is_ref,
+                    "json_converter": json_converter,
                 })
 
             out = template.render(

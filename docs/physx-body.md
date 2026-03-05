@@ -14,5 +14,5 @@ This is the schema for PhysX Body, the properties of object `physx-body`.
 | **linearDamping** | number | `0` | If > 0, will set the rigid body's linear damping to reduce movement over time. | No |
 | **emitCollisionEvents** | boolean | `False` | If set to true, it will emit 'contactbegin' and 'contactend' events when collisions occur. | No |
 | **highPrecision** | boolean | `False` | If set to true, the object will receive extra attention by the simulation engine (at a performance cost). | No |
-| **shapeOffset** | [Vector3](vector3) |  | Vector3 | No |
+| **shapeOffset** | [Vector3](vector3) | `{'x': 0, 'y': 0, 'z': 0}` | Offset applied to generated collision shapes. | No |
 

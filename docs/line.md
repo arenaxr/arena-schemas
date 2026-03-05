@@ -12,9 +12,9 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | :--- | :--- | :--- | :--- | :--- |
 | **object_type** | string; Must be: `line` | `line` | 3D object type. | Yes |
 | **color** | string | `'#74BEC1'` | Line color. | Yes |
-| **end** | [Vector3](vector3) |  | Vector3 | Yes |
+| **end** | [Vector3](vector3) | `{'x': -0.5, 'y': -0.5, 'z': 0}` | End coordinate. | Yes |
 | **opacity** | number | `1` | Line opacity. | No |
-| **start** | [Vector3](vector3) |  | Vector3 | Yes |
+| **start** | [Vector3](vector3) | `{'x': 0, 'y': 0.5, 'z': 0}` | Start point coordinate. | Yes |
 | **visible** | boolean | `True` | Whether object is visible. Property is inherited. | No |
 
 

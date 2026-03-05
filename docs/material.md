@@ -11,14 +11,14 @@ This is the schema for Material, the properties of object `material`.
 | **alphaTest** | number | `0` | Alpha test threshold for transparency. | No |
 | **ambientOcclusionMap** | string |  | Ambient occlusion map. Requires `shader: standard` or `phong`. | No |
 | **ambientOcclusionMapIntensity** | number | `1` | Intensity of the ambient occlusion map. Requires `shader: standard` or `phong`. | No |
-| **ambientOcclusionTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **ambientOcclusionTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **ambientOcclusionTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the ambient occlusion map. | No |
+| **ambientOcclusionTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the ambient occlusion map. | No |
 | **anisotropy** | number | `0` | The anisotropic filtering sample rate to use for the textures. A value of 0 means the default value will be used, see renderer. | No |
 | **blending** | string; One of: `['none', 'normal', 'additive', 'subtractive', 'multiply']` | `'normal'` | The blending mode for the material's RGB and Alpha sent to the WebGLRenderer. | No |
 | **bumpMap** | string |  | Bump map. Used to add the illusion of surface detail without geometry. Requires `shader: phong`. | No |
 | **bumpMapScale** | number | `1` | Scale of the bump map effect. Requires `shader: phong`. | No |
-| **bumpTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **bumpTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **bumpTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the bump map. Requires `shader: phong`. | No |
+| **bumpTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the bump map. Requires `shader: phong`. | No |
 | **color** | string | `'#ffffff'` | Base diffuse color. | No |
 | **combine** | string; One of: `['mix', 'add', 'multiply']` | `'mix'` | How the environment map mixes with the material. Requires `shader: phong`. | No |
 | **depthTest** | boolean | `True` | Whether depth testing is enabled when rendering the material. | No |
@@ -26,8 +26,8 @@ This is the schema for Material, the properties of object `material`.
 | **displacementBias** | number | `0.5` | The zero point of the displacement map. Requires `shader: standard` or `phong`. | No |
 | **displacementMap** | string |  | Displacement map. Distorts a simpler model at a high resolution. Requires `shader: standard` or `phong`. | No |
 | **displacementScale** | number | `1` | Scale of the displacement map effect. Requires `shader: standard` or `phong`. | No |
-| **displacementTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **displacementTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **displacementTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the displacement map. | No |
+| **displacementTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the displacement map. | No |
 | **dithering** | boolean | `True` | Whether material is dithered with noise. Removes banding from gradients like ones produced by lighting. | No |
 | **emissive** | string | `'#000000'` | The color of the emissive lighting component. Used to make objects produce light even without other lighting in the scene. Requires `shader: standard` or `phong`. | No |
 | **emissiveIntensity** | number | `1` | Intensity of the emissive lighting component. Requires `shader: standard` or `phong`. | No |
@@ -36,23 +36,23 @@ This is the schema for Material, the properties of object `material`.
 | **fog** | boolean | `True` | Whether or not material is affected by fog. | No |
 | **metalness** | number | `0` | How metallic the material is from 0 to 1. Requires `shader: standard`. | No |
 | **metalnessMap** | string |  | Metalness map. Requires `shader: standard`. | No |
-| **metalnessTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **metalnessTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **metalnessTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the metalness map. | No |
+| **metalnessTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the metalness map. | No |
 | **normalMap** | string |  | Normal map. Defines the angle of the surface at each point. Requires `shader: standard` or `phong`. | No |
-| **normalScale** | [Vector2](vector2) |  | Vector2 | No |
-| **normalTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **normalTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **normalScale** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Scale of the effect of the normal map in the X and Y directions. | No |
+| **normalTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the normal map. | No |
+| **normalTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the normal map. | No |
 | **npot** | boolean | `False` | Use settings for non-power-of-two (NPOT) texture. | No |
-| **offset** | [Vector2](vector2) |  | Vector2 | No |
+| **offset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset to be used. | No |
 | **opacity** | number | `1` | Extent of transparency. If the transparent property is not true, then the material will remain opaque and opacity will only affect color. | No |
 | **reflectivity** | number | `0.9` | How much the environment map affects the surface. Requires `shader: phong`. | No |
 | **refract** | boolean | `False` | Whether the defined envMap should refract. Requires `shader: phong`. | No |
 | **refractionRatio** | number | `0.98` | refractionRatio | No |
-| **repeat** | [Vector2](vector2) |  | Vector2 | No |
+| **repeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | How many times a texture (defined by src) repeats in the X and Y direction. | No |
 | **roughness** | number | `0.5` | How rough the material is from 0 to 1. A rougher material will scatter reflected light in more directions than a smooth material. Requires `shader: standard`. | No |
 | **roughnessMap** | string |  | Roughness map. Requires `shader: standard`. | No |
-| **roughnessTextureOffset** | [Vector2](vector2) |  | Vector2 | No |
-| **roughnessTextureRepeat** | [Vector2](vector2) |  | Vector2 | No |
+| **roughnessTextureOffset** | [Vector2](vector2) | `{'x': 0, 'y': 0}` | Texture offset for the roughness map. | No |
+| **roughnessTextureRepeat** | [Vector2](vector2) | `{'x': 1, 'y': 1}` | Texture repeat for the roughness map. | No |
 | **shader** | string; One of: `['flat', 'standard', 'phong']` | `'standard'` | Which material to use. Defaults to the standard material. Can be set to the flat material or to a registered custom shader material. | No |
 | **shininess** | number | `30` | How shiny the specular highlight is; a higher value gives a sharper highlight. Requires `shader: phong`. | No |
 | **side** | string; One of: `['front', 'back', 'double']` | `'front'` | Which sides of the mesh to render. | No |
