@@ -10,7 +10,6 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **data** | Program data | | Program object data properties as defined below | Yes |
 | **name** | string |  | Name of the program. | Yes |
 | **affinity** | string; One of: `['client', 'none']` | `'client'` | Indicates the module affinity (client=client's runtime; none or empty=any suitable/available runtime). | No |
 | **instantiate** | string; One of: `['single', 'client']` | `'client'` | Single instance of the program (=single), or let every client create a program instance (=client). Per client instance will create new uuid for each program. | Yes |

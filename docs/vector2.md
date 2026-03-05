@@ -2,7 +2,7 @@
 
 
 
-This is the schema for Vector2, the properties of object `vector2`.
+This is the schema for Vector2, the properties of object `vector2`. Part of the **Common** definition set.
 
 ## Vector2 Attributes
 

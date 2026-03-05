@@ -1,8 +1,6 @@
 # `spe-particles`
 
-GPU based particle systems in A-Frame.
-
-More properties at <a href='https://github.com/harlyq/aframe-spe-particles-component'>A-Frame SPE Particles</a> component.
+GPU based particle systems in A-Frame. More properties at <a href='https://github.com/harlyq/aframe-spe-particles-component'>A-Frame SPE Particles</a> component.
 
 This is the schema for SPE Particles, the properties of object `spe-particles`.
 
@@ -60,7 +58,7 @@ This is the schema for SPE Particles, the properties of object `spe-particles`.
 | **rotationStatic** | boolean | `False` | If true, the particles are fixed at their initial rotation value. if false, the particle will rotate from 0 to the 'rotation' value. | No |
 | **size** | number[] | `[1]` | Array of sizes over the particle's lifetime, max 4 elements. | No |
 | **sizeSpread** | number[] | `[0]` | Spread in size over the particle's lifetime, max 4 elements. | No |
-| **texture** | string | `''` | Texture to be used for each particle, may be a spritesheet.  Examples: [blob.png, fog.png, square.png, explosion_sheet.png, fireworks_sheet.png], like path 'static/images/textures/blob.png'. | No |
+| **texture** | string | `''` | Texture to be used for each particle, may be a spritesheet. Examples: [blob.png, fog.png, square.png, explosion_sheet.png, fireworks_sheet.png], like path 'static/images/textures/blob.png'. | No |
 | **textureFrameCount** | integer | `-1` | Number of frames in the spritesheet, negative numbers default to textureFrames.x * textureFrames.y. | No |
 | **textureFrameLoop** | integer | `1` | Number of times the spritesheet should be looped over the lifetime of a particle. | No |
 | **textureFrames** | [Vector2](vector2) |  | Vector2 | No |

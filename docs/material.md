@@ -1,8 +1,6 @@
 # `material`
 
-The material properties of the object's surface.
-
-More properties at <a href='https://aframe.io/docs/1.7.0/components/material.html'>A-Frame Material</a>.
+The material properties of the object's surface. More properties at <a href='https://aframe.io/docs/1.7.0/components/material.html'>A-Frame Material</a>.
 
 This is the schema for Material, the properties of object `material`.
 

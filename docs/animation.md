@@ -1,8 +1,6 @@
 # `animation`
 
-Animate and tween values.
-
-More properties at <a href='https://aframe.io/docs/1.5.0/components/animation.html'>A-Frame Animation</a> component. Easing properties are detailed at <a href='https://easings.net'>easings.net</a>.
+Animate and tween values. More properties at <a href='https://aframe.io/docs/1.5.0/components/animation.html'>A-Frame Animation</a> component. Easing properties are detailed at <a href='https://easings.net'>easings.net</a>.
 
 This is the schema for Animation, the properties of object `animation`.
 

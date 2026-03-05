@@ -1,8 +1,6 @@
 # `env-presets`
 
-A-Frame Environment presets.
-
-More properties at <a href='https://github.com/supermedium/aframe-environment-component'>A-Frame Environment Component</a>.
+A-Frame Environment presets. More properties at <a href='https://github.com/supermedium/aframe-environment-component'>A-Frame Environment Component</a>.
 
 This is the schema for Environment Presets, the properties of object `env-presets`.
 

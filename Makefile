@@ -1,20 +1,20 @@
 run:
-	./.venv/bin/python build_schemas4.py all $(src)
+	./.venv/bin/python build_schemas5.py all $(src)
 
 update: venv
-	$(VENV)/python build_schemas4.py update $(src)
+	$(VENV)/python build_schemas5.py update $(src)
 
 docs: venv
-	$(VENV)/python build_schemas4.py docs $(dst)
+	$(VENV)/python build_schemas5.py docs $(dst)
 
 jekyll: venv
-	$(VENV)/python build_schemas4.py jekyll $(dst)
+	$(VENV)/python build_schemas5.py jekyll $(dst)
 
 dotnet: venv
-	$(VENV)/python build_schemas4.py dotnet $(dst)
+	$(VENV)/python build_schemas5.py dotnet $(dst)
 
 py: venv
-	$(VENV)/python build_schemas4.py py $(dst)
+	$(VENV)/python build_schemas5.py py $(dst)
 
 show-req: venv
 		$(VENV)/pip freeze

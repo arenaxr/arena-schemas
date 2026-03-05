@@ -6,11 +6,11 @@ This is the schema for Ocean, the properties of wire object type `ocean`.
 
 All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-## Ocean Attributes
+### Ocean Properties
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **data** | Ocean data | | Ocean object data properties as defined below | Yes |
+| **object_type** | string; Must be: `ocean` | `ocean` | 3D object type. | Yes |
 | **width** | number | `10` | Width of the ocean area. | Yes |
 | **depth** | number | `10` | Depth of the ocean area. | Yes |
 | **density** | number | `10` | Density of waves. | No |
@@ -20,6 +20,12 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **speedVariance** | number | `2` | Wave speed variance. | No |
 | **color** | string | `'#7AD2F7'` | Wave color. | Yes |
 | **opacity** | number | `0.8` | Wave opacity. | No |
+
+
+### Entity Properties
+
+| Attribute | Type | Default | Description | Required |
+| :--- | :--- | :--- | :--- | :--- |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
 | **position** | [Position](position) |  | 3D object position. | Yes |
 | **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |

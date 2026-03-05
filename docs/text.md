@@ -1,18 +1,16 @@
 # `text`
 
-Display text.
-
-More properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>A-Frame Text</a>.
+Display text. More properties at <a href='https://aframe.io/docs/1.5.0/components/text.html'>A-Frame Text</a>.
 
 This is the schema for Text, the properties of wire object type `text`.
 
 All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-## Text Attributes
+### Text Properties
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **data** | Text data | | Text object data properties as defined below | Yes |
+| **object_type** | string; Must be: `text` | `text` | 3D object type. | Yes |
 | **align** | string; One of: `['left', 'center', 'right']` | `'left'` | Multi-line text alignment. | No |
 | **alphaTest** | number | `0.5` | Discard text pixels if alpha is less than this value. | No |
 | **anchor** | string; One of: `['left', 'right', 'center', 'align']` | `'center'` | Horizontal positioning. | No |
@@ -31,6 +29,12 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **wrapCount** | number | `40` | Number of characters before wrapping text (more or less). | No |
 | **xOffset** | number | `0` | X-offset to apply to add padding. | No |
 | **zOffset** | number | `0.001` | Z-offset to apply to avoid Z-fighting if using with a geometry as a background. | No |
+
+
+### Entity Properties
+
+| Attribute | Type | Default | Description | Required |
+| :--- | :--- | :--- | :--- | :--- |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |
 | **position** | [Position](position) |  | 3D object position. | Yes |
 | **rotation** | [Rotation](rotation) |  | 3D object rotation in quaternion representation; Right-handed coordinate system. Euler degrees are deprecated in wire message format. | Yes |

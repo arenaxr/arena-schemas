@@ -10,7 +10,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **data** | Camera Override data | | Camera Override object data properties as defined below | Yes |
+| **object_type** | string; One of: `['camera', 'look-at', 'teleport-to-landmark']` |  | 3D object type. | Yes |
 | **target** | string |  | Look at target object_id or position. Requires `object_type: look-at`. | No |
 | **landmarkObj** | string |  | Teleport to the same id as the target object. Requires `object_type: teleport-to-landmark`. | No |
 | **parent** | string |  | Parent's object_id. Child objects inherit attributes of their parent, for example scale and translation. | No |

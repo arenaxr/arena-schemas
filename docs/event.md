@@ -6,11 +6,10 @@ This is the schema for Event, the properties of wire object type `event`.
 
 All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-## Event Attributes
+### Event Properties
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-| **data** | Event data | | Event object data properties as defined below | Yes |
 | **target** | string |  | The `object_id` of event destination. | Yes |
 | **targetPosition** | [Vector3](vector3) |  | Vector3 | Yes |
 | **originPosition** | [Vector3](vector3) |  | Vector3 | No |
