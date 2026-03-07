@@ -7,20 +7,20 @@
 ```mermaid
 graph LR
     subgraph source["Source of Truth"]
-        webcore["arena-web-core\nbuild/schemas/\n(A-Frame schema definitions)"]
+        webcore["arena-web-core<br/>build/schemas/<br/>(A-Frame schema definitions)"]
     end
 
     subgraph pipeline["arena-schemas Pipeline"]
-        generator["build_schemas5.py\n(Code Generator)"]
-        templates["templates/\n(Jinja2 Templates)"]
-        expanded["schemas/\n(48 Expanded JSON Schemas)"]
-        docs["docs/\n(Linked Markdown Tables)"]
+        generator["build_schemas5.py<br/>(Code Generator)"]
+        templates["templates/<br/>(Jinja2 Templates)"]
+        expanded["schemas/<br/>(48 Expanded JSON Schemas)"]
+        docs["docs/<br/>(Linked Markdown Tables)"]
     end
 
     subgraph targets["Generation Targets"]
-        pyClasses["arena-py\narena/objects/ + arena/attributes/\n(Python Classes)"]
-        csClasses["arena-unity\nRuntime/Schemas/\n(C# .NET Classes)"]
-        jekyll["arena-docs\ncontent/schemas/message/\n(Jekyll Markdown)"]
+        pyClasses["arena-py<br/>arena/objects/ + arena/attributes/<br/>(Python Classes)"]
+        csClasses["arena-unity<br/>Runtime/Schemas/<br/>(C# .NET Classes)"]
+        jekyll["arena-docs<br/>content/schemas/message/<br/>(Jekyll Markdown)"]
     end
 
     webcore -->|make update| expanded
@@ -107,9 +107,9 @@ graph TD
     end
 
     subgraph step3["Step 3: Deploy (parallel targets)"]
-        jekyll["make jekyll\ndst=arena-docs/content/schemas/message"]
-        py["make py\ndst=arena-py/arena"]
-        dotnet["make dotnet\ndst=arena-unity/Runtime/Schemas"]
+        jekyll["make jekyll<br/>dst=arena-docs/content/schemas/message"]
+        py["make py<br/>dst=arena-py/arena"]
+        dotnet["make dotnet<br/>dst=arena-unity/Runtime/Schemas"]
 
         mdFiles --> jekyll
         src --> py
