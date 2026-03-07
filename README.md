@@ -1,7 +1,11 @@
 # arena-schemas
 Schemas for objects used in the ARENA.
 
-There are a handful of scripts and run commands that can update schemas and generate intermediate json schema and markdown documents:
+There are a handful of scripts and run commands that can update schemas and generate intermediate json schema and markdown documents.
+
+## Documentation
+- [Requirements & Architecture](REQUIREMENTS.md)
+- [Contributing](CONTRIBUTING.md)
 
 ## Generate Intermediate Schema (required)
 Step 1. This will take a source directory, like the arena-web-core build directory and parse it's `[src]/schemas/` for  `arena-schema-files.json` to output expanded json schema in our local schema dir `./schemas/`, removing older `.json` schema files if needed.
