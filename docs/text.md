@@ -24,7 +24,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **tabSize** | number | `4` | Tab size in spaces. | No |
 | **text** | ~~string~~ | ~~~~ | ~~DEPRECATED: data.text is deprecated for object_type: text, use data.value instead.~~ | ~~No~~ |
 | **transparent** | boolean | `True` | Whether text is transparent. | No |
-| **value** | string |  | The actual content of the text. Line breaks and tabs are supported with `\n` and `\t`. | Yes |
+| **value** | string | `'Default Text'` | The actual content of the text. Line breaks and tabs are supported with `\n` and `\t`. | Yes |
 | **whiteSpace** | string; One of: `['normal', 'pre', 'nowrap']` | `'normal'` | How whitespace should be handled. | No |
 | **wrapCount** | number | `40` | Number of characters before wrapping text (more or less). | No |
 | **xOffset** | number | `0` | X-offset to apply to add padding. | No |

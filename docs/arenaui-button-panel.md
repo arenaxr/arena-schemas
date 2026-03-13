@@ -11,11 +11,12 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
 | **object_type** | string; Must be: `arenaui-button-panel` | `arenaui-button-panel` | 3D object type. | Yes |
-| **buttons** | [Buttons](buttons)[] | `[{'name': 'Option 1'}, {'name': 'Option 2'}]` | Buttons | Yes |
+| **buttons** | [Buttons](buttons)[] | `[{'name': 'Confirm'}, {'name': 'Cancel'}]` | Buttons | Yes |
 | **title** | string | `''` | Title to display above buttons (optional). | Yes |
 | **vertical** | boolean | `False` | Vertical button layout | Yes |
 | **font** | string; One of: `['Roboto', 'Roboto-Mono']` | `'Roboto'` | Font to use for button text. | No |
 | **theme** | string; One of: `['light', 'dark']` | `'light'` | Color Theme | No |
+| **themeOverride** | array[] | `[]` | Array of color override tuples e.g. [['textBg', '#000000']] | No |
 | **materialSides** | string; One of: `['both', 'front']` | `'both'` | Which sides display the rendered UI material | No |
 
 

@@ -23,6 +23,8 @@ This is the schema for Environment Presets, the properties of object `env-preset
 | **ground** | string; One of: `['canyon', 'flat', 'hills', 'noise', 'none', 'spikes']` | `'hills'` | Orography style. | No |
 | **groundColor** | string | `'#553e35'` | Main color of the ground. | No |
 | **groundColor2** | string | `'#694439'` | Secondary color of the ground. Used for textures, ignored if groundTexture is none. | No |
+| **groundDensity** | number | `64` | Number of divisions of the ground mesh. | No |
+| **groundFrequency** | number | `10` | Frequency of the ground noise. | No |
 | **groundScale** | [Vector3](vector3) | `{'x': 1, 'y': 1, 'z': 1}` | Ground dimensions (in meters). | No |
 | **groundTexture** | string; One of: `['checkerboard', 'none', 'squares', 'walkernoise']` | `'none'` | Texture applied to the ground. | No |
 | **groundYScale** | number | `3` | Maximum height (in meters) of ground's features (hills, mountains, peaks..). | No |
@@ -35,6 +37,7 @@ This is the schema for Environment Presets, the properties of object `env-preset
 | **seed** | integer | `1` | Seed for randomization. If you don't like the layout of the elements, try another value for the seed. | No |
 | **shadow** | boolean | `False` | Shadows on/off. Sky light casts shadows on the ground of all those objects with shadow component applied. | No |
 | **shadowSize** | number | `10` | Size of the shadow, if applied. | No |
+| **stageSize** | number | `200` | Stage ground diameter (and sky radius) in meters. | No |
 | **skyColor** | string | `'#ffa500'` | Sky Color | No |
 | **skyType** | string; One of: `['atmosphere', 'color', 'gradient', 'none']` | `'color'` | A sky type. | No |
 

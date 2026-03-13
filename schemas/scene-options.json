@@ -66,7 +66,7 @@
                     "type": "boolean"
                 },
                 "dressingVariance": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 1,
@@ -125,8 +125,24 @@
                     "title": "Ground Color (secondary)",
                     "type": "string"
                 },
+                "groundDensity": {
+                    "default": 64,
+                    "description": "Number of divisions of the ground mesh.",
+                    "maximum": 1024,
+                    "minimum": 8,
+                    "title": "Ground Density",
+                    "type": "number"
+                },
+                "groundFrequency": {
+                    "default": 10,
+                    "description": "Frequency of the ground noise.",
+                    "maximum": 1000,
+                    "minimum": 0.1,
+                    "title": "Ground Frequency",
+                    "type": "number"
+                },
                 "groundScale": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 1,
@@ -171,7 +187,7 @@
                     "type": "string"
                 },
                 "lightPosition": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 0,
@@ -233,6 +249,14 @@
                     "default": 10,
                     "description": "Size of the shadow, if applied.",
                     "title": "Shadow size",
+                    "type": "number"
+                },
+                "stageSize": {
+                    "default": 200,
+                    "description": "Stage ground diameter (and sky radius) in meters.",
+                    "maximum": 20000,
+                    "minimum": 1,
+                    "title": "Stage Size",
                     "type": "number"
                 },
                 "skyColor": {
@@ -463,7 +487,7 @@
                             }
                         },
                         "gravity": {
-                            "$ref": "#/definitions/vector3",
+                            "$ref": "./schemas/definitions-common.json#definitions/vector3",
                             "format": "grid",
                             "default": {
                                 "x": 0,
@@ -486,7 +510,7 @@
                     },
                     "required": ["enabled"],
                     "title": "Physics Settings",
-                    "type": "object",
+                    "type": ["object", "boolean", "string"],
                     "description": "Clientside PhysX-based physics system. Required for all physx-* components"
                 },
                 "ar-hit-test": {
@@ -767,26 +791,6 @@
             "title": "Post-Processing Effects",
             "type": "object",
             "description": "These effects are enabled in desktop and XR views."
-        },
-        "vector3": {
-            "title": "Vector3",
-            "format": "grid",
-            "properties": {
-                "x": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "y": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "z": {
-                    "default": 0,
-                    "type": "number"
-                }
-            },
-            "required": ["x", "y", "z"],
-            "type": "object"
         }
     },
     "format": "grid",
@@ -811,6 +815,21 @@
             "description": "Message action create, update, delete.",
             "enum": ["create", "delete", "update"],
             "type": "string"
+        },
+        "timestamp": {
+            "$ref": "#definitions/timestamp"
+        },
+        "override": {
+            "$ref": "#definitions/override"
+        },
+        "ttl": {
+            "$ref": "#definitions/ttl"
+        },
+        "private": {
+            "$ref": "#definitions/private"
+        },
+        "program_id": {
+            "$ref": "#definitions/program_id"
         },
         "data": {
             "properties": {

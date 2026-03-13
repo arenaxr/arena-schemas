@@ -15,6 +15,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **lineWidth** | number | `1` | Width of line in px. | Yes |
 | **lineWidthStyler** | string; One of: `['default', 'grow', 'shrink', 'center-sharp', 'center-smooth', 'sine-wave']` | `'default'` | Allows defining the line width as a function of relative position p along the path of the line. By default it is set to a constant 1. You may also choose one of the preset functions. | Yes |
 | **path** | string | `'-2 -1 0, 0 20 0, 10 -1 10'` | Comma-separated list of x y z coordinates of the line vertices. | Yes |
+| **sizeAttenuation** | boolean | `False` | Whether the line width is constant regardless of distance (false) or scales with it (true). | No |
 
 
 ### Entity Properties

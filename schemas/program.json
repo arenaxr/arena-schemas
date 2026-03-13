@@ -222,6 +222,21 @@
             "enum": ["create", "delete", "update"],
             "default": "create"
         },
+        "timestamp": {
+            "$ref": "#/definitions/timestamp"
+        },
+        "override": {
+            "$ref": "#/definitions/override"
+        },
+        "ttl": {
+            "$ref": "#/definitions/ttl"
+        },
+        "private": {
+            "$ref": "#/definitions/private"
+        },
+        "program_id": {
+            "$ref": "#/definitions/program_id"
+        },
         "persist": {
             "type": "boolean",
             "description": "Persist this object in the database.",

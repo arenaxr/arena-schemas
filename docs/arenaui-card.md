@@ -24,6 +24,7 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 | **closeButton** | boolean | `False` | Show close button | No |
 | **font** | string; One of: `['Roboto', 'Roboto-Mono']` | `'Roboto'` | Font to use for button text. | No |
 | **theme** | string; One of: `['light', 'dark']` | `'light'` | Color Theme | No |
+| **themeOverride** | array[] | `[]` | Array of color override tuples e.g. [['textBg', '#000000']] | No |
 | **materialSides** | string; One of: `['both', 'front']` | `'both'` | Which sides display the rendered UI material | No |
 
 
