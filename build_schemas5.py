@@ -241,11 +241,12 @@ class SchemaLoader:
                 p.ref_link = items_ref if items_ref else p_name
 
         orig_ref = p_data.get("__orig_ref")
-        if orig_ref or (t == "object" and "properties" in p_data):
+        is_obj_type = (t == "object") or (isinstance(t, list) and "object" in t)
+        if orig_ref or (is_obj_type and "properties" in p_data):
             p.is_ref = True
             p.ref_name = pascalcase(orig_ref if orig_ref else p_name)
             p.ref_link = orig_ref if orig_ref else p_name
-            p.type_name = p.ref_name
+            p.type_name = t if isinstance(t, list) else p.ref_name
 
         return p
 
@@ -460,8 +461,8 @@ class SchemaLoader:
         ]
         # Also pull top-level properties from program and scene-options
         program_sources = [
-            ("arena-program.json", "program"),
-            ("arena-scene-options.json", "scene-options"),
+            ("program.json", "program"),
+            ("scene-options.json", "scene-options"),
         ]
 
         merged_props: Dict[str, dict] = {}
@@ -924,17 +925,23 @@ class PythonGenerator:
 class DotnetGenerator:
     """Generates Unity C# classes using Jinja2 templates."""
 
+    # Set of known C# type names (populated during generate_all)
+    _known_cs_types: set = set()
+
     @classmethod
     def get_cs_type(cls, prop: SchemaProperty) -> str:
         t = prop.type_name
         if prop.is_ref:
             cs = f"Arena{prop.ref_name}Json"
+            # Fall back to object if this ref doesn't correspond to a known component
+            if cls._known_cs_types and cs not in cls._known_cs_types:
+                cs = "object"
         elif t == "number":
-            cs = "float"
+            cs = "float?" if prop.default is None else "float"
         elif t == "integer":
-            cs = "int"
+            cs = "int?" if prop.default is None else "int"
         elif t == "boolean":
-            cs = "bool"
+            cs = "bool?" if prop.default is None else "bool"
         elif t == "string":
             cs = "string"
         elif t == "array":
@@ -988,17 +995,23 @@ class DotnetGenerator:
         if isinstance(d, dict):
             props = ", ".join(f"{pascalcase(k)} = {cls._format_cs_value(v)}" for k, v in d.items())
             return f"new() {{ {props} }}"
-        if cs_type in ("float", "float[]"):
+        if cs_type in ("float", "float?", "float[]", "float?[]"):
             return f"{d}f"
-        if cs_type == "string":
+        if cs_type in ("string",):
             return f'"{d}"'
         return str(d)
 
     @classmethod
     def generate_all(cls, loader: SchemaLoader, out_folder: str):
         print(f"Generating Unity C# classes in {out_folder}/")
-        os.makedirs(out_folder, exist_ok=True)
-        for f in glob.glob(f"{out_folder}/*.cs"):
+        obj_dir = os.path.join(out_folder, "Object")
+        attr_dir = os.path.join(out_folder, "Attribute")
+        os.makedirs(obj_dir, exist_ok=True)
+        os.makedirs(attr_dir, exist_ok=True)
+        # Only clean the subdirectories we manage
+        for f in glob.glob(f"{obj_dir}/*.cs"):
+            os.remove(f)
+        for f in glob.glob(f"{attr_dir}/*.cs"):
             os.remove(f)
 
         env = jinja2.Environment(
@@ -1028,11 +1041,28 @@ class DotnetGenerator:
         env.globals["enumcase"] = enumcase
         env.globals["pascalcase"] = pascalcase
 
-        def write_cs(obj: SchemaObject, wire_obj: bool):
-            class_name = pascalcase(obj.name)
+        def write_cs(obj: SchemaObject, wire_obj: bool, target_dir: str):
+            # Strip "arena-" prefix to avoid double "Arena" in class name
+            stripped_name = obj.name
+            if stripped_name.startswith("arena-"):
+                stripped_name = stripped_name[len("arena-"):]
+            class_name = pascalcase(stripped_name)
+
+            # Determine which properties belong directly to this object
+            allowed_props = set(obj.properties.keys())
+            if wire_obj:
+                allowed_props = set()
+                for group in obj.property_groups:
+                    # Generic entity/common stuff shouldn't generate fields on the wire object
+                    # We only want inline properties or properties from the specific object's definition
+                    if not group.source_ref:
+                        allowed_props.update(group.property_keys)
+                    elif group.source_ref == f"{obj.name}":
+                        allowed_props.update(group.property_keys)
+
             cs_props = []
             for p_name, p in obj.properties.items():
-                if wire_obj and p_name not in obj.inline_properties:
+                if p_name not in allowed_props:
                     continue
                 if wire_obj and p_name == "object_type":
                     continue  # handled by readonly field in template
@@ -1040,7 +1070,11 @@ class DotnetGenerator:
 
                 # Determine JsonConverter type
                 json_converter = ""
-                if p.is_ref and p.ref_name == "Vector3":
+                if isinstance(p.type_name, list) and "object" in p.type_name and "boolean" in p.type_name:
+                    if p.is_ref:
+                        cs_ref = f"Arena{p.ref_name}Json"
+                        json_converter = f"ArenaBooleanObjectJsonConverter<{cs_ref}>"
+                elif p.is_ref and p.ref_name == "Vector3":
                     json_converter = "ArenaVector3JsonConverter"
                 elif p.is_ref and p.ref_name == "Vector2":
                     json_converter = "ArenaVector2JsonConverter"
@@ -1065,19 +1099,236 @@ class DotnetGenerator:
                     "json_converter": json_converter,
                 })
 
+            uses_converter = any(cp["json_converter"] for cp in cs_props)
             out = template.render(
                 obj=obj, wire_obj=wire_obj,
                 cs_class_name=class_name, properties=cs_props,
+                uses_converter=uses_converter,
             )
-            p_path = os.path.join(out_folder, f"Arena{class_name}Json.cs")
+            p_path = os.path.join(target_dir, f"Arena{class_name}Json.cs")
             print(f"-> {p_path}")
             with open(p_path, "w", encoding="utf-8") as f:
                 f.write(f"{out.rstrip()}\n")
 
-        for _, obj in loader.arena_objects.items():
-            write_cs(obj, wire_obj=True)
+        # Build set of component class names to detect collisions
+        component_class_names = set()
         for _, obj in loader.components.items():
-            write_cs(obj, wire_obj=False)
+            comp_stripped = obj.name
+            if comp_stripped.startswith("arena-"):
+                comp_stripped = comp_stripped[len("arena-"):]
+            component_class_names.add(pascalcase(comp_stripped))
+
+        # Build set of known C# type names for ref validation in get_cs_type
+        cls._known_cs_types = set()
+        for _, obj in loader.components.items():
+            comp_stripped = obj.name
+            if comp_stripped.startswith("arena-"):
+                comp_stripped = comp_stripped[len("arena-"):]
+            cls._known_cs_types.add(f"Arena{pascalcase(comp_stripped)}Json")
+        for _, obj in loader.arena_objects.items():
+            wo_stripped = obj.name
+            if wo_stripped.startswith("arena-"):
+                wo_stripped = wo_stripped[len("arena-"):]
+            cls._known_cs_types.add(f"Arena{pascalcase(wo_stripped)}Json")
+        # Also add well-known shared types
+        cls._known_cs_types.update({"ArenaVector3Json", "ArenaVector2Json"})
+
+        # Wire objects → Object/ subdirectory (skip if class name collides with component)
+        for _, obj in loader.arena_objects.items():
+            stripped_name = obj.name
+            if stripped_name.startswith("arena-"):
+                stripped_name = stripped_name[len("arena-"):]
+            class_name = pascalcase(stripped_name)
+            if class_name in component_class_names:
+                print(f"   (skipping Object/{class_name} — collides with Attribute component)")
+                continue
+            write_cs(obj, wire_obj=True, target_dir=obj_dir)
+        # Components → Attribute/ subdirectory
+        for _, obj in loader.components.items():
+            write_cs(obj, wire_obj=False, target_dir=attr_dir)
+
+        # Generate data wrapper files in the root output folder
+        cls._generate_data_object(loader, out_folder, env)
+        cls._generate_data_scene_options(loader, out_folder, env)
+        cls._generate_message(loader, out_folder, env)
+
+    @classmethod
+    def _make_data_prop(cls, p_name, p):
+        """Build a property dict for a data wrapper template."""
+        cs_type = cls.get_cs_type(p)
+
+        json_converter = ""
+        if isinstance(p.type_name, list) and "object" in p.type_name and "boolean" in p.type_name:
+            if p.is_ref:
+                cs_ref = f"Arena{p.ref_name}Json"
+                json_converter = f"ArenaBooleanObjectJsonConverter<{cs_ref}>"
+        elif p.is_ref and p.ref_name == "Vector3":
+            json_converter = "ArenaVector3JsonConverter"
+        elif p.is_ref and p.ref_name == "Vector2":
+            json_converter = "ArenaVector2JsonConverter"
+        elif "color" in p_name.lower():
+            if p.is_array:
+                json_converter = "ArenaColorArrayJsonConverter"
+            elif cs_type == "string":
+                json_converter = "ArenaColorJsonConverter"
+
+        bool_object_converter = ""
+        if p.is_ref and p_name in ("click-listener",):
+            bool_object_converter = f"ArenaBooleanObjectJsonConverter<{cs_type}>"
+
+        return {
+            "name": p_name,
+            "cs_name": pascalcase(p_name),
+            "cs_type": cs_type,
+            "description": p.description or p_name,
+            "required": p.required,
+            "default_formatted": cls.format_default(p, cs_type),
+            "default": p.default,
+            "deprecated": p.deprecated,
+            "is_ref": p.is_ref,
+            "json_converter": json_converter,
+            "bool_object_converter": bool_object_converter,
+        }
+
+    @classmethod
+    def _generate_data_object(cls, loader: SchemaLoader, out_folder: str, env: jinja2.Environment):
+        """Generate ArenaDataObjectJson.cs — data wrapper for type:'object' messages."""
+        try:
+            tmpl = env.get_template("cs_data_object.j2")
+        except jinja2.TemplateNotFound:
+            print("Warning: templates/cs_data_object.j2 missing, skipping data object.")
+            return
+
+        # Build property key sets for each definition source
+        def_sources = [
+            ("definitions-entity.json", "Entity"),
+            ("definitions-common.json", "Common"),
+            ("definitions-geometry.json", "Geometry"),
+            ("definitions-gltf.json", "GLTF"),
+        ]
+        def_key_sets = {}
+        for def_file, label in def_sources:
+            raw = loader.get_raw(def_file)
+            def_key_sets[label] = set(raw.get("properties", {}).keys())
+
+        # Use the entity wire object (broadest set) to gather all properties
+        entity_obj = loader.arena_objects.get("entity")
+        if not entity_obj:
+            print("Warning: 'entity' not found in arena_objects, skipping data object.")
+            return
+
+        # Group properties by definition source
+        property_groups = []
+        seen = set()
+
+        # First: object_type is special (handled inline in template, not in groups)
+
+        # Inline properties (those not from any definition file)
+        inline_props = []
+        for p_name, p in entity_obj.properties.items():
+            if p_name == "object_type":
+                continue
+            is_from_def = any(p_name in keys for keys in def_key_sets.values())
+            if not is_from_def and p_name in entity_obj.inline_properties:
+                inline_props.append(cls._make_data_prop(p_name, p))
+                seen.add(p_name)
+
+        # Definition-sourced groups
+        for _, label in def_sources:
+            group_props = []
+            for p_name in def_key_sets.get(label, []):
+                if p_name in seen or p_name == "object_type":
+                    continue
+                if p_name in entity_obj.properties:
+                    group_props.append(cls._make_data_prop(p_name, entity_obj.properties[p_name]))
+                    seen.add(p_name)
+            if group_props:
+                property_groups.append({"label": label, "properties": group_props})
+
+
+        all_props = inline_props[:]
+        for g in property_groups:
+            all_props.extend(g["properties"])
+
+        uses_converter = any(dp.get("json_converter") or dp.get("bool_object_converter") for dp in all_props)
+        out = tmpl.render(
+            inline_properties=inline_props,
+            property_groups=property_groups,
+            uses_converter=uses_converter,
+        )
+        p_path = os.path.join(out_folder, "ArenaDataObjectJson.cs")
+        print(f"-> {p_path}")
+        with open(p_path, "w", encoding="utf-8") as f:
+            f.write(f"{out.rstrip()}\n")
+
+    @classmethod
+    def _generate_data_scene_options(cls, loader: SchemaLoader, out_folder: str, env: jinja2.Environment):
+        """Generate ArenaDataSceneOptionsJson.cs — data wrapper for type:'scene-options' messages."""
+        try:
+            tmpl = env.get_template("cs_data_scene_options.j2")
+        except jinja2.TemplateNotFound:
+            print("Warning: templates/cs_data_scene_options.j2 missing, skipping data scene options.")
+            return
+
+        # Get the scene-options wire object and extract its component-ref properties
+        # Try both possible keys: the schema filename-based key and the object_type key
+        scene_obj = loader.arena_objects.get("arena-scene-options") or loader.arena_objects.get("scene-options")
+        if not scene_obj:
+            print("Warning: 'scene-options'/'arena-scene-options' not found in arena_objects, skipping.")
+            return
+
+        data_props = []
+        for p_name, p in scene_obj.properties.items():
+            if p_name == "object_type":
+                continue
+            cs_type = cls.get_cs_type(p)
+            data_props.append({
+                "name": p_name,
+                "cs_name": pascalcase(p_name),
+                "cs_type": cs_type,
+                "description": p.description or p_name,
+                "required": p.required,
+                "default_formatted": cls.format_default(p, cs_type),
+                "default": p.default,
+            })
+
+        out = tmpl.render(properties=data_props)
+        p_path = os.path.join(out_folder, "ArenaDataSceneOptionsJson.cs")
+        print(f"-> {p_path}")
+        with open(p_path, "w", encoding="utf-8") as f:
+            f.write(f"{out.rstrip()}\n")
+
+    @classmethod
+    def _generate_message(cls, loader: SchemaLoader, out_folder: str, env: jinja2.Environment):
+        """Generate ArenaMessageJson.cs — the MQTT wire envelope."""
+        try:
+            tmpl = env.get_template("cs_message.j2")
+        except jinja2.TemplateNotFound:
+            print("Warning: templates/cs_message.j2 missing, skipping message.")
+            return
+
+        if not loader.wire_envelope:
+            print("Warning: wire envelope not built, skipping message generation.")
+            return
+
+        msg_props = []
+        for p_name, p in loader.wire_envelope.properties.items():
+            if p_name == "data":
+                continue  # data is handled specially in the template
+            cs_type = cls.get_cs_type(p)
+            # Use nullable types for optional fields
+            nullable = not p.required
+            msg_props.append({
+                "name": p_name,
+                "cs_type": cs_type,
+                "nullable": nullable,
+            })
+
+        out = tmpl.render(properties=msg_props)
+        p_path = os.path.join(out_folder, "ArenaMessageJson.cs")
+        print(f"-> {p_path}")
+        with open(p_path, "w", encoding="utf-8") as f:
+            f.write(f"{out.rstrip()}\n")
 
 
 # ---------------------------------------------------------------------------
