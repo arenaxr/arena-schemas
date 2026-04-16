@@ -718,46 +718,35 @@ class MarkdownGenerator:
         return "\n".join(lines)
 
     @classmethod
-    def _render_page_body(cls, obj: SchemaObject, page_type: str) -> List[str]:
-        """Render the body content for a schema page (shared by Markdown and Jekyll)."""
-        lines = []
-        if page_type == "envelope":
-            lines.append(f"{obj.description}\n")
-            lines.append(f"## {obj.title} Attributes\n")
-            lines.append(cls.generate_table(obj))
-            lines.append("\n")
+    def _build_page_context(cls, obj: SchemaObject, page_type: str) -> dict:
+        """Build the template context dict for md_page.j2."""
+        ctx = {
+            "name": obj.name,
+            "title": obj.title,
+            "description": obj.description,
+            "page_type": page_type,
+            "definition_group": getattr(obj, "definition_group", ""),
+        }
 
+        if page_type == "wire_object" and obj.property_groups:
+            groups = []
+            for group in obj.property_groups:
+                keys_in_obj = [k for k in group.property_keys if k in obj.properties]
+                if not keys_in_obj:
+                    continue
+                groups.append({
+                    "label": group.label,
+                    "table": cls.generate_table(obj, only_keys=keys_in_obj),
+                })
+            ctx["groups"] = groups
         elif page_type == "wire_object":
-            schema_desc = f"This is the schema for {obj.title}, the properties of wire object type `{obj.name}`."
-            lines.append(f"{obj.description}\n\n{schema_desc}\n")
-            lines.append(
-                "All wire objects have a set of basic attributes "
-                "`{object_id, action, type, persist, data}`. "
-                "The `data` attribute defines the object-specific attributes\n"
-            )
-            if obj.property_groups:
-                for group in obj.property_groups:
-                    keys_in_obj = [k for k in group.property_keys if k in obj.properties]
-                    if not keys_in_obj:
-                        continue
-                    lines.append(f"### {group.label} Properties\n")
-                    lines.append(cls.generate_table(obj, only_keys=keys_in_obj))
-                    lines.append("\n")
-            else:
-                lines.append(f"## {obj.title} Attributes\n")
-                lines.append(cls.generate_table(obj))
-                lines.append("\n")
+            # No groups — fall back to simple single-table layout
+            ctx["page_type"] = "wire_object_simple"
+            ctx["table"] = cls.generate_table(obj)
+        else:
+            ctx["table"] = cls.generate_table(obj)
 
-        elif page_type == "component":
-            schema_desc = f"This is the schema for {obj.title}, the properties of object `{obj.name}`."
-            if obj.definition_group:
-                schema_desc += f" Part of the **{obj.definition_group}** definition set."
-            lines.append(f"{obj.description}\n\n{schema_desc}\n")
-            lines.append(f"## {obj.title} Attributes\n")
-            lines.append(cls.generate_table(obj))
-            lines.append("\n")
-
-        return lines
+        return ctx
 
     @classmethod
     def generate_all(cls, loader: SchemaLoader, out_folder: str = "docs"):
@@ -767,47 +756,33 @@ class MarkdownGenerator:
         for f in glob.glob(f"{out_folder}/*.md"):
             os.remove(f)
 
+        env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader("templates"),
+            trim_blocks=True, lstrip_blocks=True,
+        )
+        tmpl = env.get_template("md_page.j2")
+
         # Wire Envelope
         if loader.wire_envelope:
-            cls._write_envelope_md(loader.wire_envelope, out_folder)
+            cls._write_page(loader.wire_envelope, "envelope", tmpl, out_folder)
 
         # Wire Objects (grouped tables)
         for _, obj in loader.arena_objects.items():
-            cls._write_wire_object_md(obj, out_folder)
+            cls._write_page(obj, "wire_object", tmpl, out_folder)
 
         # Components (single table)
         for _, obj in loader.components.items():
-            cls._write_component_md(obj, out_folder)
+            cls._write_page(obj, "component", tmpl, out_folder)
 
     @classmethod
-    def _write_envelope_md(cls, obj: SchemaObject, out_folder: str):
-        md = [f"# `{obj.name}`\n"]
-        md.extend(cls._render_page_body(obj, "envelope"))
+    def _write_page(cls, obj: SchemaObject, page_type: str, tmpl, out_folder: str):
+        ctx = cls._build_page_context(obj, page_type)
+        out = tmpl.render(**ctx)
 
         p_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {p_path}")
         with open(p_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
-
-    @classmethod
-    def _write_wire_object_md(cls, obj: SchemaObject, out_folder: str):
-        md = [f"# `{obj.name}`\n"]
-        md.extend(cls._render_page_body(obj, "wire_object"))
-
-        p_path = os.path.join(out_folder, f"{obj.name}.md")
-        print(f"-> {p_path}")
-        with open(p_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
-
-    @classmethod
-    def _write_component_md(cls, obj: SchemaObject, out_folder: str):
-        md = [f"# `{obj.name}`\n"]
-        md.extend(cls._render_page_body(obj, "component"))
-
-        p_path = os.path.join(out_folder, f"{obj.name}.md")
-        print(f"-> {p_path}")
-        with open(p_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
+            f.write(out)
 
 
 # ---------------------------------------------------------------------------
@@ -827,71 +802,53 @@ class JekyllGenerator:
         sec_title = "ARENA Objects"
         sec_sub_title = "Objects Schema"
 
+        env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader("templates"),
+            trim_blocks=True, lstrip_blocks=True,
+        )
+        index_tmpl = env.get_template("jekyll_index.j2")
+        page_tmpl = env.get_template("jekyll_page.j2")
+
         # Index page
-        index_md = [
-            "---",
-            f"title: {sec_sub_title}",
-            "layout: default",
-            f"parent: {sec_title}",
-            "has_children: true",
-            "has_toc: false",
-            "---",
-            "\n<!--CAUTION: This file is autogenerated from https://github.com/arenaxr/arena-schemas. Changes made here may be overwritten.-->\n",
-            "# ARENA Message Objects\n",
-            "|Object Message|Description|",
-            "| :--- | :--- |",
-        ]
+        objects = []
         for name, obj in sorted(loader.arena_objects.items()):
             desc_line = obj.description.splitlines()[0] if obj.description else ""
-            index_md.append(f"|[{obj.title}]({name})|{desc_line}|")
+            objects.append({"name": name, "title": obj.title, "desc_line": desc_line})
 
+        index_out = index_tmpl.render(
+            sec_title=sec_title, sec_sub_title=sec_sub_title, objects=objects,
+        )
         index_path = os.path.join(out_folder, "index.md")
         with open(index_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(index_md) + "\n")
+            f.write(index_out)
 
         # Wire envelope page
         if loader.wire_envelope:
-            cls._write_page(
-                loader.wire_envelope, sec_title, sec_sub_title, out_folder,
-                page_type="envelope", loader=loader,
-            )
+            cls._write_page(loader.wire_envelope, "envelope", page_tmpl, out_folder,
+                            sec_title, sec_sub_title)
 
         # Wire object pages
         for _, obj in loader.arena_objects.items():
-            cls._write_page(
-                obj, sec_title, sec_sub_title, out_folder,
-                page_type="wire_object", loader=loader,
-            )
+            cls._write_page(obj, "wire_object", page_tmpl, out_folder,
+                            sec_title, sec_sub_title)
 
         # Component pages
         for _, obj in loader.components.items():
-            cls._write_page(
-                obj, sec_title, sec_sub_title, out_folder,
-                page_type="component", loader=loader,
-            )
+            cls._write_page(obj, "component", page_tmpl, out_folder,
+                            sec_title, sec_sub_title)
 
     @classmethod
-    def _write_page(
-        cls, obj: SchemaObject, sec_title: str, sec_sub_title: str,
-        out_folder: str, page_type: str, loader: SchemaLoader = None,
-    ):
-        page_md = [
-            "---",
-            f"title: {obj.name}",
-            "layout: default",
-            f"parent: {sec_sub_title}",
-            f"grand_parent: {sec_title}",
-            "---",
-            "\n<!--CAUTION: This file is autogenerated from https://github.com/arenaxr/arena-schemas. Changes made here may be overwritten.-->\n",
-            f"# `{obj.name}`\n",
-        ]
+    def _write_page(cls, obj: SchemaObject, page_type: str, tmpl,
+                    out_folder: str, sec_title: str, sec_sub_title: str):
+        ctx = MarkdownGenerator._build_page_context(obj, page_type)
+        ctx["sec_title"] = sec_title
+        ctx["sec_sub_title"] = sec_sub_title
 
-        page_md.extend(MarkdownGenerator._render_page_body(obj, page_type))
-
+        out = tmpl.render(**ctx)
         out_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {out_path}")
         with open(out_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(page_md))
+            f.write(out)
 
 
 # ---------------------------------------------------------------------------
