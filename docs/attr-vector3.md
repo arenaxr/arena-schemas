@@ -1,0 +1,16 @@
+# `vector3`
+
+Vector3
+
+This is the schema for Vector3, the properties of object `vector3`. Part of the **Common** definition set.
+
+**Used by:** [Environment Presets](attr-env-presets), [Event](obj-event), [Landmark](attr-landmark), [Line](obj-line), [Physics Settings](attr-physics), [PhysX Body](attr-physx-body), [PhysX Joint Driver](attr-physx-joint-driver), [SPE Particles](attr-spe-particles), [Triangle](obj-triangle)
+
+## Vector3 Attributes
+
+| Attribute | Type | Default | Description | Required |
+| :--- | :--- | :--- | :--- | :--- |
+| **x** | number | `0` | x | Yes |
+| **y** | number | `0` | y | Yes |
+| **z** | number | `0` | z | Yes |
+

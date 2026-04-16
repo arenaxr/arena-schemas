@@ -37,6 +37,7 @@ class SchemaProperty:
     cs_type: str = ""         # C# type string
     py_type: str = ""         # Python type string
     json_converter: str = ""  # C# JsonConverter attribute
+    doc_link: str = ""        # namespaced markdown link
 
 
 @dataclass
@@ -63,6 +64,7 @@ class SchemaObject:
     py_class_name: str = ""   # Python class name (with overrides applied)
     envelope_type: str = ""   # envelope type from arena-message
     used_by: set = field(default_factory=set) # component reverse refs (stores obj/comp names)
+    doc_link: str = ""        # namespaced markdown filename
 
 
 # ---------------------------------------------------------------------------
@@ -318,6 +320,7 @@ class SchemaLoader:
                 p.is_ref = True
                 p.ref_name = pascalcase(items_ref if items_ref else p_name)
                 p.ref_link = items_ref if items_ref else p_name
+                p.doc_link = f"attr-{p.ref_link}"
 
         orig_ref = p_data.get("__orig_ref")
         is_obj_type = (t == "object") or (isinstance(t, list) and "object" in t)
@@ -325,6 +328,7 @@ class SchemaLoader:
             p.is_ref = True
             p.ref_name = pascalcase(orig_ref if orig_ref else p_name)
             p.ref_link = orig_ref if orig_ref else p_name
+            p.doc_link = f"attr-{p.ref_link}"
             p.type_name = t if isinstance(t, list) else p.ref_name
 
         return p
@@ -425,11 +429,15 @@ class SchemaLoader:
                     comp = self._create_schema_object(target_name, expanded_prop)
                     comp.is_component = True
                     comp.title = expanded_prop.get("title", target_name.title())
-                    comp.description = _sanitize_desc(expanded_prop.get("description", ""))
+                    comp.description = _sanitize_desc(expanded_prop.get("description", comp.title))
+                    comp.doc_link = f"attr-{target_name}"
                     self.components[target_name] = comp
 
-            if isinstance(prop_data, dict) and "properties" in prop_data:
-                self._extract_components_from_props(prop_data["properties"], base_dict, fn, defs)
+            if isinstance(prop_data, dict):
+                if "properties" in prop_data:
+                    self._extract_components_from_props(prop_data["properties"], base_dict, fn, defs)
+                elif prop_data.get("type") == "array" and "properties" in prop_data.get("items", {}):
+                    self._extract_components_from_props(prop_data["items"]["properties"], base_dict, fn, defs)
 
     # -- Build Models --------------------------------------------------------
 
@@ -480,8 +488,9 @@ class SchemaLoader:
                 obj.is_component = False
                 obj.inline_properties = inline_props
                 obj.envelope_type = env_type
+                obj.doc_link = f"obj-{ot}"
                 obj.title = expanded.get("title", f"{ot.title()} Data")
-                obj.description = _sanitize_desc(expanded.get("description", ""))
+                obj.description = _sanitize_desc(expanded.get("description", obj.title))
                 obj.property_groups = self._extract_property_groups(raw_data, obj.title)
                 self.arena_objects[ot] = obj
 
@@ -508,7 +517,8 @@ class SchemaLoader:
                     comp = self._create_schema_object(def_name, expanded_def)
                     comp.is_component = True
                     comp.title = expanded_def.get("title", def_name.title())
-                    comp.description = _sanitize_desc(expanded_def.get("description", ""))
+                    comp.description = _sanitize_desc(expanded_def.get("description", comp.title))
+                    comp.doc_link = f"attr-{def_name}"
                     if group_label:
                         comp.definition_group = group_label
                         def_group_map[def_name] = group_label
@@ -607,6 +617,7 @@ class SchemaLoader:
         required_list = list(all_required)
         envelope = SchemaObject(name="arena-message")
         envelope.title = "ARENA Message"
+        envelope.doc_link = "arena-message"
         envelope.description = (
             "The top-level ARENA wire message. All ARENA messages share this envelope structure. "
             "The `data` attribute contents depend on the message `type`."
@@ -715,10 +726,10 @@ class MarkdownGenerator:
             dft_str = cls.format_value(p) if p.default is not None else ""
 
             if p.is_ref:
-                type_str = f"[{p.ref_name}]({p.ref_link})"
+                type_str = f"[{p.ref_name}]({p.doc_link})"
             if p.is_array:
                 if p.is_ref:
-                    type_str = f"[{p.ref_name}]({p.ref_link})[]"
+                    type_str = f"[{p.ref_name}]({p.doc_link})[]"
                 else:
                     type_str = f"{p.array_item_type}[]"
 
@@ -759,7 +770,8 @@ class MarkdownGenerator:
                 # Try to get title from components or wire objects
                 ref_obj = loader.arena_objects.get(name) or loader.components.get(name)
                 title = ref_obj.title if ref_obj else name
-                used_list.append({"name": name, "title": title})
+                link = ref_obj.doc_link if ref_obj else name
+                used_list.append({"name": name, "title": title, "link": link})
             ctx["used_by"] = used_list
 
         if page_type == "wire_object" and obj.property_groups:
@@ -813,7 +825,7 @@ class MarkdownGenerator:
         ctx = cls._build_page_context(obj, page_type, loader=loader)
         out = tmpl.render(**ctx)
 
-        p_path = os.path.join(out_folder, f"{obj.name}.md")
+        p_path = os.path.join(out_folder, f"{obj.doc_link}.md")
         print(f"-> {p_path}")
         with open(p_path, "w", encoding="utf-8") as f:
             f.write(out)
@@ -847,7 +859,7 @@ class JekyllGenerator:
         objects = []
         for name, obj in sorted(loader.arena_objects.items()):
             desc_line = obj.description.splitlines()[0] if obj.description else ""
-            objects.append({"name": name, "title": obj.title, "desc_line": desc_line})
+            objects.append({"name": name, "title": obj.title, "desc_line": desc_line, "doc_link": obj.doc_link})
 
         index_out = index_tmpl.render(
             sec_title=sec_title, sec_sub_title=sec_sub_title, objects=objects,
@@ -879,7 +891,7 @@ class JekyllGenerator:
         ctx["sec_sub_title"] = sec_sub_title
 
         out = tmpl.render(**ctx)
-        out_path = os.path.join(out_folder, f"{obj.name}.md")
+        out_path = os.path.join(out_folder, f"{obj.doc_link}.md")
         print(f"-> {out_path}")
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(out)

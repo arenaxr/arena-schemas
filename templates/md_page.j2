@@ -14,7 +14,7 @@
 This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
 
 {% if used_by %}
-**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.link }}){% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endif %}
 
@@ -36,7 +36,7 @@ All wire objects have a set of basic [ARENA Message](arena-message) envelope att
 This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
 
 {% if used_by %}
-**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.link }}){% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endif %}
 
@@ -55,7 +55,7 @@ All wire objects have a set of basic [ARENA Message](arena-message) envelope att
 This is the schema for {{ title }}, the properties of object `{{ name }}`.{{ ' Part of the **' ~ definition_group ~ '** definition set.' if definition_group }}
 
 {% if used_by %}
-**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.link }}){% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endif %}
 
