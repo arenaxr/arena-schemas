@@ -1,0 +1,46 @@
+# `{{ name }}`
+{% if page_type == 'envelope' %}
+
+{{ description }}
+
+## {{ title }} Attributes
+
+{{ table }}
+
+{% elif page_type == 'wire_object' %}
+
+{{ description }}
+
+This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
+
+All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+{% for group in groups %}
+
+### {{ group.label }} Properties
+
+{{ group.table }}
+
+{% endfor %}
+{% elif page_type == 'wire_object_simple' %}
+
+{{ description }}
+
+This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
+
+All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+## {{ title }} Attributes
+
+{{ table }}
+
+{% elif page_type == 'component' %}
+
+{{ description }}
+
+This is the schema for {{ title }}, the properties of object `{{ name }}`.{{ ' Part of the **' ~ definition_group ~ '** definition set.' if definition_group }}
+
+## {{ title }} Attributes
+
+{{ table }}
+
+{% endif %}

@@ -1,0 +1,25 @@
+from dataclasses import dataclass, field
+from typing import Optional, List, Dict, Any
+
+@dataclass
+class {{ class_name }}:
+    """
+    {{ title }}
+{% if description %}
+    {{ description }}
+{% endif %}
+
+{% for p in properties %}
+    {{ p.param_line }}
+{% endfor %}
+    """
+{% for p in properties %}
+{% if p.default_str is none %}
+    {{ p.name }}: {{ p.type_hint }}
+{% else %}
+    {{ p.name }}: {{ p.type_hint }} = {{ p.default_str }}
+{% endif %}
+{% endfor %}
+{% if not properties %}
+    pass
+{% endif %}
