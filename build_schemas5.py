@@ -31,6 +31,12 @@ class SchemaProperty:
     ref_link: str = ""        # kebab-case link target
     deprecated: bool = False
     enum: List[str] = field(default_factory=list)
+    # Language-specific computed fields (populated by compute_language_fields)
+    pascal_name: str = ""     # PascalCase of name
+    snake_name: str = ""      # snake_case of name
+    cs_type: str = ""         # C# type string
+    py_type: str = ""         # Python type string
+    json_converter: str = ""  # C# JsonConverter attribute
 
 
 @dataclass
@@ -52,10 +58,13 @@ class SchemaObject:
     property_groups: List[PropertyGroup] = field(default_factory=list)
     inline_properties: set = field(default_factory=set)
     definition_group: str = ""   # For components: which group they belong to
+    # Language-specific computed fields (populated by compute_language_fields)
+    cs_class_name: str = ""   # C# class name (arena- prefix stripped)
+    py_class_name: str = ""   # Python class name (with overrides applied)
 
 
 # ---------------------------------------------------------------------------
-# Ref Label Mapping
+# Ref Label Mapping & Helpers
 # ---------------------------------------------------------------------------
 
 _REF_LABELS = {
@@ -63,6 +72,12 @@ _REF_LABELS = {
     "definitions-common": "Common",
     "definitions-geometry": "Geometry",
     "definitions-gltf": "GLTF",
+}
+
+# Python class name overrides for special cases
+_PY_CLASS_NAME_OVERRIDES = {
+    "SceneOptions": "Scene",
+    "MaterialExtension": "MaterialExt",
 }
 
 
@@ -83,6 +98,68 @@ def _ref_to_key(ref_path: str) -> str:
 def _sanitize_desc(text: str) -> str:
     """Collapse newlines, tabs, and excess whitespace into single spaces."""
     return re.sub(r'\s+', ' ', text).strip() if text else ""
+
+
+def _strip_arena_prefix(name: str) -> str:
+    """Strip 'arena-' prefix from a name to avoid double 'Arena' in class names."""
+    if name.startswith("arena-"):
+        return name[len("arena-"):]
+    return name
+
+
+def _compute_cs_type(prop: SchemaProperty, known_cs_types: set) -> str:
+    """Compute the C# type string for a SchemaProperty."""
+    t = prop.type_name
+    if prop.is_ref:
+        cs = f"Arena{prop.ref_name}Json"
+        # Fall back to object if this ref doesn't correspond to a known component
+        if known_cs_types and cs not in known_cs_types:
+            cs = "object"
+    elif t == "number":
+        cs = "float?" if prop.default is None else "float"
+    elif t == "integer":
+        cs = "int?" if prop.default is None else "int"
+    elif t == "boolean":
+        cs = "bool?" if prop.default is None else "bool"
+    elif t == "string":
+        cs = "string"
+    elif t == "array":
+        item_t = prop.array_item_type
+        inner = {"number": "float", "integer": "int", "string": "string", "boolean": "bool"}.get(item_t, "object")
+        cs = inner
+    else:
+        cs = "object"
+    return f"{cs}[]" if prop.is_array else cs
+
+
+def _compute_py_type(prop: SchemaProperty) -> str:
+    """Compute the Python type string for a SchemaProperty."""
+    t = prop.type_name
+    if t == "number": return "float"
+    if t == "integer": return "int"
+    if t == "boolean": return "bool"
+    if t == "string": return "str"
+    if t == "array": return "list"
+    if t == "object": return "dict"
+    return "dict"
+
+
+def _resolve_json_converter(p_name: str, prop: SchemaProperty) -> str:
+    """Determine the C# JsonConverter attribute for a property."""
+    if isinstance(prop.type_name, list) and "object" in prop.type_name and "boolean" in prop.type_name:
+        if prop.is_ref:
+            cs_ref = f"Arena{prop.ref_name}Json"
+            return f"ArenaBooleanObjectJsonConverter<{cs_ref}>"
+    elif prop.is_ref and prop.ref_name == "Vector3":
+        return "ArenaVector3JsonConverter"
+    elif prop.is_ref and prop.ref_name == "Vector2":
+        return "ArenaVector2JsonConverter"
+    elif "color" in p_name.lower():
+        if prop.is_array:
+            return "ArenaColorArrayJsonConverter"
+        elif prop.type_name == "string":
+            return "ArenaColorJsonConverter"
+    return ""
 
 
 # ---------------------------------------------------------------------------
@@ -294,6 +371,64 @@ class SchemaLoader:
 
         return groups
 
+    # -- Component Extraction from Wire Object Properties --------------------
+
+    def _extract_components_from_props(self, props, base_dict, fn, defs):
+        """Extract component objects from wire object properties (recursive)."""
+        for prop_name, prop_data in props.items():
+            if prop_name == "object_type":
+                continue
+
+            is_obj = prop_data.get("type") == "object"
+            is_obj_array = (
+                prop_data.get("type") == "array"
+                and prop_data.get("items", {}).get("type") == "object"
+            )
+            has_ref = prop_data.get("$ref") is not None or (
+                prop_data.get("type") == "array"
+                and prop_data.get("items", {}).get("$ref") is not None
+            )
+            has_props = "properties" in prop_data or (
+                prop_data.get("type") == "array"
+                and "properties" in prop_data.get("items", {})
+            )
+
+            if is_obj or has_ref or has_props or is_obj_array:
+                target_data = prop_data
+                if prop_data.get("type") == "array":
+                    target_data = prop_data.get("items", {})
+
+                orig_ref = target_data.get("__orig_ref")
+                ref_path = target_data.get("$ref")
+                if ref_path and not orig_ref:
+                    orig_ref = (
+                        ref_path.split("/")[-1]
+                        .replace(".json", "")
+                        .replace("#properties", "")
+                        .split("#")[-1]
+                    )
+                target_name = orig_ref if orig_ref else prop_name
+
+                if target_name not in self.components:
+                    expanded_prop = target_data
+                    if "__orig_ref" in target_data or "$ref" in target_data:
+                        expanded_prop = self._resolve_refs(target_data, fn, defs)
+                    if not isinstance(expanded_prop, dict) or (
+                        "properties" not in expanded_prop and "type" not in expanded_prop
+                    ):
+                        if isinstance(expanded_prop, dict) and len(expanded_prop) > 0 and target_name != "data":
+                            pass
+                        else:
+                            continue
+                    comp = self._create_schema_object(target_name, expanded_prop)
+                    comp.is_component = True
+                    comp.title = expanded_prop.get("title", target_name.title())
+                    comp.description = _sanitize_desc(expanded_prop.get("description", ""))
+                    self.components[target_name] = comp
+
+            if isinstance(prop_data, dict) and "properties" in prop_data:
+                self._extract_components_from_props(prop_data["properties"], base_dict, fn, defs)
+
     # -- Build Models --------------------------------------------------------
 
     def build_models(self):
@@ -376,61 +511,6 @@ class SchemaLoader:
                     self.components[def_name] = comp
 
         # ── 4. Components from Wire Object properties ─────────────────────
-        def extract_components_from_props(props, base_dict, fn, defs):
-            for prop_name, prop_data in props.items():
-                if prop_name == "object_type":
-                    continue
-
-                is_obj = prop_data.get("type") == "object"
-                is_obj_array = (
-                    prop_data.get("type") == "array"
-                    and prop_data.get("items", {}).get("type") == "object"
-                )
-                has_ref = prop_data.get("$ref") is not None or (
-                    prop_data.get("type") == "array"
-                    and prop_data.get("items", {}).get("$ref") is not None
-                )
-                has_props = "properties" in prop_data or (
-                    prop_data.get("type") == "array"
-                    and "properties" in prop_data.get("items", {})
-                )
-
-                if is_obj or has_ref or has_props or is_obj_array:
-                    target_data = prop_data
-                    if prop_data.get("type") == "array":
-                        target_data = prop_data.get("items", {})
-
-                    orig_ref = target_data.get("__orig_ref")
-                    ref_path = target_data.get("$ref")
-                    if ref_path and not orig_ref:
-                        orig_ref = (
-                            ref_path.split("/")[-1]
-                            .replace(".json", "")
-                            .replace("#properties", "")
-                            .split("#")[-1]
-                        )
-                    target_name = orig_ref if orig_ref else prop_name
-
-                    if target_name not in self.components:
-                        expanded_prop = target_data
-                        if "__orig_ref" in target_data or "$ref" in target_data:
-                            expanded_prop = self._resolve_refs(target_data, fn, defs)
-                        if not isinstance(expanded_prop, dict) or (
-                            "properties" not in expanded_prop and "type" not in expanded_prop
-                        ):
-                            if isinstance(expanded_prop, dict) and len(expanded_prop) > 0 and target_name != "data":
-                                pass
-                            else:
-                                continue
-                        comp = self._create_schema_object(target_name, expanded_prop)
-                        comp.is_component = True
-                        comp.title = expanded_prop.get("title", target_name.title())
-                        comp.description = _sanitize_desc(expanded_prop.get("description", ""))
-                        self.components[target_name] = comp
-
-                if isinstance(prop_data, dict) and "properties" in prop_data:
-                    extract_components_from_props(prop_data["properties"], base_dict, fn, defs)
-
         for _, obj in self.arena_objects.items():
             fn = None
             for k, v in obj_schemas.items():
@@ -448,7 +528,7 @@ class SchemaLoader:
             defs = raw_schema.get("definitions", {})
             expanded = self._resolve_refs(raw_schema, fn, defs)
             data_props = expanded.get("properties", {}).get("data", {}).get("properties", {})
-            extract_components_from_props(data_props, expanded, fn, defs)
+            self._extract_components_from_props(data_props, expanded, fn, defs)
 
     # -- Wire Envelope ──────────────────────────────────────────────────────
 
@@ -539,6 +619,37 @@ class SchemaLoader:
         )
         self.wire_envelope.properties["data"] = data_prop
 
+    # -- Language Field Computation ------------------------------------------
+
+    def compute_language_fields(self):
+        """Populate language-specific fields on all properties and objects."""
+        # Build known C# type set from all objects and components
+        known_cs_types = {"ArenaVector3Json", "ArenaVector2Json"}
+        all_objects = list(self.arena_objects.values()) + list(self.components.values())
+        for obj in all_objects:
+            stripped = _strip_arena_prefix(obj.name)
+            known_cs_types.add(f"Arena{pascalcase(stripped)}Json")
+
+        # Process all objects including wire envelope
+        all_to_process = all_objects[:]
+        if self.wire_envelope:
+            all_to_process.append(self.wire_envelope)
+
+        for obj in all_to_process:
+            # Object-level class names
+            stripped = _strip_arena_prefix(obj.name)
+            obj.cs_class_name = pascalcase(stripped)
+            py_name = pascalcase(obj.name)
+            obj.py_class_name = _PY_CLASS_NAME_OVERRIDES.get(py_name, py_name)
+
+            # Property-level fields
+            for p_name, p in obj.properties.items():
+                p.pascal_name = pascalcase(p_name)
+                p.snake_name = snakecase(p_name)
+                p.cs_type = _compute_cs_type(p, known_cs_types)
+                p.py_type = _compute_py_type(p)
+                p.json_converter = _resolve_json_converter(p_name, p)
+
 
 # ---------------------------------------------------------------------------
 # Markdown Generator
@@ -607,6 +718,48 @@ class MarkdownGenerator:
         return "\n".join(lines)
 
     @classmethod
+    def _render_page_body(cls, obj: SchemaObject, page_type: str) -> List[str]:
+        """Render the body content for a schema page (shared by Markdown and Jekyll)."""
+        lines = []
+        if page_type == "envelope":
+            lines.append(f"{obj.description}\n")
+            lines.append(f"## {obj.title} Attributes\n")
+            lines.append(cls.generate_table(obj))
+            lines.append("\n")
+
+        elif page_type == "wire_object":
+            schema_desc = f"This is the schema for {obj.title}, the properties of wire object type `{obj.name}`."
+            lines.append(f"{obj.description}\n\n{schema_desc}\n")
+            lines.append(
+                "All wire objects have a set of basic attributes "
+                "`{object_id, action, type, persist, data}`. "
+                "The `data` attribute defines the object-specific attributes\n"
+            )
+            if obj.property_groups:
+                for group in obj.property_groups:
+                    keys_in_obj = [k for k in group.property_keys if k in obj.properties]
+                    if not keys_in_obj:
+                        continue
+                    lines.append(f"### {group.label} Properties\n")
+                    lines.append(cls.generate_table(obj, only_keys=keys_in_obj))
+                    lines.append("\n")
+            else:
+                lines.append(f"## {obj.title} Attributes\n")
+                lines.append(cls.generate_table(obj))
+                lines.append("\n")
+
+        elif page_type == "component":
+            schema_desc = f"This is the schema for {obj.title}, the properties of object `{obj.name}`."
+            if obj.definition_group:
+                schema_desc += f" Part of the **{obj.definition_group}** definition set."
+            lines.append(f"{obj.description}\n\n{schema_desc}\n")
+            lines.append(f"## {obj.title} Attributes\n")
+            lines.append(cls.generate_table(obj))
+            lines.append("\n")
+
+        return lines
+
+    @classmethod
     def generate_all(cls, loader: SchemaLoader, out_folder: str = "docs"):
         """Generate all markdown docs."""
         print(f"Generating markdown docs to {out_folder}/")
@@ -629,10 +782,7 @@ class MarkdownGenerator:
     @classmethod
     def _write_envelope_md(cls, obj: SchemaObject, out_folder: str):
         md = [f"# `{obj.name}`\n"]
-        md.append(f"{obj.description}\n")
-        md.append(f"## {obj.title} Attributes\n")
-        md.append(cls.generate_table(obj))
-        md.append("\n")
+        md.extend(cls._render_page_body(obj, "envelope"))
 
         p_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {p_path}")
@@ -642,29 +792,7 @@ class MarkdownGenerator:
     @classmethod
     def _write_wire_object_md(cls, obj: SchemaObject, out_folder: str):
         md = [f"# `{obj.name}`\n"]
-
-        schema_desc = f"This is the schema for {obj.title}, the properties of wire object type `{obj.name}`."
-        md.append(f"{obj.description}\n\n{schema_desc}\n")
-        md.append(
-            "All wire objects have a set of basic attributes "
-            "`{object_id, action, type, persist, data}`. "
-            "The `data` attribute defines the object-specific attributes\n"
-        )
-
-        if obj.property_groups:
-            # Grouped output
-            for group in obj.property_groups:
-                keys_in_obj = [k for k in group.property_keys if k in obj.properties]
-                if not keys_in_obj:
-                    continue
-                md.append(f"### {group.label} Properties\n")
-                md.append(cls.generate_table(obj, only_keys=keys_in_obj))
-                md.append("\n")
-        else:
-            # Fallback: single table
-            md.append(f"## {obj.title} Attributes\n")
-            md.append(cls.generate_table(obj))
-            md.append("\n")
+        md.extend(cls._render_page_body(obj, "wire_object"))
 
         p_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {p_path}")
@@ -674,15 +802,7 @@ class MarkdownGenerator:
     @classmethod
     def _write_component_md(cls, obj: SchemaObject, out_folder: str):
         md = [f"# `{obj.name}`\n"]
-
-        schema_desc = f"This is the schema for {obj.title}, the properties of object `{obj.name}`."
-        if obj.definition_group:
-            schema_desc += f" Part of the **{obj.definition_group}** definition set."
-        md.append(f"{obj.description}\n\n{schema_desc}\n")
-
-        md.append(f"## {obj.title} Attributes\n")
-        md.append(cls.generate_table(obj))
-        md.append("\n")
+        md.extend(cls._render_page_body(obj, "component"))
 
         p_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {p_path}")
@@ -766,41 +886,7 @@ class JekyllGenerator:
             f"# `{obj.name}`\n",
         ]
 
-        if page_type == "envelope":
-            page_md.append(f"{obj.description}\n")
-            page_md.append(f"## {obj.title} Attributes\n")
-            page_md.append(MarkdownGenerator.generate_table(obj))
-            page_md.append("\n")
-
-        elif page_type == "wire_object":
-            schema_desc = f"This is the schema for {obj.title}, the properties of wire object type `{obj.name}`."
-            page_md.append(f"{obj.description}\n\n{schema_desc}\n")
-            page_md.append(
-                "All wire objects have a set of basic attributes "
-                "`{object_id, action, type, persist, data}`. "
-                "The `data` attribute defines the object-specific attributes\n"
-            )
-            if obj.property_groups:
-                for group in obj.property_groups:
-                    keys_in_obj = [k for k in group.property_keys if k in obj.properties]
-                    if not keys_in_obj:
-                        continue
-                    page_md.append(f"### {group.label} Properties\n")
-                    page_md.append(MarkdownGenerator.generate_table(obj, only_keys=keys_in_obj))
-                    page_md.append("\n")
-            else:
-                page_md.append(f"## {obj.title} Attributes\n")
-                page_md.append(MarkdownGenerator.generate_table(obj))
-                page_md.append("\n")
-
-        elif page_type == "component":
-            schema_desc = f"This is the schema for {obj.title}, the properties of object `{obj.name}`."
-            if obj.definition_group:
-                schema_desc += f" Part of the **{obj.definition_group}** definition set."
-            page_md.append(f"{obj.description}\n\n{schema_desc}\n")
-            page_md.append(f"## {obj.title} Attributes\n")
-            page_md.append(MarkdownGenerator.generate_table(obj))
-            page_md.append("\n")
+        page_md.extend(MarkdownGenerator._render_page_body(obj, page_type))
 
         out_path = os.path.join(out_folder, f"{obj.name}.md")
         print(f"-> {out_path}")
@@ -809,11 +895,11 @@ class JekyllGenerator:
 
 
 # ---------------------------------------------------------------------------
-# Python Generator (ported from v4)
+# Python Generator
 # ---------------------------------------------------------------------------
 
 class PythonGenerator:
-    """Generates Python dataclass files."""
+    """Generates Python dataclass files using Jinja2 templates."""
 
     @classmethod
     def generate_all(cls, loader: SchemaLoader, out_folder: str):
@@ -822,135 +908,97 @@ class PythonGenerator:
         attr_dir = os.path.join(out_folder, "attributes")
         os.makedirs(obj_dir, exist_ok=True)
         os.makedirs(attr_dir, exist_ok=True)
+
+        env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader("templates"),
+            trim_blocks=True, lstrip_blocks=True,
+        )
+        try:
+            template = env.get_template("py_class.j2")
+        except jinja2.TemplateNotFound:
+            print("Warning: templates/py_class.j2 missing, skipping python.")
+            return
+
         for name, obj in loader.arena_objects.items():
-            cls._write_py_class(obj, obj_dir, is_component=False)
+            cls._write_py_class(obj, obj_dir, is_component=False, template=template)
         for name, comp in loader.components.items():
-            cls._write_py_class(comp, attr_dir, is_component=True)
+            cls._write_py_class(comp, attr_dir, is_component=True, template=template)
 
     @classmethod
-    def _get_py_type(cls, prop: SchemaProperty) -> str:
-        t = prop.type_name
-        if t == "number": return "float"
-        if t == "integer": return "int"
-        if t == "boolean": return "bool"
-        if t == "string": return "str"
-        if t == "array": return "list"
-        if t == "object": return "dict"
-        return "dict"
-
-    @classmethod
-    def _generate_docstring(cls, obj: SchemaObject, only_keys: set = None) -> str:
-        lines = [f'    """\n    {obj.title}']
-        if obj.description:
-            lines.append(f"    {obj.description}")
-        lines.append("")
-        for p_name, p in obj.properties.items():
-            if only_keys is not None and p_name not in only_keys:
-                continue
-            py_type = cls._get_py_type(p)
-            req = "" if p.required else ", optional"
-            dft_str = ""
-            if p.default is not None:
-                dft_str = f" Defaults to {p.default}"
-                if p.type_name == "string":
-                    dft_str = f" Defaults to '{p.default}'"
-            opts_str = ""
-            if p.enum:
-                if len(p.enum) == 1:
-                    opts_str = f" Must be '{p.enum[0]}'."
-                else:
-                    opts_str = f" Allows {p.enum}."
-            desc = p.description or p_name
-            lines.append(f"    :param {py_type} {p_name}: {desc}{req}.{opts_str}{dft_str}")
-        lines.append('    """')
-        return "\n".join(lines)
-
-    @classmethod
-    def _write_py_class(cls, obj: SchemaObject, folder: str, is_component: bool):
-        class_name = pascalcase(obj.name)
-        if class_name == "SceneOptions":
-            class_name = "Scene"
-        if class_name == "MaterialExtension":
-            class_name = "MaterialExt"
-
-        file_name = f"{snakecase(class_name)}.py"
-        target_path = os.path.join(folder, file_name)
-
-        lines = [
-            "from dataclasses import dataclass, field",
-            "from typing import Optional, List, Dict, Any",
-            "",
-            "@dataclass",
-            f"class {class_name}:",
-        ]
-        lines.append(cls._generate_docstring(obj, only_keys=None if is_component else obj.inline_properties))
-
-        has_props = False
+    def _build_py_context(cls, obj: SchemaObject, is_component: bool) -> dict:
+        """Build template context for Python class generation."""
+        properties = []
         for p_name, p in obj.properties.items():
             if not is_component and p_name not in obj.inline_properties:
                 continue
-            has_props = True
-            py_type = cls._get_py_type(p)
-            type_hint = py_type if p.required else f"Optional[{py_type}]"
 
+            # Compute type hint
+            type_hint = p.py_type if p.required else f"Optional[{p.py_type}]"
+
+            # Compute default value string
             if p.default is not None:
                 if isinstance(p.default, str):
-                    default_val = f"'{p.default}'"
+                    default_str = f"'{p.default}'"
                 elif isinstance(p.default, bool):
-                    default_val = str(p.default)
+                    default_str = str(p.default)
                 elif isinstance(p.default, (dict, list)):
-                    default_val = f"field(default_factory=lambda: {p.default})"
+                    default_str = f"field(default_factory=lambda: {p.default})"
                 else:
-                    default_val = str(p.default)
-                lines.append(f"    {p_name}: {type_hint} = {default_val}")
+                    default_str = str(p.default)
+            elif p.required:
+                default_str = None  # No default for required fields
             else:
-                if p.required:
-                    lines.append(f"    {p_name}: {type_hint}")
-                else:
-                    lines.append(f"    {p_name}: {type_hint} = None")
+                default_str = "None"
 
-        if not has_props:
-            lines.append("    pass")
-        lines.append("")
+            # Compute docstring param line
+            req_str = "" if p.required else ", optional"
+            dft_doc = ""
+            if p.default is not None:
+                dft_doc = f" Defaults to {p.default}"
+                if p.type_name == "string":
+                    dft_doc = f" Defaults to '{p.default}'"
+            opts_doc = ""
+            if p.enum:
+                if len(p.enum) == 1:
+                    opts_doc = f" Must be '{p.enum[0]}'."
+                else:
+                    opts_doc = f" Allows {p.enum}."
+            desc = p.description or p_name
+            param_line = f":param {p.py_type} {p_name}: {desc}{req_str}.{opts_doc}{dft_doc}"
+
+            properties.append({
+                "name": p_name,
+                "type_hint": type_hint,
+                "default_str": default_str,
+                "param_line": param_line,
+            })
+
+        return {
+            "class_name": obj.py_class_name,
+            "title": obj.title,
+            "description": obj.description,
+            "properties": properties,
+        }
+
+    @classmethod
+    def _write_py_class(cls, obj: SchemaObject, folder: str, is_component: bool, template):
+        file_name = f"{snakecase(obj.py_class_name)}.py"
+        target_path = os.path.join(folder, file_name)
+
+        context = cls._build_py_context(obj, is_component)
+        out = template.render(**context)
 
         with open(target_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines))
+            f.write(f"{out.rstrip()}\n")
         print(f"-> {target_path}")
 
 
 # ---------------------------------------------------------------------------
-# Dotnet Generator (ported from v4)
+# Dotnet Generator
 # ---------------------------------------------------------------------------
 
 class DotnetGenerator:
     """Generates Unity C# classes using Jinja2 templates."""
-
-    # Set of known C# type names (populated during generate_all)
-    _known_cs_types: set = set()
-
-    @classmethod
-    def get_cs_type(cls, prop: SchemaProperty) -> str:
-        t = prop.type_name
-        if prop.is_ref:
-            cs = f"Arena{prop.ref_name}Json"
-            # Fall back to object if this ref doesn't correspond to a known component
-            if cls._known_cs_types and cs not in cls._known_cs_types:
-                cs = "object"
-        elif t == "number":
-            cs = "float?" if prop.default is None else "float"
-        elif t == "integer":
-            cs = "int?" if prop.default is None else "int"
-        elif t == "boolean":
-            cs = "bool?" if prop.default is None else "bool"
-        elif t == "string":
-            cs = "string"
-        elif t == "array":
-            item_t = prop.array_item_type
-            inner = {"number": "float", "integer": "int", "string": "string", "boolean": "bool"}.get(item_t, "object")
-            cs = inner
-        else:
-            cs = "object"
-        return f"{cs}[]" if prop.is_array else cs
 
     @classmethod
     def _format_cs_value(cls, val) -> str:
@@ -967,10 +1015,12 @@ class DotnetGenerator:
         return str(val)
 
     @classmethod
-    def format_default(cls, prop: SchemaProperty, cs_type: str) -> str:
+    def format_default(cls, prop: SchemaProperty) -> str:
+        """Format a property's default value as a C# literal."""
         d = prop.default
         if d is None:
             return ""
+        cs_type = prop.cs_type
         if isinstance(d, bool):
             return str(d).lower()
         if isinstance(d, list):
@@ -1000,6 +1050,31 @@ class DotnetGenerator:
         if cs_type in ("string",):
             return f'"{d}"'
         return str(d)
+
+    @classmethod
+    def _build_cs_prop_dict(cls, p_name: str, p: SchemaProperty, desc_fallback: str = None) -> dict:
+        """Build a unified property dict for C# Jinja2 template rendering."""
+        description = p.description or (desc_fallback if desc_fallback else p_name)
+
+        bool_object_converter = ""
+        if p.is_ref and p_name in ("click-listener",):
+            bool_object_converter = f"ArenaBooleanObjectJsonConverter<{p.cs_type}>"
+
+        return {
+            "name": p_name,
+            "cs_name": p.pascal_name,
+            "cs_type": p.cs_type,
+            "description": description,
+            "required": p.required,
+            "default_formatted": cls.format_default(p),
+            "default": p.default,
+            "deprecated": p.deprecated,
+            "enum": p.enum,
+            "enum_name": f"{p.pascal_name}Type" if p.enum else "",
+            "is_ref": p.is_ref,
+            "json_converter": p.json_converter,
+            "bool_object_converter": bool_object_converter,
+        }
 
     @classmethod
     def generate_all(cls, loader: SchemaLoader, out_folder: str):
@@ -1042,11 +1117,7 @@ class DotnetGenerator:
         env.globals["pascalcase"] = pascalcase
 
         def write_cs(obj: SchemaObject, wire_obj: bool, target_dir: str):
-            # Strip "arena-" prefix to avoid double "Arena" in class name
-            stripped_name = obj.name
-            if stripped_name.startswith("arena-"):
-                stripped_name = stripped_name[len("arena-"):]
-            class_name = pascalcase(stripped_name)
+            class_name = obj.cs_class_name
 
             # Determine which properties belong directly to this object
             allowed_props = set(obj.properties.keys())
@@ -1066,38 +1137,7 @@ class DotnetGenerator:
                     continue
                 if wire_obj and p_name == "object_type":
                     continue  # handled by readonly field in template
-                cs_type = cls.get_cs_type(p)
-
-                # Determine JsonConverter type
-                json_converter = ""
-                if isinstance(p.type_name, list) and "object" in p.type_name and "boolean" in p.type_name:
-                    if p.is_ref:
-                        cs_ref = f"Arena{p.ref_name}Json"
-                        json_converter = f"ArenaBooleanObjectJsonConverter<{cs_ref}>"
-                elif p.is_ref and p.ref_name == "Vector3":
-                    json_converter = "ArenaVector3JsonConverter"
-                elif p.is_ref and p.ref_name == "Vector2":
-                    json_converter = "ArenaVector2JsonConverter"
-                elif "color" in p_name.lower():
-                    if p.is_array:
-                        json_converter = "ArenaColorArrayJsonConverter"
-                    elif cs_type == "string":
-                        json_converter = "ArenaColorJsonConverter"
-
-                cs_props.append({
-                    "name": p_name,
-                    "cs_name": pascalcase(p_name),
-                    "cs_type": cs_type,
-                    "description": p.description or f"The {p_name} property.",
-                    "required": p.required,
-                    "default_formatted": cls.format_default(p, cs_type),
-                    "default": p.default,
-                    "deprecated": p.deprecated,
-                    "enum": p.enum,
-                    "enum_name": f"{pascalcase(p_name)}Type" if p.enum else "",
-                    "is_ref": p.is_ref,
-                    "json_converter": json_converter,
-                })
+                cs_props.append(cls._build_cs_prop_dict(p_name, p, desc_fallback=f"The {p_name} property."))
 
             uses_converter = any(cp["json_converter"] for cp in cs_props)
             out = template.render(
@@ -1111,36 +1151,12 @@ class DotnetGenerator:
                 f.write(f"{out.rstrip()}\n")
 
         # Build set of component class names to detect collisions
-        component_class_names = set()
-        for _, obj in loader.components.items():
-            comp_stripped = obj.name
-            if comp_stripped.startswith("arena-"):
-                comp_stripped = comp_stripped[len("arena-"):]
-            component_class_names.add(pascalcase(comp_stripped))
-
-        # Build set of known C# type names for ref validation in get_cs_type
-        cls._known_cs_types = set()
-        for _, obj in loader.components.items():
-            comp_stripped = obj.name
-            if comp_stripped.startswith("arena-"):
-                comp_stripped = comp_stripped[len("arena-"):]
-            cls._known_cs_types.add(f"Arena{pascalcase(comp_stripped)}Json")
-        for _, obj in loader.arena_objects.items():
-            wo_stripped = obj.name
-            if wo_stripped.startswith("arena-"):
-                wo_stripped = wo_stripped[len("arena-"):]
-            cls._known_cs_types.add(f"Arena{pascalcase(wo_stripped)}Json")
-        # Also add well-known shared types
-        cls._known_cs_types.update({"ArenaVector3Json", "ArenaVector2Json"})
+        component_class_names = {obj.cs_class_name for _, obj in loader.components.items()}
 
         # Wire objects → Object/ subdirectory (skip if class name collides with component)
         for _, obj in loader.arena_objects.items():
-            stripped_name = obj.name
-            if stripped_name.startswith("arena-"):
-                stripped_name = stripped_name[len("arena-"):]
-            class_name = pascalcase(stripped_name)
-            if class_name in component_class_names:
-                print(f"   (skipping Object/{class_name} — collides with Attribute component)")
+            if obj.cs_class_name in component_class_names:
+                print(f"   (skipping Object/{obj.cs_class_name} — collides with Attribute component)")
                 continue
             write_cs(obj, wire_obj=True, target_dir=obj_dir)
         # Components → Attribute/ subdirectory
@@ -1153,44 +1169,6 @@ class DotnetGenerator:
         cls._generate_message(loader, out_folder, env)
 
     @classmethod
-    def _make_data_prop(cls, p_name, p):
-        """Build a property dict for a data wrapper template."""
-        cs_type = cls.get_cs_type(p)
-
-        json_converter = ""
-        if isinstance(p.type_name, list) and "object" in p.type_name and "boolean" in p.type_name:
-            if p.is_ref:
-                cs_ref = f"Arena{p.ref_name}Json"
-                json_converter = f"ArenaBooleanObjectJsonConverter<{cs_ref}>"
-        elif p.is_ref and p.ref_name == "Vector3":
-            json_converter = "ArenaVector3JsonConverter"
-        elif p.is_ref and p.ref_name == "Vector2":
-            json_converter = "ArenaVector2JsonConverter"
-        elif "color" in p_name.lower():
-            if p.is_array:
-                json_converter = "ArenaColorArrayJsonConverter"
-            elif cs_type == "string":
-                json_converter = "ArenaColorJsonConverter"
-
-        bool_object_converter = ""
-        if p.is_ref and p_name in ("click-listener",):
-            bool_object_converter = f"ArenaBooleanObjectJsonConverter<{cs_type}>"
-
-        return {
-            "name": p_name,
-            "cs_name": pascalcase(p_name),
-            "cs_type": cs_type,
-            "description": p.description or p_name,
-            "required": p.required,
-            "default_formatted": cls.format_default(p, cs_type),
-            "default": p.default,
-            "deprecated": p.deprecated,
-            "is_ref": p.is_ref,
-            "json_converter": json_converter,
-            "bool_object_converter": bool_object_converter,
-        }
-
-    @classmethod
     def _generate_data_object(cls, loader: SchemaLoader, out_folder: str, env: jinja2.Environment):
         """Generate ArenaDataObjectJson.cs — data wrapper for type:'object' messages."""
         try:
@@ -1199,13 +1177,8 @@ class DotnetGenerator:
             print("Warning: templates/cs_data_object.j2 missing, skipping data object.")
             return
 
-        # Build property key sets for each definition source
-        def_sources = [
-            ("definitions-entity.json", "Entity"),
-            ("definitions-common.json", "Common"),
-            ("definitions-geometry.json", "Geometry"),
-            ("definitions-gltf.json", "GLTF"),
-        ]
+        # Derive definition sources from _REF_LABELS (single source of truth)
+        def_sources = [(f"{key}.json", label) for key, label in _REF_LABELS.items()]
         def_key_sets = {}
         for def_file, label in def_sources:
             raw = loader.get_raw(def_file)
@@ -1230,7 +1203,7 @@ class DotnetGenerator:
                 continue
             is_from_def = any(p_name in keys for keys in def_key_sets.values())
             if not is_from_def and p_name in entity_obj.inline_properties:
-                inline_props.append(cls._make_data_prop(p_name, p))
+                inline_props.append(cls._build_cs_prop_dict(p_name, p))
                 seen.add(p_name)
 
         # Definition-sourced groups
@@ -1240,7 +1213,7 @@ class DotnetGenerator:
                 if p_name in seen or p_name == "object_type":
                     continue
                 if p_name in entity_obj.properties:
-                    group_props.append(cls._make_data_prop(p_name, entity_obj.properties[p_name]))
+                    group_props.append(cls._build_cs_prop_dict(p_name, entity_obj.properties[p_name]))
                     seen.add(p_name)
             if group_props:
                 property_groups.append({"label": label, "properties": group_props})
@@ -1281,16 +1254,7 @@ class DotnetGenerator:
         for p_name, p in scene_obj.properties.items():
             if p_name == "object_type":
                 continue
-            cs_type = cls.get_cs_type(p)
-            data_props.append({
-                "name": p_name,
-                "cs_name": pascalcase(p_name),
-                "cs_type": cs_type,
-                "description": p.description or p_name,
-                "required": p.required,
-                "default_formatted": cls.format_default(p, cs_type),
-                "default": p.default,
-            })
+            data_props.append(cls._build_cs_prop_dict(p_name, p))
 
         out = tmpl.render(properties=data_props)
         p_path = os.path.join(out_folder, "ArenaDataSceneOptionsJson.cs")
@@ -1315,13 +1279,9 @@ class DotnetGenerator:
         for p_name, p in loader.wire_envelope.properties.items():
             if p_name == "data":
                 continue  # data is handled specially in the template
-            cs_type = cls.get_cs_type(p)
-            # Use nullable types for optional fields
-            nullable = not p.required
             msg_props.append({
                 "name": p_name,
-                "cs_type": cs_type,
-                "nullable": nullable,
+                "cs_type": p.cs_type,
             })
 
         out = tmpl.render(properties=msg_props)
@@ -1375,6 +1335,7 @@ def main():
 
     loader = SchemaLoader(src_folder)
     loader.build_models()
+    loader.compute_language_fields()
     print(
         f"Loaded {len(loader.arena_objects)} ARENA Objects "
         f"and {len(loader.components)} Components."
