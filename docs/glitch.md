@@ -1,13 +1,12 @@
-
-Glitch
-======
-
+# `glitch`
 
 Use Glitch post-processing effect.
 
-Glitch Attributes
-------------------
+This is the schema for Glitch, the properties of object `glitch`.
 
-|Attribute|Type|Default|Description|Required|
+## Glitch Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**dtSize**|number|```64```|Heightmap size|Yes|
+| **dtSize** | number | `64` | Heightmap size | Yes |
+

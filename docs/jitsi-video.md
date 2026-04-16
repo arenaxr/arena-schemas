@@ -1,14 +1,13 @@
-
-Jitsi Video
-===========
-
+# `jitsi-video`
 
 Apply a jitsi video source to the geometry.
 
-Jitsi Video Attributes
------------------------
+This is the schema for Jitsi Video, the properties of object `jitsi-video`.
 
-|Attribute|Type|Default|Description|Required|
+## Jitsi Video Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**jitsiId**|string||JitsiId of the video source; If defined will override displayName.|No|
-|**displayName**|string||ARENA or Jitsi display name of the video source; Will be ignored if jitsiId is given. (* change requires reload* ).|Yes|
+| **jitsiId** | string |  | JitsiId of the video source; If defined will override displayName. | No |
+| **displayName** | string |  | ARENA or Jitsi display name of the video source; Will be ignored if jitsiId is given. (* change requires reload* ). | Yes |
+

@@ -1,19 +1,18 @@
-
-Post-Processing Effects
-=======================
-
+# `post-processing`
 
 These effects are enabled in desktop and XR views.
 
-Post-Processing Effects Attributes
------------------------------------
+This is the schema for Post-Processing Effects, the properties of object `post-processing`.
 
-|Attribute|Type|Default|Description|Required|
+## Post-Processing Effects Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**bloom**|object||Use bloom post-processing effect.|No|
-|**sao**|object||Use scalable ambient occlusion (SAO) post-processing effect.|No|
-|**ssao**|object||Use screen space ambient occlusion (SSAO) post-processing effect.|No|
-|**pixel**|object||Use Pixelation post-processing effect.|No|
-|**glitch**|object||Use Glitch post-processing effect.|No|
-|**fxaa**|object||Use FXAA post-processing effect. You may want to place this last in effects list.|No|
-|**smaa**|object||Use SMAA post-processing effect. You may want to place this last in effects list.|No|
+| **bloom** | [Bloom](bloom) |  | Use bloom post-processing effect. | No |
+| **sao** | [Sao](sao) |  | Use scalable ambient occlusion (SAO) post-processing effect. | No |
+| **ssao** | [Ssao](ssao) |  | Use screen space ambient occlusion (SSAO) post-processing effect. | No |
+| **pixel** | [Pixel](pixel) |  | Use Pixelation post-processing effect. | No |
+| **glitch** | [Glitch](glitch) |  | Use Glitch post-processing effect. | No |
+| **fxaa** | [Fxaa](fxaa) |  | Use FXAA post-processing effect. You may want to place this last in effects list. | No |
+| **smaa** | [Smaa](smaa) |  | Use SMAA post-processing effect. You may want to place this last in effects list. | No |
+

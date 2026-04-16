@@ -1,22 +1,20 @@
-run: venv
-	$(VENV)/python main.py
+run:
+	./.venv/bin/python build_schemas5.py all $(src)
 
 update: venv
-	rm -f schemas/*.json
-	$(VENV)/python updateschemas.py $(src)
+	$(VENV)/python build_schemas5.py update $(src)
 
 docs: venv
-	rm -f docs/*.md
-	$(VENV)/python createdoc.py
+	$(VENV)/python build_schemas5.py docs $(dst)
 
 jekyll: venv
-	$(VENV)/python createjekyll.py $(dst)
+	$(VENV)/python build_schemas5.py jekyll $(dst)
 
 dotnet: venv
-	$(VENV)/python createdotnet.py $(src) $(dst)
+	$(VENV)/python build_schemas5.py dotnet $(dst)
 
 py: venv
-	$(VENV)/python createpy.py $(src) $(dst)
+	$(VENV)/python build_schemas5.py py $(dst)
 
 show-req: venv
 		$(VENV)/pip freeze

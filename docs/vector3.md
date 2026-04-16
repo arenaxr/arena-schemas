@@ -1,15 +1,14 @@
-
-Vector3
-=======
+# `vector3`
 
 
-Vector3
 
-Vector3 Attributes
--------------------
+This is the schema for Vector3, the properties of object `vector3`. Part of the **Common** definition set.
 
-|Attribute|Type|Default|Description|Required|
+## Vector3 Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**x**|number|```0```|x|Yes|
-|**y**|number|```0```|y|Yes|
-|**z**|number|```0```|z|Yes|
+| **x** | number | `0` | x | Yes |
+| **y** | number | `0` | y | Yes |
+| **z** | number | `0` | z | Yes |
+

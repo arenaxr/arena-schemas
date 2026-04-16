@@ -11,11 +11,7 @@
                             "type": "string",
                             "title": "3D object type",
                             "description": "3D object type.",
-                            "enum": [
-                                "camera",
-                                "look-at",
-                                "teleport-to-landmark"
-                            ]
+                            "enum": ["camera", "look-at", "teleport-to-landmark"]
                         },
                         "target": {
                             "type": "string",
@@ -30,12 +26,10 @@
                     }
                 },
                 {
-                    "$ref": "./schemas/definitions-entity.json#/properties"
+                    "$ref": "./schemas/definitions-entity.json#properties"
                 }
             ],
-            "required": [
-                "object_type"
-            ]
+            "required": ["object_type"]
         }
     },
     "type": "object",
@@ -49,11 +43,7 @@
         "action": {
             "type": "string",
             "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
+            "enum": ["create", "delete", "update"],
             "default": "update"
         },
         "persist": {
@@ -63,20 +53,12 @@
         },
         "type": {
             "type": "string",
-            "enum": [
-                "camera-override"
-            ]
+            "enum": ["camera-override"]
         },
         "data": {
             "$ref": "#/definitions/camera-override",
             "description": "Object data payload; Camera Override config data"
         }
     },
-    "required": [
-        "object_id",
-        "action",
-        "persist",
-        "type",
-        "data"
-    ]
+    "required": ["object_id", "action", "persist", "type", "data"]
 }

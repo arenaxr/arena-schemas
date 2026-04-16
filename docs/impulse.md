@@ -1,15 +1,11 @@
+# `impulse`
 
-Impulse
-=======
+DEPRECATED: data.impulse is deprecated, use data.physx-force-pushable instead.
 
+This is the schema for DEPRECATED (impulse), the properties of object `impulse`.
 
-Apply an impulse to an object to set it in motion. This happens in conjunction with an event. Requires `click-listener` attribute and `scene-options: physics`.
+## DEPRECATED (impulse) Attributes
 
-Impulse Attributes
--------------------
-
-|Attribute|Type|Default|Description|Required|
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**force**|[vector3](vector3)|```{'x': 1, 'y': 1, 'z': 1}```|Impulse vector.|No|
-|**on**|string; One of: ```['mousedown', 'mouseup']```|```'mousedown'```|Event to listen 'on'.|No|
-|**position**|[vector3](vector3)|```{'x': 1, 'y': 1, 'z': 1}```|World position.|No|
+

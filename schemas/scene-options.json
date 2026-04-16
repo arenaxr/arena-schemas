@@ -66,7 +66,7 @@
                     "type": "boolean"
                 },
                 "dressingVariance": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 1,
@@ -93,15 +93,7 @@
                 "grid": {
                     "default": "none",
                     "description": "1x1 and 2x2 are rectangular grids of 1 and 2 meters side, respectively.",
-                    "enum": [
-                        "1x1",
-                        "2x2",
-                        "crosses",
-                        "dots",
-                        "none",
-                        "xlines",
-                        "ylines"
-                    ],
+                    "enum": ["1x1", "2x2", "crosses", "dots", "none", "xlines", "ylines"],
                     "title": "Grid",
                     "type": "string"
                 },
@@ -115,14 +107,7 @@
                 "ground": {
                     "default": "hills",
                     "description": "Orography style.",
-                    "enum": [
-                        "canyon",
-                        "flat",
-                        "hills",
-                        "noise",
-                        "none",
-                        "spikes"
-                    ],
+                    "enum": ["canyon", "flat", "hills", "noise", "none", "spikes"],
                     "title": "Ground",
                     "type": "string"
                 },
@@ -140,8 +125,24 @@
                     "title": "Ground Color (secondary)",
                     "type": "string"
                 },
+                "groundDensity": {
+                    "default": 64,
+                    "description": "Number of divisions of the ground mesh.",
+                    "maximum": 1024,
+                    "minimum": 8,
+                    "title": "Ground Density",
+                    "type": "number"
+                },
+                "groundFrequency": {
+                    "default": 10,
+                    "description": "Frequency of the ground noise.",
+                    "maximum": 1000,
+                    "minimum": 0.1,
+                    "title": "Ground Frequency",
+                    "type": "number"
+                },
                 "groundScale": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 1,
@@ -154,12 +155,7 @@
                 "groundTexture": {
                     "default": "none",
                     "description": "Texture applied to the ground.",
-                    "enum": [
-                        "checkerboard",
-                        "none",
-                        "squares",
-                        "walkernoise"
-                    ],
+                    "enum": ["checkerboard", "none", "squares", "walkernoise"],
                     "title": "Ground Texture",
                     "type": "string"
                 },
@@ -186,16 +182,12 @@
                 "lighting": {
                     "default": "distant",
                     "description": "A hemisphere light and a key light (directional or point) are added to the scene automatically when using the component. Use none if you don't want this automatic lighting set being added. The color and intensity are estimated automatically.",
-                    "enum": [
-                        "distant",
-                        "none",
-                        "point"
-                    ],
+                    "enum": ["distant", "none", "point"],
                     "title": "Lighting",
                     "type": "string"
                 },
                 "lightPosition": {
-                    "$ref": "#/definitions/vector3",
+                    "$ref": "./schemas/definitions-common.json#definitions/vector3",
                     "format": "grid",
                     "default": {
                         "x": 0,
@@ -259,6 +251,14 @@
                     "title": "Shadow size",
                     "type": "number"
                 },
+                "stageSize": {
+                    "default": 200,
+                    "description": "Stage ground diameter (and sky radius) in meters.",
+                    "maximum": 20000,
+                    "minimum": 1,
+                    "title": "Stage Size",
+                    "type": "number"
+                },
                 "skyColor": {
                     "default": "#ffa500",
                     "format": "color",
@@ -268,20 +268,12 @@
                 "skyType": {
                     "default": "color",
                     "description": "A sky type.",
-                    "enum": [
-                        "atmosphere",
-                        "color",
-                        "gradient",
-                        "none"
-                    ],
+                    "enum": ["atmosphere", "color", "gradient", "none"],
                     "title": "Sky Type",
                     "type": "string"
                 }
             },
-            "required": [
-                "active",
-                "preset"
-            ],
+            "required": ["active", "preset"],
             "title": "Environment Presets",
             "type": "object",
             "description": "A-Frame Environment presets.\n\nMore properties at <a href='https://github.com/supermedium/aframe-environment-component'>A-Frame Environment Component</a>."
@@ -297,12 +289,7 @@
                 "outputColorSpace": {
                     "default": "SRGBColorSpace",
                     "description": "Defines the output color space of the renderer (three.js default is SRGBColorSpace).",
-                    "enum": [
-                        "SRGBColorSpace",
-                        "LinearSRGBColorSpace",
-                        "DisplayP3ColorSpace",
-                        "NoColorSpace"
-                    ],
+                    "enum": ["SRGBColorSpace", "LinearSRGBColorSpace", "DisplayP3ColorSpace", "NoColorSpace"],
                     "title": "Output Color Space",
                     "type": "string"
                 },
@@ -319,9 +306,7 @@
                     "type": "boolean"
                 }
             },
-            "required": [
-                "outputColorSpace"
-            ],
+            "required": ["outputColorSpace"],
             "title": "Renderer Settings",
             "type": "object",
             "description": "These settings are fed into three.js WebGLRenderer properties."
@@ -343,11 +328,7 @@
                 "distanceModel": {
                     "default": "inverse",
                     "description": "Algorithm to use to reduce the volume of the audio source as it moves away from the listener.",
-                    "enum": [
-                        "exponential",
-                        "inverse",
-                        "linear"
-                    ],
+                    "enum": ["exponential", "inverse", "linear"],
                     "title": "Positional Audio Distance Model",
                     "type": "string"
                 },
@@ -374,10 +355,7 @@
                                 "description": "The head model GLTF URL. You must scale and rotate your source GLTFs appropriately."
                             }
                         },
-                        "required": [
-                            "name",
-                            "url"
-                        ]
+                        "required": ["name", "url"]
                     }
                 },
                 "jitsiHost": {
@@ -489,44 +467,27 @@
                             "type": "number"
                         },
                         "groundCollisionLayers": {
-                            "default": [
-                                2
-                            ],
+                            "default": [2],
                             "description": "Which collision layers the ground belongs to",
                             "title": "Ground Collision Layers",
                             "type": "array",
                             "items": {
                                 "type": "number",
-                                "enum": [
-                                    1,
-                                    2,
-                                    3,
-                                    4
-                                ]
+                                "enum": [1, 2, 3, 4]
                             }
                         },
                         "groundCollisionMask": {
-                            "default": [
-                                1,
-                                2,
-                                3,
-                                4
-                            ],
+                            "default": [1, 2, 3, 4],
                             "description": "Which collision layers will collide with the ground",
                             "title": "Ground Collision Mask",
                             "type": "array",
                             "items": {
                                 "type": "number",
-                                "enum": [
-                                    1,
-                                    2,
-                                    3,
-                                    4
-                                ]
+                                "enum": [1, 2, 3, 4]
                             }
                         },
                         "gravity": {
-                            "$ref": "#/definitions/vector3",
+                            "$ref": "./schemas/definitions-common.json#definitions/vector3",
                             "format": "grid",
                             "default": {
                                 "x": 0,
@@ -534,8 +495,7 @@
                                 "z": 0
                             },
                             "description": "Gravity vector in m/s^2",
-                            "title": "Gravity",
-                            "type": "object"
+                            "title": "Gravity"
                         },
                         "stats": {
                             "default": [],
@@ -544,19 +504,13 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "enum": [
-                                    "console",
-                                    "events",
-                                    "panel"
-                                ]
+                                "enum": ["console", "events", "panel"]
                             }
                         }
                     },
-                    "required": [
-                        "enabled"
-                    ],
+                    "required": ["enabled"],
                     "title": "Physics Settings",
-                    "type": "object",
+                    "type": ["object", "boolean", "string"],
                     "description": "Clientside PhysX-based physics system. Required for all physx-* components"
                 },
                 "ar-hit-test": {
@@ -575,10 +529,7 @@
                         "type": {
                             "default": "footprint",
                             "description": "Footprint is the shape of the model.",
-                            "enum": [
-                                "footprint",
-                                "map"
-                            ],
+                            "enum": ["footprint", "map"],
                             "type": "string"
                         },
                         "footprintDepth": {
@@ -592,10 +543,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [
-                        "enabled",
-                        "src"
-                    ],
+                    "required": ["enabled", "src"],
                     "title": "AR Hit Test Settings",
                     "type": "object",
                     "description": "A-Frame AR Hit Test Settings.\n\nMore properties at <a href='https://aframe.io/docs/1.5.0/components/ar-hit-test.html'>AR Hit Test</a> component."
@@ -630,20 +578,13 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "enabled"
-                    ],
+                    "required": ["enabled"],
                     "title": "OpenVPS Settings",
                     "type": "object",
                     "description": "Set an OpenVPS server to localize by camera image on mobile devices"
                 }
             },
-            "required": [
-                "maxAVDist",
-                "physics",
-                "originMarker",
-                "privateScene"
-            ],
+            "required": ["maxAVDist", "physics", "originMarker", "privateScene"],
             "title": "Scene Options",
             "type": "object",
             "description": "ARENA Scene Options."
@@ -677,12 +618,7 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "strength",
-                        "radius",
-                        "threshold",
-                        "resolution"
-                    ],
+                    "required": ["strength", "radius", "threshold", "resolution"],
                     "description": "Use bloom post-processing effect.",
                     "title": "Bloom",
                     "type": "object"
@@ -751,11 +687,7 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "resolution",
-                        "useDepthTexture",
-                        "useNormals"
-                    ],
+                    "required": ["resolution", "useDepthTexture", "useNormals"],
                     "description": "Use scalable ambient occlusion (SAO) post-processing effect.",
                     "title": "SAO",
                     "type": "object"
@@ -787,12 +719,7 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "resolution",
-                        "kernelRadius",
-                        "minDistance",
-                        "maxDistance"
-                    ],
+                    "required": ["resolution", "kernelRadius", "minDistance", "maxDistance"],
                     "description": "Use screen space ambient occlusion (SSAO) post-processing effect.",
                     "title": "SSAO",
                     "type": "object"
@@ -815,11 +742,7 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "pixelSize",
-                        "normalEdgeStrength",
-                        "depthEdgeStrength"
-                    ],
+                    "required": ["pixelSize", "normalEdgeStrength", "depthEdgeStrength"],
                     "description": "Use Pixelation post-processing effect.",
                     "title": "Pixel",
                     "type": "object"
@@ -832,9 +755,7 @@
                             "type": "number"
                         }
                     },
-                    "required": [
-                        "dtSize"
-                    ],
+                    "required": ["dtSize"],
                     "description": "Use Glitch post-processing effect.",
                     "title": "Glitch",
                     "type": "object"
@@ -847,9 +768,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [
-                        "options"
-                    ],
+                    "required": ["options"],
                     "description": "Use FXAA post-processing effect. You may want to place this last in effects list.",
                     "title": "FXAA",
                     "type": "object"
@@ -862,9 +781,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [
-                        "options"
-                    ],
+                    "required": ["options"],
                     "description": "Use SMAA post-processing effect. You may want to place this last in effects list.",
                     "title": "SMAA",
                     "type": "object"
@@ -874,30 +791,6 @@
             "title": "Post-Processing Effects",
             "type": "object",
             "description": "These effects are enabled in desktop and XR views."
-        },
-        "vector3": {
-            "title": "Vector3",
-            "format": "grid",
-            "properties": {
-                "x": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "y": {
-                    "default": 0,
-                    "type": "number"
-                },
-                "z": {
-                    "default": 0,
-                    "type": "number"
-                }
-            },
-            "required": [
-                "x",
-                "y",
-                "z"
-            ],
-            "type": "object"
         }
     },
     "format": "grid",
@@ -914,20 +807,29 @@
             "type": "boolean"
         },
         "type": {
-            "enum": [
-                "scene-options"
-            ],
+            "enum": ["scene-options"],
             "type": "string"
         },
         "action": {
             "default": "create",
             "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
+            "enum": ["create", "delete", "update"],
             "type": "string"
+        },
+        "timestamp": {
+            "$ref": "#definitions/timestamp"
+        },
+        "override": {
+            "$ref": "#definitions/override"
+        },
+        "ttl": {
+            "$ref": "#definitions/ttl"
+        },
+        "private": {
+            "$ref": "#definitions/private"
+        },
+        "program_id": {
+            "$ref": "#definitions/program_id"
         },
         "data": {
             "properties": {
@@ -944,20 +846,11 @@
                     "$ref": "#/definitions/post-processing"
                 }
             },
-            "required": [
-                "env-presets",
-                "scene-options"
-            ],
+            "required": ["env-presets", "scene-options"],
             "title": "Scene Config Data"
         }
     },
-    "required": [
-        "action",
-        "data",
-        "object_id",
-        "persist",
-        "type"
-    ],
+    "required": ["action", "data", "object_id", "persist", "type"],
     "title": "Scene Config",
     "type": "object"
 }

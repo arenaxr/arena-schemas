@@ -1,15 +1,14 @@
-
-Position
-========
-
+# `position`
 
 3D object position.
 
-Position Attributes
---------------------
+This is the schema for Position, the properties of object `position`.
 
-|Attribute|Type|Default|Description|Required|
+## Position Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**x**|number|```0```|x|Yes|
-|**y**|number|```0```|y|Yes|
-|**z**|number|```0```|z|Yes|
+| **x** | number | `0` | x | Yes |
+| **y** | number | `0` | y | Yes |
+| **z** | number | `0` | z | Yes |
+

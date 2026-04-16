@@ -1,0 +1,44 @@
+{
+    "format": "grid",
+    "properties": {
+        "object_id": {
+            "description": "A uuid or otherwise unique identifier for this object.",
+            "minLength": 3,
+            "type": "string"
+        },
+        "persist": {
+            "default": false,
+            "description": "Persist this object in the database.",
+            "type": "boolean"
+        },
+        "type": {
+            "description": "One of the client event action types like 'mousedown'.",
+            "enum": [
+                "mousedown",
+                "mouseup",
+                "mouseenter",
+                "mouseleave",
+                "triggerdown",
+                "triggerup",
+                "gripdown",
+                "gripup",
+                "menudown",
+                "menuup",
+                "systemdown",
+                "systemup",
+                "trackpaddown",
+                "trackpadup",
+                "soundplay",
+                "soundpause",
+                "soundstop"
+            ],
+            "type": "string"
+        },
+        "action": {
+            "default": "clientEvent",
+            "description": "Message action client event.",
+            "enum": ["clientEvent"],
+            "type": "string"
+        }
+    }
+}

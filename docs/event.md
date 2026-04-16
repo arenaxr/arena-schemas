@@ -1,30 +1,19 @@
-
-Event
-=====
-
+# `event`
 
 Generate an event message for an object.
 
-All wire objects have a set of basic attributes ```{object_id, action, type, persist, data}```. The ```data``` attribute defines the object-specific attributes
+This is the schema for Event, the properties of wire object type `event`.
 
-Event Attributes
------------------
+All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-|Attribute|Type|Default|Description|Required|
+### Event Properties
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**object_id**|string||A uuid or otherwise unique identifier for this object.|Yes|
-|**persist**|boolean|```False```|Persist this object in the database.|No|
-|**type**|string; One of: ```['mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'triggerdown', 'triggerup', 'gripdown', 'gripup', 'menudown', 'menuup', 'systemdown', 'systemup', 'trackpaddown', 'trackpadup', 'soundplay', 'soundpause', 'soundstop']```||One of the client event action types like 'mousedown'.|Yes|
-|**action**|string; Must be: ```clientEvent```|```'clientEvent'```|Message action client event.|Yes|
-|**data**|Event data||Event Data|Yes|
+| **target** | string |  | The `object_id` of event destination. | Yes |
+| **targetPosition** | [Vector3](vector3) |  | The event destination position in 3D. | Yes |
+| **originPosition** | [Vector3](vector3) | `{'x': 0, 'y': 1.6, 'z': 0}` | The event origination position in 3D. | No |
+| **source** | ~~string~~ | ~~~~ | ~~DEPRECATED: data.source is deprecated for clientEvent, use data.target instead.~~ | ~~No~~ |
+| **position** | ~~object~~ | ~~~~ | ~~DEPRECATED: data.position is deprecated for clientEvent, use data.targetPosition instead.~~ | ~~No~~ |
+| **clickPos** | ~~object~~ | ~~~~ | ~~DEPRECATED: data.clickPos is deprecated for clientEvent, use data.originPosition instead.~~ | ~~No~~ |
 
-### Event Data Attributes
-
-|Attribute|Type|Default|Description|Required|
-| :--- | :--- | :--- | :--- | :--- |
-|**target**|string||The `object_id` of event destination.|Yes|
-|**targetPosition**|[vector3](vector3)||The event destination position in 3D.|Yes|
-|**originPosition**|[vector3](vector3)|```{'x': 0, 'y': 1.6, 'z': 0}```|The event origination position in 3D.|No|
-|~~**source**~~|~~string~~||~~DEPRECATED: data.source is deprecated for clientEvent, use data.target instead.~~|~~No~~|
-|~~**position**~~|~~object~~||~~DEPRECATED: data.position is deprecated for clientEvent, use data.targetPosition instead.~~|~~No~~|
-|~~**clickPos**~~|~~object~~||~~DEPRECATED: data.clickPos is deprecated for clientEvent, use data.originPosition instead.~~|~~No~~|

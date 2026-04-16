@@ -13,29 +13,20 @@
                 "affinity": {
                     "type": "string",
                     "description": "Indicates the module affinity (client=client's runtime; none or empty=any suitable/available runtime).",
-                    "enum": [
-                        "client",
-                        "none"
-                    ],
+                    "enum": ["client", "none"],
                     "default": "client"
                 },
                 "instantiate": {
                     "type": "string",
                     "description": "Single instance of the program (=single), or let every client create a program instance (=client). Per client instance will create new uuid for each program.",
-                    "enum": [
-                        "single",
-                        "client"
-                    ],
+                    "enum": ["single", "client"],
                     "default": "client"
                 },
                 "file": {
                     "type": "string",
                     "title": "file",
                     "description": "The path to a `.wasm` file (e.g. `counter.wasm`, `user1/counter.wasm`) in the ARENA filestore, starting from the location field indicated below. See location. Example: user1/py/counter/counter.py should have file: `counter.py` and location: `user1/py/counter`. Note that the runtime will download all files in parent folder (e.g. you can add a requirements.txt)",
-                    "examples": [
-                        "counter.wasm",
-                        "py/counter/counter.py"
-                    ]
+                    "examples": ["counter.wasm", "py/counter/counter.py"]
                 },
                 "filename": {
                     "title": "DEPRECATED (filename)",
@@ -48,27 +39,19 @@
                     "title": "File location",
                     "description": "Filestore path starting at user home; Example: `user1/hello` for a program inside folder `hello` of user1. Should, at least be the user filesore home folder.",
                     "minLength": 3,
-                    "examples": [
-                        "user1/python-programs/program1",
-                        "user1/py/counter"
-                    ]
+                    "examples": ["user1/python-programs/program1", "user1/py/counter"]
                 },
                 "filetype": {
                     "type": "string",
                     "description": "Type of the program (WA=WASM or PY=Python).",
-                    "enum": [
-                        "WA",
-                        "PY"
-                    ],
+                    "enum": ["WA", "PY"],
                     "default": "WA"
                 },
                 "parent": {
                     "type": "string",
                     "description": "Request the orchestrator to deploy to this runtime (can be a runtime name or UUID); Temporarily must be arena-rt1.",
                     "minLength": 5,
-                    "enum": [
-                        "arena-rt1"
-                    ],
+                    "enum": ["arena-rt1"],
                     "default": "arena-rt1"
                 },
                 "args": {
@@ -111,20 +94,13 @@
                             "type": {
                                 "type": "string",
                                 "description": "Pubsub or client socket.",
-                                "enum": [
-                                    "pubsub",
-                                    "client"
-                                ],
+                                "enum": ["pubsub", "client"],
                                 "default": "pubsub"
                             },
                             "mode": {
                                 "type": "string",
                                 "description": "Access mode.",
-                                "enum": [
-                                    "r",
-                                    "w",
-                                    "rw"
-                                ]
+                                "enum": ["r", "w", "rw"]
                             },
                             "params": {
                                 "type": "object",
@@ -147,11 +123,7 @@
                             }
                         }
                     },
-                    "required": [
-                        "path",
-                        "type",
-                        "mode"
-                    ],
+                    "required": ["path", "type", "mode"],
                     "default": [
                         {
                             "path": "/ch/${scene}",
@@ -231,15 +203,7 @@
                     }
                 }
             },
-            "required": [
-                "name",
-                "file",
-                "location",
-                "filetype",
-                "instantiate",
-                "parent",
-                "env"
-            ]
+            "required": ["name", "file", "location", "filetype", "instantiate", "parent", "env"]
         }
     },
     "type": "object",
@@ -255,12 +219,23 @@
         "action": {
             "type": "string",
             "description": "Message action create, update, delete.",
-            "enum": [
-                "create",
-                "delete",
-                "update"
-            ],
+            "enum": ["create", "delete", "update"],
             "default": "create"
+        },
+        "timestamp": {
+            "$ref": "#/definitions/timestamp"
+        },
+        "override": {
+            "$ref": "#/definitions/override"
+        },
+        "ttl": {
+            "$ref": "#/definitions/ttl"
+        },
+        "private": {
+            "$ref": "#/definitions/private"
+        },
+        "program_id": {
+            "$ref": "#/definitions/program_id"
         },
         "persist": {
             "type": "boolean",
@@ -269,20 +244,12 @@
         },
         "type": {
             "type": "string",
-            "enum": [
-                "program"
-            ]
+            "enum": ["program"]
         },
         "data": {
             "$ref": "#/definitions/program",
             "description": "Object data payload; Program config data"
         }
     },
-    "required": [
-        "object_id",
-        "action",
-        "persist",
-        "type",
-        "data"
-    ]
+    "required": ["object_id", "action", "persist", "type", "data"]
 }

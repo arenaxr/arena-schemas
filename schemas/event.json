@@ -1,12 +1,60 @@
 {
     "title": "Event",
     "description": "Generate an event message for an object.",
-    "required": [
-        "object_id",
-        "action",
-        "type",
-        "data"
+    "allOf": [
+        {
+            "$ref": "./schemas/definitions-arena-event.json#properties"
+        },
+        {
+            "properties": {
+                "data": {
+                    "properties": {
+                        "target": {
+                            "description": "The `object_id` of event destination.",
+                            "type": "string"
+                        },
+                        "targetPosition": {
+                            "description": "The event destination position in 3D.",
+                            "format": "grid",
+                            "$ref": "#/definitions/vector3"
+                        },
+                        "originPosition": {
+                            "description": "The event origination position in 3D.",
+                            "format": "grid",
+                            "$ref": "#/definitions/vector3",
+                            "default": {
+                                "x": 0,
+                                "y": 1.6,
+                                "z": 0
+                            }
+                        },
+                        "source": {
+                            "title": "DEPRECATED (source)",
+                            "description": "DEPRECATED: data.source is deprecated for clientEvent, use data.target instead.",
+                            "type": "string",
+                            "deprecated": true
+                        },
+                        "position": {
+                            "title": "DEPRECATED (position)",
+                            "description": "DEPRECATED: data.position is deprecated for clientEvent, use data.targetPosition instead.",
+                            "type": "object",
+                            "deprecated": true
+                        },
+                        "clickPos": {
+                            "title": "DEPRECATED (clickPos)",
+                            "description": "DEPRECATED: data.clickPos is deprecated for clientEvent, use data.originPosition instead.",
+                            "type": "object",
+                            "deprecated": true
+                        }
+                    },
+                    "title": "Event Data",
+                    "additionalProperties": true,
+                    "required": ["target", "targetPosition"]
+                }
+            }
+        }
     ],
+    "required": ["object_id", "action", "type", "data"],
     "definitions": {
         "vector3": {
             "title": "Vector3",
@@ -25,102 +73,8 @@
                     "type": "number"
                 }
             },
-            "required": [
-                "x",
-                "y",
-                "z"
-            ],
+            "required": ["x", "y", "z"],
             "type": "object"
-        }
-    },
-    "properties": {
-        "object_id": {
-            "description": "A uuid or otherwise unique identifier for this object.",
-            "minLength": 3,
-            "type": "string"
-        },
-        "persist": {
-            "default": false,
-            "description": "Persist this object in the database.",
-            "type": "boolean"
-        },
-        "type": {
-            "description": "One of the client event action types like 'mousedown'.",
-            "enum": [
-                "mousedown",
-                "mouseup",
-                "mouseenter",
-                "mouseleave",
-                "triggerdown",
-                "triggerup",
-                "gripdown",
-                "gripup",
-                "menudown",
-                "menuup",
-                "systemdown",
-                "systemup",
-                "trackpaddown",
-                "trackpadup",
-                "soundplay",
-                "soundpause",
-                "soundstop"
-            ],
-            "type": "string"
-        },
-        "action": {
-            "default": "clientEvent",
-            "description": "Message action client event.",
-            "enum": [
-                "clientEvent"
-            ],
-            "type": "string"
-        },
-        "data": {
-            "properties": {
-                "target": {
-                    "description": "The `object_id` of event destination.",
-                    "type": "string"
-                },
-                "targetPosition": {
-                    "description": "The event destination position in 3D.",
-                    "format": "grid",
-                    "$ref": "#/definitions/vector3"
-                },
-                "originPosition": {
-                    "description": "The event origination position in 3D.",
-                    "format": "grid",
-                    "$ref": "#/definitions/vector3",
-                    "default": {
-                        "x": 0,
-                        "y": 1.6,
-                        "z": 0
-                    }
-                },
-                "source": {
-                    "title": "DEPRECATED (source)",
-                    "description": "DEPRECATED: data.source is deprecated for clientEvent, use data.target instead.",
-                    "type": "string",
-                    "deprecated": true
-                },
-                "position": {
-                    "title": "DEPRECATED (position)",
-                    "description": "DEPRECATED: data.position is deprecated for clientEvent, use data.targetPosition instead.",
-                    "type": "object",
-                    "deprecated": true
-                },
-                "clickPos": {
-                    "title": "DEPRECATED (clickPos)",
-                    "description": "DEPRECATED: data.clickPos is deprecated for clientEvent, use data.originPosition instead.",
-                    "type": "object",
-                    "deprecated": true
-                }
-            },
-            "title": "Event Data",
-            "additionalProperties": true,
-            "required": [
-                "target",
-                "targetPosition"
-            ]
         }
     }
 }

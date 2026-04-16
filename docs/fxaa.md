@@ -1,13 +1,12 @@
-
-FXAA
-====
-
+# `fxaa`
 
 Use FXAA post-processing effect. You may want to place this last in effects list.
 
-FXAA Attributes
-----------------
+This is the schema for FXAA, the properties of object `fxaa`.
 
-|Attribute|Type|Default|Description|Required|
+## FXAA Attributes
+
+| Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |
-|**options**|string|```' '```|placeholder options|Yes|
+| **options** | string | `' '` | placeholder options | Yes |
+
