@@ -1206,10 +1206,12 @@ class DotnetGenerator:
                 inline_props.append(cls._build_cs_prop_dict(p_name, p))
                 seen.add(p_name)
 
-        # Definition-sourced groups
-        for _, label in def_sources:
+        # Definition-sourced groups — iterate definition file keys to preserve
+        # the canonical JSON schema property ordering.
+        for def_file, label in def_sources:
             group_props = []
-            for p_name in def_key_sets.get(label, []):
+            raw = loader.get_raw(def_file)
+            for p_name in raw.get("properties", {}).keys():
                 if p_name in seen or p_name == "object_type":
                     continue
                 if p_name in entity_obj.properties:

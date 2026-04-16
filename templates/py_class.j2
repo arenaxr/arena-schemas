@@ -8,6 +8,7 @@ class {{ class_name }}:
 {% if description %}
     {{ description }}
 {% endif %}
+
 {% for p in properties %}
     {{ p.param_line }}
 {% endfor %}
