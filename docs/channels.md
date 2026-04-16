@@ -4,6 +4,8 @@
 
 This is the schema for Channels, the properties of object `channels`.
 
+**Used by:** [Program](program)
+
 ## Channels Attributes
 
 | Attribute | Type | Default | Description | Required |

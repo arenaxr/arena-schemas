@@ -4,6 +4,8 @@ A-Frame AR Hit Test Settings. More properties at <a href='https://aframe.io/docs
 
 This is the schema for AR Hit Test Settings, the properties of object `ar-hit-test`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## AR Hit Test Settings Attributes
 
 | Attribute | Type | Default | Description | Required |

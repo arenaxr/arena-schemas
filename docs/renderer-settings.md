@@ -4,6 +4,8 @@ These settings are fed into three.js WebGLRenderer properties.
 
 This is the schema for Renderer Settings, the properties of object `renderer-settings`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## Renderer Settings Attributes
 
 | Attribute | Type | Default | Description | Required |

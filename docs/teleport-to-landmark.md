@@ -4,9 +4,12 @@
 
 This is the schema for Camera Override, the properties of wire object type `teleport-to-landmark`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
 
-## Camera Override Attributes
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"camera-override"` for this wire object.
+- The `data` attribute defines the `teleport-to-landmark` object-specific attributes listed below.
+
+## Camera Override Data Attributes
 
 | Attribute | Type | Default | Description | Required |
 | :--- | :--- | :--- | :--- | :--- |

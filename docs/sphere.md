@@ -4,7 +4,11 @@ Sphere Geometry.
 
 This is the schema for Sphere, the properties of wire object type `sphere`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `sphere` object-specific attributes listed below.
+
 
 ### Sphere Properties
 

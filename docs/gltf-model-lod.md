@@ -4,6 +4,8 @@ Simple switch between the default gltf-model and a detailed one when a user came
 
 This is the schema for GLTF Model Level of Detail, the properties of object `gltf-model-lod`.
 
+**Used by:** [GLTF Model](gltf-model)
+
 ## GLTF Model Level of Detail Attributes
 
 | Attribute | Type | Default | Description | Required |

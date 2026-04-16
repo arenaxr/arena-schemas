@@ -4,6 +4,8 @@ Use screen space ambient occlusion (SSAO) post-processing effect.
 
 This is the schema for SSAO, the properties of object `ssao`.
 
+**Used by:** [Post-Processing Effects](post-processing)
+
 ## SSAO Attributes
 
 | Attribute | Type | Default | Description | Required |

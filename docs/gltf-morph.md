@@ -4,6 +4,8 @@ Allows you to target and control a gltf model's morphTargets created in Blender.
 
 This is the schema for GLTF Morph, the properties of object `gltf-morph`.
 
+**Used by:** [GLTF Model](gltf-model)
+
 ## GLTF Morph Attributes
 
 | Attribute | Type | Default | Description | Required |

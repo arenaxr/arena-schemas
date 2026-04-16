@@ -4,6 +4,8 @@ A-Frame Environment presets. More properties at <a href='https://github.com/supe
 
 This is the schema for Environment Presets, the properties of object `env-presets`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## Environment Presets Attributes
 
 | Attribute | Type | Default | Description | Required |

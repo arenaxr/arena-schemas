@@ -4,6 +4,8 @@
 
 This is the schema for Buttons, the properties of object `buttons`.
 
+**Used by:** [ARENAUI Button Panel](arenaui-button-panel)
+
 ## Buttons Attributes
 
 | Attribute | Type | Default | Description | Required |

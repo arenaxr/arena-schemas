@@ -4,7 +4,11 @@ Entities are the base of all objects in the scene. Entities are containers into 
 
 This is the schema for Entity (generic object), the properties of wire object type `entity`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `entity` object-specific attributes listed below.
+
 
 ### Entity (generic object) Properties
 

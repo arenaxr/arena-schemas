@@ -4,7 +4,11 @@ Load a PCD model. Format: <a href='https://pointclouds.org/documentation/tutoria
 
 This is the schema for PCD Model, the properties of wire object type `pcd-model`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `pcd-model` object-specific attributes listed below.
+
 
 ### PCD Model Properties
 

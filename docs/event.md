@@ -4,7 +4,11 @@ Generate an event message for an object.
 
 This is the schema for Event, the properties of wire object type `event`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"mousedown"` for this wire object.
+- The `data` attribute defines the `event` object-specific attributes listed below.
+
 
 ### Event Properties
 

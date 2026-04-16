@@ -4,7 +4,11 @@ Cube (=Box) Geometry (deprecated); Supported for Legacy reasons; Please use Box 
 
 This is the schema for Cube (deprecated; don't use), the properties of wire object type `cube`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `cube` object-specific attributes listed below.
+
 
 ### Cube (deprecated; don't use) Properties
 

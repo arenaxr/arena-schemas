@@ -4,6 +4,8 @@ Use bloom post-processing effect.
 
 This is the schema for Bloom, the properties of object `bloom`.
 
+**Used by:** [Post-Processing Effects](post-processing)
+
 ## Bloom Attributes
 
 | Attribute | Type | Default | Description | Required |

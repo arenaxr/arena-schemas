@@ -4,6 +4,8 @@ Set an OpenVPS server to localize by camera image on mobile devices
 
 This is the schema for OpenVPS Settings, the properties of object `openvps`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## OpenVPS Settings Attributes
 
 | Attribute | Type | Default | Description | Required |

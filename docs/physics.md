@@ -4,6 +4,8 @@ Clientside PhysX-based physics system. Required for all physx-* components
 
 This is the schema for Physics Settings, the properties of object `physics`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## Physics Settings Attributes
 
 | Attribute | Type | Default | Description | Required |

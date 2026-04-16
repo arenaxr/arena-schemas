@@ -4,6 +4,7 @@ The GLTF-specific `modelUpdate` attribute is an object with child component name
 
 This is the schema for GLTF Model Update, the properties of object `modelUpdate`.
 
+
 ## GLTF Model Update Attributes
 
 | Attribute | Type | Default | Description | Required |

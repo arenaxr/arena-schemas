@@ -13,7 +13,15 @@
 
 This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+{% if used_by %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endif %}
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"{{ envelope_type }}"` for this wire object.
+- The `data` attribute defines the `{{ name }}` object-specific attributes listed below.
+
 {% for group in groups %}
 
 ### {{ group.label }} Properties
@@ -27,9 +35,16 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 
 This is the schema for {{ title }}, the properties of wire object type `{{ name }}`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+{% if used_by %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
 
-## {{ title }} Attributes
+{% endif %}
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"{{ envelope_type }}"` for this wire object.
+- The `data` attribute defines the `{{ name }}` object-specific attributes listed below.
+
+## {{ title }} Data Attributes
 
 {{ table }}
 
@@ -38,6 +53,11 @@ All wire objects have a set of basic attributes `{object_id, action, type, persi
 {{ description }}
 
 This is the schema for {{ title }}, the properties of object `{{ name }}`.{{ ' Part of the **' ~ definition_group ~ '** definition set.' if definition_group }}
+
+{% if used_by %}
+**Used by:** {% for ref in used_by %}[{{ ref.title }}]({{ ref.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endif %}
 
 ## {{ title }} Attributes
 

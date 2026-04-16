@@ -4,6 +4,8 @@ The primitive mesh geometry.
 
 This is the schema for Geometry, the properties of object `geometry`.
 
+**Used by:** [Entity (generic object)](entity)
+
 ## Geometry Attributes
 
 | Attribute | Type | Default | Description | Required |

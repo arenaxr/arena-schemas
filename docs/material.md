@@ -4,6 +4,8 @@ The material properties of the object's surface. More properties at <a href='htt
 
 This is the schema for Material, the properties of object `material`.
 
+**Used by:** [Box](box), [Capsule](capsule), [Circle](circle), [Cone](cone), [Cube (deprecated; don't use)](cube), [Cylinder](cylinder), [Dodecahedron](dodecahedron), [Icosahedron](icosahedron), [Image](image), [OBJ Model](obj-model), [Octahedron](octahedron), [Plane](plane), [Ring](ring), [Rounded Box](roundedbox), [Sphere](sphere), [Tetrahedron](tetrahedron), [Torus](torus), [Torus Knot](torusKnot), [Triangle](triangle), [Videosphere](videosphere)
+
 ## Material Attributes
 
 | Attribute | Type | Default | Description | Required |

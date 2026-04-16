@@ -4,6 +4,8 @@ Use Glitch post-processing effect.
 
 This is the schema for Glitch, the properties of object `glitch`.
 
+**Used by:** [Post-Processing Effects](post-processing)
+
 ## Glitch Attributes
 
 | Attribute | Type | Default | Description | Required |

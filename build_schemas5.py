@@ -61,6 +61,8 @@ class SchemaObject:
     # Language-specific computed fields (populated by compute_language_fields)
     cs_class_name: str = ""   # C# class name (arena- prefix stripped)
     py_class_name: str = ""   # Python class name (with overrides applied)
+    envelope_type: str = ""   # envelope type from arena-message
+    used_by: set = field(default_factory=set) # component reverse refs (stores obj/comp names)
 
 
 # ---------------------------------------------------------------------------
@@ -471,11 +473,13 @@ class SchemaLoader:
                         break
 
             inline_props = extract_inline_keys(raw_data)
+            env_type = expanded.get("properties", {}).get("type", {}).get("enum", ["object"])[0]
 
             for ot in (obj_types if obj_types else [base_name]):
                 obj = self._create_schema_object(ot, data_props, skip_object_type=False)
                 obj.is_component = False
                 obj.inline_properties = inline_props
+                obj.envelope_type = env_type
                 obj.title = expanded.get("title", f"{ot.title()} Data")
                 obj.description = _sanitize_desc(expanded.get("description", ""))
                 obj.property_groups = self._extract_property_groups(raw_data, obj.title)
@@ -529,6 +533,26 @@ class SchemaLoader:
             expanded = self._resolve_refs(raw_schema, fn, defs)
             data_props = expanded.get("properties", {}).get("data", {}).get("properties", {})
             self._extract_components_from_props(data_props, expanded, fn, defs)
+
+        # ── 5. Compute Reverse References ─────────────────────────────────
+        self._compute_reverse_references()
+
+    # -- Reverse References ─────────────────────────────────────────────────
+
+    def _compute_reverse_references(self):
+        """Map dependencies back to components for documentation cross-linking."""
+        def _check_props(props, parent_name):
+            for p in props.values():
+                if p.is_ref and p.ref_link in self.components:
+                    self.components[p.ref_link].used_by.add(parent_name)
+                elif p.is_array and p.is_ref and p.ref_link in self.components:
+                    self.components[p.ref_link].used_by.add(parent_name)
+
+        for name, obj in self.arena_objects.items():
+            _check_props(obj.properties, name)
+
+        for name, comp in self.components.items():
+            _check_props(comp.properties, name)
 
     # -- Wire Envelope ──────────────────────────────────────────────────────
 
@@ -718,7 +742,7 @@ class MarkdownGenerator:
         return "\n".join(lines)
 
     @classmethod
-    def _build_page_context(cls, obj: SchemaObject, page_type: str) -> dict:
+    def _build_page_context(cls, obj: SchemaObject, page_type: str, loader: SchemaLoader = None) -> dict:
         """Build the template context dict for md_page.j2."""
         ctx = {
             "name": obj.name,
@@ -726,7 +750,17 @@ class MarkdownGenerator:
             "description": obj.description,
             "page_type": page_type,
             "definition_group": getattr(obj, "definition_group", ""),
+            "envelope_type": getattr(obj, "envelope_type", ""),
         }
+
+        if getattr(obj, "used_by", None) and loader:
+            used_list = []
+            for name in sorted(list(obj.used_by)):
+                # Try to get title from components or wire objects
+                ref_obj = loader.arena_objects.get(name) or loader.components.get(name)
+                title = ref_obj.title if ref_obj else name
+                used_list.append({"name": name, "title": title})
+            ctx["used_by"] = used_list
 
         if page_type == "wire_object" and obj.property_groups:
             groups = []
@@ -764,19 +798,19 @@ class MarkdownGenerator:
 
         # Wire Envelope
         if loader.wire_envelope:
-            cls._write_page(loader.wire_envelope, "envelope", tmpl, out_folder)
+            cls._write_page(loader.wire_envelope, "envelope", tmpl, out_folder, loader=loader)
 
         # Wire Objects (grouped tables)
         for _, obj in loader.arena_objects.items():
-            cls._write_page(obj, "wire_object", tmpl, out_folder)
+            cls._write_page(obj, "wire_object", tmpl, out_folder, loader=loader)
 
         # Components (single table)
         for _, obj in loader.components.items():
-            cls._write_page(obj, "component", tmpl, out_folder)
+            cls._write_page(obj, "component", tmpl, out_folder, loader=loader)
 
     @classmethod
-    def _write_page(cls, obj: SchemaObject, page_type: str, tmpl, out_folder: str):
-        ctx = cls._build_page_context(obj, page_type)
+    def _write_page(cls, obj: SchemaObject, page_type: str, tmpl, out_folder: str, loader: SchemaLoader = None):
+        ctx = cls._build_page_context(obj, page_type, loader=loader)
         out = tmpl.render(**ctx)
 
         p_path = os.path.join(out_folder, f"{obj.name}.md")
@@ -825,22 +859,22 @@ class JekyllGenerator:
         # Wire envelope page
         if loader.wire_envelope:
             cls._write_page(loader.wire_envelope, "envelope", page_tmpl, out_folder,
-                            sec_title, sec_sub_title)
+                            sec_title, sec_sub_title, loader=loader)
 
         # Wire object pages
         for _, obj in loader.arena_objects.items():
             cls._write_page(obj, "wire_object", page_tmpl, out_folder,
-                            sec_title, sec_sub_title)
+                            sec_title, sec_sub_title, loader=loader)
 
         # Component pages
         for _, obj in loader.components.items():
             cls._write_page(obj, "component", page_tmpl, out_folder,
-                            sec_title, sec_sub_title)
+                            sec_title, sec_sub_title, loader=loader)
 
     @classmethod
     def _write_page(cls, obj: SchemaObject, page_type: str, tmpl,
-                    out_folder: str, sec_title: str, sec_sub_title: str):
-        ctx = MarkdownGenerator._build_page_context(obj, page_type)
+                    out_folder: str, sec_title: str, sec_sub_title: str, loader: SchemaLoader = None):
+        ctx = MarkdownGenerator._build_page_context(obj, page_type, loader=loader)
         ctx["sec_title"] = sec_title
         ctx["sec_sub_title"] = sec_sub_title
 

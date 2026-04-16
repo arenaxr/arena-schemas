@@ -4,7 +4,11 @@ Display an image on a plane. See guidance to store paths under <a href='https://
 
 This is the schema for Image, the properties of wire object type `image`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `image` object-specific attributes listed below.
+
 
 ### Image Properties
 

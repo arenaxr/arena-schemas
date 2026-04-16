@@ -4,6 +4,8 @@ These effects are enabled in desktop and XR views.
 
 This is the schema for Post-Processing Effects, the properties of object `post-processing`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## Post-Processing Effects Attributes
 
 | Attribute | Type | Default | Description | Required |

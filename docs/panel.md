@@ -4,6 +4,8 @@ The rounded UI panel primitive.
 
 This is the schema for UI Panel, the properties of object `panel`.
 
+**Used by:** [Entity (generic object)](entity)
+
 ## UI Panel Attributes
 
 | Attribute | Type | Default | Description | Required |

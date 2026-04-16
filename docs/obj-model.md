@@ -4,7 +4,11 @@ Loads a 3D model and material using a Wavefront (.OBJ) file and a .MTL file. See
 
 This is the schema for OBJ Model, the properties of wire object type `obj-model`.
 
-All wire objects have a set of basic attributes `{object_id, action, type, persist, data}`. The `data` attribute defines the object-specific attributes
+
+All wire objects have a set of basic [ARENA Message](arena-message) envelope attributes: `{object_id, action, type, persist, data}`.
+- The `type` attribute must be set to `"object"` for this wire object.
+- The `data` attribute defines the `obj-model` object-specific attributes listed below.
+
 
 ### OBJ Model Properties
 

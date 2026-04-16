@@ -4,6 +4,7 @@ Object data payload; Camera Override config data.
 
 This is the schema for Camera Override Data, the properties of object `camera-override`.
 
+
 ## Camera Override Data Attributes
 
 | Attribute | Type | Default | Description | Required |

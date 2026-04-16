@@ -4,6 +4,8 @@ Use scalable ambient occlusion (SAO) post-processing effect.
 
 This is the schema for SAO, the properties of object `sao`.
 
+**Used by:** [Post-Processing Effects](post-processing)
+
 ## SAO Attributes
 
 | Attribute | Type | Default | Description | Required |

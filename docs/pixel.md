@@ -4,6 +4,8 @@ Use Pixelation post-processing effect.
 
 This is the schema for Pixel, the properties of object `pixel`.
 
+**Used by:** [Post-Processing Effects](post-processing)
+
 ## Pixel Attributes
 
 | Attribute | Type | Default | Description | Required |

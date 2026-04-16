@@ -4,6 +4,8 @@ A list of available animations can usually be found by inspecting the model file
 
 This is the schema for Animation Mixer, the properties of object `animation-mixer`.
 
+**Used by:** [GLTF Model](gltf-model)
+
 ## Animation Mixer Attributes
 
 | Attribute | Type | Default | Description | Required |

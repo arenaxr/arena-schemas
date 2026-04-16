@@ -4,6 +4,8 @@ ARENA Scene Options.
 
 This is the schema for Scene Options, the properties of object `scene-options`.
 
+**Used by:** [Scene Config](scene-options)
+
 ## Scene Options Attributes
 
 | Attribute | Type | Default | Description | Required |
