@@ -32,8 +32,11 @@ namespace ArenaUnity.Schemas
         public {{ p.cs_type }} {{ p.cs_name }} = def{{ p.cs_name }};
         public bool ShouldSerialize{{ p.cs_name }}()
         {
-{% if p.required %}
+{% if p.required and p.default_formatted %}
             return true; // required in json schema
+{% elif p.required %}
+            // {{ p.name }} is required in json schema but has no default; omit rather than emit null
+            return ({{ p.cs_name }} != def{{ p.cs_name }});
 {% else %}
             // {{ p.name }}
             return ({{ p.cs_name }} != def{{ p.cs_name }});
