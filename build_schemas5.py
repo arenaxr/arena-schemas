@@ -31,6 +31,10 @@ class SchemaProperty:
     ref_link: str = ""        # kebab-case link target
     deprecated: bool = False
     enum: List[str] = field(default_factory=list)
+    # sub-property name → enum values, for the object type this property refers to
+    # (or its array items). Used to render enum-typed values inside a `default`
+    # object/array-of-object initializer as enum members rather than strings.
+    ref_enums: Dict[str, List[str]] = field(default_factory=dict)
     # Language-specific computed fields (populated by compute_language_fields)
     pascal_name: str = ""     # PascalCase of name
     snake_name: str = ""      # snake_case of name
@@ -109,6 +113,37 @@ def _strip_arena_prefix(name: str) -> str:
     if name.startswith("arena-"):
         return name[len("arena-"):]
     return name
+
+
+def _enumcase(word: str) -> str:
+    """PascalCase a schema enum value into a legal C# enum member identifier.
+
+    A value starting with a digit is not a legal identifier, so leading numeric
+    runs are spelled out via num2words ("1x1" -> "OneX1").
+    """
+    import num2words
+
+    def wordify(txt):
+        if txt.isnumeric():
+            return num2words.num2words(txt)
+        return txt
+
+    if word and word[0:1].isdigit():
+        sub_words = re.split(r"(\d+)", word)
+        num2worded = "-".join(list(map(wordify, sub_words)))
+        return pascalcase(num2worded)
+    return pascalcase(word)
+
+
+def _collect_ref_enums(schema: dict) -> dict:
+    """Map sub-property name → enum values for the string-enum sub-properties of
+    a referenced object schema. cs_class3.j2 renders exactly these as nested C#
+    enums, so a `default` naming one must render an enum member, not a string."""
+    out = {}
+    for sub_name, sub in (schema.get("properties") or {}).items():
+        if isinstance(sub, dict) and sub.get("enum") and sub.get("type") == "string":
+            out[sub_name] = sub["enum"]
+    return out
 
 
 def _compute_cs_type(prop: SchemaProperty, known_cs_types: set) -> str:
@@ -197,6 +232,7 @@ class SchemaLoader:
         self.src_folder = src_folder
         self._raw_cache: Dict[str, dict] = {}
         self.arena_objects: Dict[str, SchemaObject] = {}
+        self._obj_index_source: Dict[str, str] = {}  # index name → schema file that registered it
         self.components: Dict[str, SchemaObject] = {}
         self.wire_envelope: Optional[SchemaObject] = None
         self._wire_object_filenames: set = set()
@@ -321,6 +357,7 @@ class SchemaLoader:
                 p.ref_name = pascalcase(items_ref if items_ref else p_name)
                 p.ref_link = items_ref if items_ref else p_name
                 p.doc_link = f"attr-{p.ref_link}"
+                p.ref_enums = _collect_ref_enums(items)
 
         orig_ref = p_data.get("__orig_ref")
         is_obj_type = (t == "object") or (isinstance(t, list) and "object" in t)
@@ -330,6 +367,7 @@ class SchemaLoader:
             p.ref_link = orig_ref if orig_ref else p_name
             p.doc_link = f"attr-{p.ref_link}"
             p.type_name = t if isinstance(t, list) else p.ref_name
+            p.ref_enums = _collect_ref_enums(p_data)
 
         return p
 
@@ -449,6 +487,16 @@ class SchemaLoader:
         self._obj_schemas = {}
         for list_fn in list_fns:
             fn_dict = self.get_raw(list_fn)
+            # A wire object's index name is its registry key (see below), so a name
+            # repeated across the two index files would silently drop one entry here.
+            for key in fn_dict:
+                if key in self._obj_schemas:
+                    raise ValueError(
+                        f"duplicate wire object index name {key!r} in {list_fn}; "
+                        f"already listed in {self._obj_index_source[key]}. Index "
+                        f"names must be unique across {', '.join(list_fns)}."
+                    )
+                self._obj_index_source[key] = list_fn
             self._obj_schemas.update(fn_dict)
             for key, val in fn_dict.items():
                 if isinstance(val, dict) and "file" in val:
@@ -459,7 +507,7 @@ class SchemaLoader:
 
         # ── 2. Wire Objects ───────────────────────────────────────────────
         obj_schemas = self._obj_schemas
-        for _, obj_info in obj_schemas.items():
+        for index_name, obj_info in obj_schemas.items():
             fn = obj_info["file"]
             raw_schema = self.get_raw(fn)
             definitions = raw_schema.get("definitions", {})
@@ -468,9 +516,6 @@ class SchemaLoader:
             data_props = expanded.get("properties", {}).get("data", {})
             if "properties" not in data_props:
                 continue
-
-            base_name = os.path.splitext(os.path.basename(fn))[0]
-            obj_types = data_props.get("properties", {}).get("object_type", {}).get("enum", [])
 
             # Raw data block for group extraction
             raw_data = raw_schema.get("properties", {}).get("data", {})
@@ -483,16 +528,32 @@ class SchemaLoader:
             inline_props = extract_inline_keys(raw_data)
             env_type = expanded.get("properties", {}).get("type", {}).get("enum", ["object"])[0]
 
-            for ot in (obj_types if obj_types else [base_name]):
-                obj = self._create_schema_object(ot, data_props, skip_object_type=False)
-                obj.is_component = False
-                obj.inline_properties = inline_props
-                obj.envelope_type = env_type
-                obj.doc_link = f"obj-{ot}"
-                obj.title = expanded.get("title", f"{ot.title()} Data")
-                obj.description = _sanitize_desc(expanded.get("description", obj.title))
-                obj.property_groups = self._extract_property_groups(raw_data, obj.title)
-                self.arena_objects[ot] = obj
+            # The wire-object registry is keyed by the *index name* — the key under
+            # which arena-schema-files{,-nonpersist}.json lists this schema — not by
+            # the values of the schema's own data.object_type enum. Those enum values
+            # are not unique across files: camera-override.json reuses the literal
+            # "camera" as one of three override *modes*, so keying by enum value let
+            # camera-override clobber camera.json's real Camera wire object
+            # (last-write-wins), silently losing the class. The index is the
+            # authoritative list of wire object types, one entry per type — hand.json
+            # is listed twice, as handLeft and handRight, precisely for that reason.
+            if index_name in self.arena_objects:
+                raise ValueError(
+                    f"wire object registry collision on {index_name!r} while "
+                    f"processing {fn}. Wire object index names must be unique "
+                    f"across arena-schema-files*.json."
+                )
+
+            ot = index_name
+            obj = self._create_schema_object(ot, data_props, skip_object_type=False)
+            obj.is_component = False
+            obj.inline_properties = inline_props
+            obj.envelope_type = env_type
+            obj.doc_link = f"obj-{ot}"
+            obj.title = expanded.get("title", f"{ot.title()} Data")
+            obj.description = _sanitize_desc(expanded.get("description", obj.title))
+            obj.property_groups = self._extract_property_groups(raw_data, obj.title)
+            self.arena_objects[ot] = obj
 
         # Add data links to envelope now that all objects are loaded
         self._add_data_links_to_envelope()
@@ -1004,18 +1065,49 @@ class DotnetGenerator:
     """Generates Unity C# classes using Jinja2 templates."""
 
     @classmethod
-    def _format_cs_value(cls, val) -> str:
-        """Format a Python value as a C# literal for object initializers."""
+    def _format_cs_value(cls, val, enum_type: str = "") -> str:
+        """Format a Python value as a C# literal for object initializers.
+
+        `enum_type`, when given, is the fully-qualified name of the nested C# enum
+        this value belongs to (e.g. "ArenaChannelsJson.TypeType"); a string value is
+        then rendered as an enum member rather than a quoted string literal, which
+        is what the target field's type actually is.
+        """
         if isinstance(val, bool):
             return str(val).lower()
         if isinstance(val, float) or isinstance(val, int):
             return f"{val}f"
         if isinstance(val, str):
+            if enum_type:
+                return f"{enum_type}.{_enumcase(val)}"
             return f'"{val}"'
         if isinstance(val, dict):
             # Nested object — not handled, fall back
             return "null"
         return str(val)
+
+    @staticmethod
+    def _cs_enum_owner(cs_type: str) -> str:
+        """The C# class that owns the nested enums for this property's type, or ""
+        when the type isn't a generated Arena*Json class (e.g. the `object`
+        fallback from _compute_cs_type)."""
+        base = cs_type.rstrip("[]")
+        if base.startswith("Arena") and base.endswith("Json"):
+            return base
+        return ""
+
+    @classmethod
+    def _cs_init_props(cls, item: dict, prop: SchemaProperty) -> str:
+        """Render one `Prop = value, ...` object-initializer body, resolving any
+        enum-typed sub-property to its nested C# enum member."""
+        owner = cls._cs_enum_owner(prop.cs_type)
+        parts = []
+        for k, v in item.items():
+            enum_type = ""
+            if owner and k in prop.ref_enums:
+                enum_type = f"{owner}.{pascalcase(k)}Type"
+            parts.append(f"{pascalcase(k)} = {cls._format_cs_value(v, enum_type)}")
+        return ", ".join(parts)
 
     @classmethod
     def format_default(cls, prop: SchemaProperty) -> str:
@@ -1035,8 +1127,7 @@ class DotnetGenerator:
             if any(isinstance(item, dict) for item in d):
                 obj_inits = []
                 for item in d:
-                    props = ", ".join(f"{pascalcase(k)} = {cls._format_cs_value(v)}" for k, v in item.items())
-                    obj_inits.append(f"new() {{ {props} }}")
+                    obj_inits.append(f"new() {{ {cls._cs_init_props(item, prop)} }}")
                 return f"{{ {', '.join(obj_inits)} }}"
             if base_type == "float":
                 items = ", ".join(f"{x}f" for x in d)
@@ -1046,8 +1137,7 @@ class DotnetGenerator:
                 items = ", ".join(str(x) for x in d)
             return f"{{ {items} }}"
         if isinstance(d, dict):
-            props = ", ".join(f"{pascalcase(k)} = {cls._format_cs_value(v)}" for k, v in d.items())
-            return f"new() {{ {props} }}"
+            return f"new() {{ {cls._cs_init_props(d, prop)} }}"
         if cs_type in ("float", "float?", "float[]", "float?[]"):
             return f"{d}f"
         if cs_type in ("string",):
@@ -1102,21 +1192,7 @@ class DotnetGenerator:
             print("Warning: templates/cs_class3.j2 missing, skipping dotnet.")
             return
 
-        import num2words
-
-        def wordify(txt):
-            if txt.isnumeric():
-                return num2words.num2words(txt)
-            return txt
-
-        def enumcase(word):
-            if word and word[0:1].isdigit():
-                sub_words = re.split(r"(\d+)", word)
-                num2worded = "-".join(list(map(wordify, sub_words)))
-                return pascalcase(num2worded)
-            return pascalcase(word)
-
-        env.globals["enumcase"] = enumcase
+        env.globals["enumcase"] = _enumcase
         env.globals["pascalcase"] = pascalcase
 
         def write_cs(obj: SchemaObject, wire_obj: bool, target_dir: str):

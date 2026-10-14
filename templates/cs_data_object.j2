@@ -54,8 +54,11 @@ namespace ArenaUnity.Schemas
         {
 {% if p.deprecated %}
             return false; // deprecated in json schema
-{% elif p.required %}
+{% elif p.required and p.default_formatted %}
             return true; // required in json schema
+{% elif p.required %}
+            // {{ p.name }} is required in json schema but has no default; omit rather than emit null
+            return ({{ p.cs_name }} != def{{ p.cs_name }});
 {% else %}
             // {{ p.name }}
             return ({{ p.cs_name }} != def{{ p.cs_name }});
@@ -84,8 +87,11 @@ namespace ArenaUnity.Schemas
         {
 {% if p.deprecated %}
             return false; // deprecated in json schema
-{% elif p.required %}
+{% elif p.required and p.default_formatted %}
             return true; // required in json schema
+{% elif p.required %}
+            // {{ p.name }} is required in json schema but has no default; omit rather than emit null
+            return ({{ p.cs_name }} != def{{ p.cs_name }});
 {% else %}
             // {{ p.name }}
             return ({{ p.cs_name }} != def{{ p.cs_name }});
