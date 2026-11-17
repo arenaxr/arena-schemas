@@ -1,17 +1,43 @@
+"""Report which schemas have no matching arena-unity behaviour-component stub.
+
+What this checks: every arena-unity `Runtime/Components/*.cs` file may carry a
+`// ARENA <name> component unity conversion status:` banner followed by
+`// TODO:/DONE:/N/A: <property>` annotation lines. This script collects those
+banners and lists the schemas (wire objects + components) that no banner claims.
+
+What this does NOT check: it does not compare the schemas against the generated
+DTOs in `Runtime/Schemas/`, so it is not a schema-versus-DTO field-parity gate --
+a schema field missing from a generated class, or a stale generated class, is
+invisible to it. The per-property comparison it computes (missing_in_comments /
+extra_in_comments) is not reported: that block is commented out below, and
+`deprecated_but_in_unity` is never populated. It reads hand-written annotation
+comments, which are only as accurate as whoever last edited them.
+
+Usage: python3 check_unity_parity.py [path/to/arena-unity/Runtime/Components]
+       (default ../arena-unity/Runtime/Components, or $ARENA_UNITY_COMPONENTS)
+"""
 import os
 import re
 import glob
 import sys
 
-from build_schemas4 import SchemaLoader
+from build_schemas5 import SchemaLoader
 
 def main():
     loader = SchemaLoader('schemas')
     loader.build_models()
     print(f"Loaded {len(loader.arena_objects)} ARENA Objects and {len(loader.components)} Components.")
 
-    unity_dir = '../arena-unity/Runtime/Components'
+    unity_dir = (
+        sys.argv[1] if len(sys.argv) > 1
+        else os.environ.get("ARENA_UNITY_COMPONENTS", '../arena-unity/Runtime/Components')
+    )
+    if not os.path.isdir(unity_dir):
+        print(f"\nNOTE: arena-unity components dir not found: {unity_dir}")
+        print("      Pass it as argv[1] or set ARENA_UNITY_COMPONENTS.")
+        print("      Every schema will be reported as a missing stub below.")
     unity_files = glob.glob(os.path.join(unity_dir, '*.cs'))
+    print(f"Scanning {len(unity_files)} arena-unity component file(s) in {unity_dir}")
 
     # Dictionary mapping schema_name -> set(properties in comments)
     unity_components = {}
